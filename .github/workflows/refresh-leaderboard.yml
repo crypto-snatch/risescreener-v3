@@ -10,7 +10,7 @@ name: Refresh leaderboard
 
 on:
   schedule:
-    - cron: "0 * * * *" # hourly — full-universe index (~9.3k accounts, fetches positions+fills+balance)
+    - cron: "*/30 * * * *" # every 30 min — full-universe index (~9.3k accounts, ~6-10 min run)
   workflow_dispatch: {} # allow manual runs from the Actions tab
 
 permissions:
