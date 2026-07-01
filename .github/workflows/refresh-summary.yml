@@ -1,0 +1,40 @@
+name: Refresh Summary snapshot
+
+# Freezes the daily-recap card once a day at UTC 00:00. Runs a bit after the
+# data refreshers (Dune 00:00, timeseries/leaderboard :15/:45) so it snapshots
+# the freshest committed data, then commits data/summary.json.
+
+on:
+  schedule:
+    - cron: "30 0 * * *" # daily 00:30 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-summary
+  cancel-in-progress: false
+
+jobs:
+  snap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build summary snapshot
+        run: node scripts/snapshot-summary.mjs
+      - name: Commit & push (race-safe)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/summary.json
+          git diff --cached --quiet && { echo "no change"; exit 0; }
+          git commit -m "chore: refresh Summary snapshot [skip ci]"
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin main || true
+            git push && break || sleep 5
+          done

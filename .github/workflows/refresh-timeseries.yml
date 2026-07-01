@@ -1,0 +1,43 @@
+name: Refresh timeseries
+
+# Appends a Total Volume / Open Interest / TVL datapoint to data/timeseries.json
+# and commits it. RISEx has no historical API, so the Overview trend charts are
+# built from these periodic snapshots — the more often this runs, the denser the
+# history. The deployed app reads the file via the TIMESERIES_URL env (raw URL).
+#
+# Offset from the leaderboard cron (:00) to avoid push races on the same minute.
+
+on:
+  schedule:
+    - cron: "15,45 * * * *" # every 30 min, at :15 and :45
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-timeseries
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Snapshot timeseries
+        run: node scripts/snapshot-timeseries.mjs
+      - name: Commit & push (race-safe)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/timeseries.json
+          git diff --cached --quiet && { echo "no change"; exit 0; }
+          git commit -m "chore: append timeseries snapshot [skip ci]"
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin main || true
+            git push && break || sleep 5
+          done
