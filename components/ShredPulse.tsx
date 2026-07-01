@@ -130,14 +130,14 @@ export default function ShredPulse() {
   const FEED_H = 176;
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "minmax(0,2fr) minmax(0,1.3fr)", gap: 14 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 14 }}>
       {/* LEFT: Live Explorer */}
       <div className="glass glow-edge" data-component="live-explorer" style={{ padding: "14px 16px", borderRadius: "var(--r-lg)" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10, gap: 8 }}>
           <span style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ink)", fontWeight: 600 }}>Live Explorer</span>
           <Link href="/explorer" className="chip tag-accent" style={{ fontSize: 10.5 }}>block #{block ? block.toLocaleString() : "—"} · open ↗</Link>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1.25fr", gap: 16, alignItems: "stretch" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 16, alignItems: "stretch" }}>
           {/* ① block feed (~1s) */}
           <Col label="Blocks">
           <div style={{ height: FEED_H, overflow: "hidden" }}>
