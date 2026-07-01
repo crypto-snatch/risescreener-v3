@@ -10,7 +10,7 @@ name: Refresh leaderboard
 
 on:
   schedule:
-    - cron: "*/15 * * * *" # every 15 min — index now fetches balance too, so give it headroom
+    - cron: "0 * * * *" # hourly — full-universe index (~9.3k accounts, fetches positions+fills+balance)
   workflow_dispatch: {} # allow manual runs from the Actions tab
 
 permissions:
