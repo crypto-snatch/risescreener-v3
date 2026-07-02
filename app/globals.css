@@ -184,7 +184,7 @@ body[data-theme="light"] .recharts-cartesian-axis-tick text { fill: #5a6c7a !imp
   white-space: nowrap; cursor: pointer; font-family: inherit;
   transition: color .15s ease, background .15s ease;
 }
-.navtrigger:hover { color: var(--ink); background: rgba(255, 255, 255, 0.04); }
+@media (hover: hover) { .navtrigger:hover { color: var(--ink); background: rgba(255, 255, 255, 0.04); } }
 .navtrigger[data-active="true"] { color: var(--ink); background: rgba(255, 255, 255, 0.05); }
 .navgroup .navtrigger { position: relative; }
 .navtrigger[data-open="true"] { color: var(--ink); background: rgba(255, 255, 255, 0.04); }
@@ -209,7 +209,7 @@ body[data-theme="light"] .recharts-cartesian-axis-tick text { fill: #5a6c7a !imp
   border-left: 2px solid transparent;
   transition: background .13s ease, border-color .13s ease;
 }
-.navitem:hover { background: rgba(255, 255, 255, 0.05); }
+@media (hover: hover) { .navitem:hover { background: rgba(255, 255, 255, 0.05); } }
 .navitem[data-active="true"] { background: var(--accent-soft); border-left-color: var(--accent); }
 .navitem-label { font-size: 13px; font-weight: 500; color: var(--ink); }
 .navitem-desc { font-size: 11px; color: var(--muted-2); }

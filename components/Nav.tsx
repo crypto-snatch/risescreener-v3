@@ -47,14 +47,10 @@ const GROUPS: Group[] = [
 export default function Nav() {
   const path = usePathname();
   const [open, setOpen] = useState<string | null>(null);
-  const [hoverable, setHoverable] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  // hover-to-open only on devices that actually hover (desktop);
-  // on touch, mouseenter+click would open then instantly re-close.
-  useEffect(() => {
-    setHoverable(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
-  }, []);
+  // Click/tap to open — no hover-open. Hover-to-open + the element's :hover
+  // styles made iOS require a double tap (first tap = hover, second = click).
 
   // close on route change
   useEffect(() => setOpen(null), [path]);
@@ -79,12 +75,7 @@ export default function Nav() {
             {g.label}
           </Link>
         ) : (
-          <div
-            key={g.label}
-            className="navgroup"
-            onMouseEnter={hoverable ? () => setOpen(g.label) : undefined}
-            onMouseLeave={hoverable ? () => setOpen((o) => (o === g.label ? null : o)) : undefined}
-          >
+          <div key={g.label} className="navgroup">
             <button
               className="navtrigger"
               data-active={isActive(g)}
