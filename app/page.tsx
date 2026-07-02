@@ -45,7 +45,7 @@ export default async function Welcome() {
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center", marginTop: 2 }}>
           <Link href="/overview" className="chip tag-accent" style={{ padding: "11px 20px", fontSize: 13.5, fontWeight: 600 }}>Enter dashboard →</Link>
           <Link href="/markets" className="chip" style={{ padding: "11px 18px", fontSize: 13.5 }}>Explore markets</Link>
-          <a href="https://www.rise.trade/invite/risescreener" target="_blank" rel="noreferrer" className="chip" style={{ padding: "11px 18px", fontSize: 13.5 }}>Trade on RISEx ↗</a>
+          <a href="https://www.rise.trade/invite/risescreener" target="_blank" rel="noreferrer" className="chip tag-accent" style={{ padding: "11px 18px", fontSize: 13.5, fontWeight: 600 }}>Trade on RISEx ↗</a>
         </div>
       </div>
 
