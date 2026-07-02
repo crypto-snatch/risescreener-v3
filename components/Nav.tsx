@@ -47,18 +47,25 @@ const GROUPS: Group[] = [
 export default function Nav() {
   const path = usePathname();
   const [open, setOpen] = useState<string | null>(null);
+  const [hoverable, setHoverable] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  // hover-to-open only on devices that actually hover (desktop);
+  // on touch, mouseenter+click would open then instantly re-close.
+  useEffect(() => {
+    setHoverable(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+  }, []);
 
   // close on route change
   useEffect(() => setOpen(null), [path]);
 
-  // close on outside click
+  // close on outside tap/click (pointerdown covers touch + mouse)
   useEffect(() => {
-    const onDoc = (e: MouseEvent) => {
+    const onDoc = (e: Event) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(null);
     };
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
+    document.addEventListener("pointerdown", onDoc);
+    return () => document.removeEventListener("pointerdown", onDoc);
   }, []);
 
   const isActive = (g: Group) =>
@@ -75,8 +82,8 @@ export default function Nav() {
           <div
             key={g.label}
             className="navgroup"
-            onMouseEnter={() => setOpen(g.label)}
-            onMouseLeave={() => setOpen((o) => (o === g.label ? null : o))}
+            onMouseEnter={hoverable ? () => setOpen(g.label) : undefined}
+            onMouseLeave={hoverable ? () => setOpen((o) => (o === g.label ? null : o)) : undefined}
           >
             <button
               className="navtrigger"
