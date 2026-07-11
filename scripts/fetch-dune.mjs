@@ -25,25 +25,47 @@ const Q = {
 const GROUPS = ["BTC", "ETH", "SOL", "HYPE"];
 const sym = (name) => (name || "").replace("/USDC", "");
 
-async function rows(id, limit = 2000) {
-  const r = await fetch(`https://api.dune.com/api/v1/query/${id}/results?limit=${limit}`, {
-    headers: { "X-Dune-Api-Key": KEY },
-  });
-  if (!r.ok) throw new Error(`dune q${id} -> ${r.status}`);
-  const j = await r.json();
-  return j.result?.rows ?? [];
+// Paginated fetch — per-market-per-day queries outgrow a single page.
+// Also returns execution_ended_at: Dune serves cached results that may have run
+// mid-day, so the trailing day bucket can be partial and must be dropped.
+async function query(id, pageSize = 1000) {
+  const all = [];
+  let offset = 0;
+  let execEndedAt = null;
+  for (;;) {
+    const r = await fetch(`https://api.dune.com/api/v1/query/${id}/results?limit=${pageSize}&offset=${offset}`, {
+      headers: { "X-Dune-Api-Key": KEY },
+    });
+    if (!r.ok) throw new Error(`dune q${id} -> ${r.status}`);
+    const j = await r.json();
+    execEndedAt ??= j.execution_ended_at ?? null;
+    const page = j.result?.rows ?? [];
+    all.push(...page);
+    const total = j.result?.metadata?.total_row_count;
+    offset += page.length;
+    if (page.length < pageSize || (total != null && offset >= total)) break;
+  }
+  return { rows: all, execEndedAt };
 }
+const rows = async (id) => (await query(id)).rows;
 const dayMs = (s) => new Date(String(s).replace(" ", "T") + "Z").getTime();
 
 async function main() {
-  const [vbm, tvl, proto, accts, oi, liq] = await Promise.all([
-    rows(Q.volumeByMarket),
+  const [vbmQ, tvl, proto, accts, oi, liq] = await Promise.all([
+    query(Q.volumeByMarket),
     rows(Q.tvlDaily),
     rows(Q.protocolDaily),
     rows(Q.accountsDaily),
     rows(Q.oiNow),
     rows(Q.liqTotals),
   ]);
+  const vbm = vbmQ.rows;
+
+  // Day buckets on/after the query's execution day are partial (the cached run
+  // happened mid-day) — keep complete days only.
+  const execMs = vbmQ.execEndedAt ? new Date(vbmQ.execEndedAt).getTime() : Date.now();
+  const d = new Date(execMs);
+  const cutoff = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
 
   // volume / fees / liq-fees by market → per-day { BTC, ETH, SOL, HYPE, Others }
   const blank = (t) => ({ t, BTC: 0, ETH: 0, SOL: 0, HYPE: 0, Others: 0 });
@@ -52,6 +74,7 @@ async function main() {
   const liqFeeDay = new Map();
   for (const r of vbm) {
     const t = dayMs(r.period);
+    if (t >= cutoff) continue;
     const g = GROUPS.includes(sym(r.market_name)) ? sym(r.market_name) : "Others";
     if (!byDay.has(t)) byDay.set(t, blank(t));
     if (!feeDay.has(t)) feeDay.set(t, blank(t));
