@@ -25,19 +25,29 @@ const Q = {
 const GROUPS = ["BTC", "ETH", "SOL", "HYPE"];
 const sym = (name) => (name || "").replace("/USDC", "");
 
-// Paginated fetch — per-market-per-day queries outgrow a single page.
-// Also returns execution_ended_at: Dune serves cached results that may have run
-// mid-day, so the trailing day bucket can be partial and must be dropped.
-async function query(id, pageSize = 1000) {
+const startTodayUTC = () => {
+  const n = new Date();
+  return Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate());
+};
+
+async function api(path, opts = {}) {
+  const r = await fetch(`https://api.dune.com/api/v1${path}`, {
+    ...opts,
+    headers: { "X-Dune-Api-Key": KEY, ...(opts.headers || {}) },
+  });
+  if (!r.ok) throw new Error(`dune ${path} -> ${r.status}`);
+  return r.json();
+}
+
+// Paginated results fetch — per-market-per-day queries outgrow a single page.
+// Also returns execution_ended_at: results come from whatever execution Dune has
+// cached, which may have run mid-day, so trailing day buckets can be partial.
+async function resultsPages(base, pageSize = 1000) {
   const all = [];
   let offset = 0;
   let execEndedAt = null;
   for (;;) {
-    const r = await fetch(`https://api.dune.com/api/v1/query/${id}/results?limit=${pageSize}&offset=${offset}`, {
-      headers: { "X-Dune-Api-Key": KEY },
-    });
-    if (!r.ok) throw new Error(`dune q${id} -> ${r.status}`);
-    const j = await r.json();
+    const j = await api(`${base}?limit=${pageSize}&offset=${offset}`);
     execEndedAt ??= j.execution_ended_at ?? null;
     const page = j.result?.rows ?? [];
     all.push(...page);
@@ -47,14 +57,41 @@ async function query(id, pageSize = 1000) {
   }
   return { rows: all, execEndedAt };
 }
-const rows = async (id) => (await query(id)).rows;
+
+// fresh: if the cached execution predates today 00:00 UTC (so it can't cover all
+// of yesterday), trigger a new execution and wait for it — otherwise the chart's
+// last day gets dropped as partial and the series lags an extra day. Costs Dune
+// credits, so only the queries that feed the volume chart ask for it; any
+// failure (credits exhausted, timeout) falls back to the cached results.
+async function query(id, { fresh = false } = {}) {
+  const cached = await resultsPages(`/query/${id}/results`);
+  const stale = !cached.execEndedAt || new Date(cached.execEndedAt).getTime() < startTodayUTC();
+  if (!fresh || !stale) return cached;
+  try {
+    const { execution_id } = await api(`/query/${id}/execute`, { method: "POST" });
+    const t0 = Date.now();
+    for (;;) {
+      await new Promise((r) => setTimeout(r, 5000));
+      const s = await api(`/execution/${execution_id}/status`);
+      if (s.state === "QUERY_STATE_COMPLETED") break;
+      if (["QUERY_STATE_FAILED", "QUERY_STATE_CANCELLED", "QUERY_STATE_EXPIRED"].includes(s.state)) throw new Error(s.state);
+      if (Date.now() - t0 > 240_000) throw new Error("execution timeout");
+    }
+    console.log(`q${id}: ran fresh execution (cached was ${cached.execEndedAt})`);
+    return await resultsPages(`/execution/${execution_id}/results`);
+  } catch (e) {
+    console.warn(`q${id}: fresh execution failed (${e.message}) — using cached results`);
+    return cached;
+  }
+}
+const rows = async (id, opts) => (await query(id, opts)).rows;
 const dayMs = (s) => new Date(String(s).replace(" ", "T") + "Z").getTime();
 
 async function main() {
   const [vbmQ, tvl, proto, accts, oi, liq] = await Promise.all([
-    query(Q.volumeByMarket),
+    query(Q.volumeByMarket, { fresh: true }),
     rows(Q.tvlDaily),
-    rows(Q.protocolDaily),
+    rows(Q.protocolDaily, { fresh: true }), // keeps the Cumulative-volume card in step with the chart
     rows(Q.accountsDaily),
     rows(Q.oiNow),
     rows(Q.liqTotals),
