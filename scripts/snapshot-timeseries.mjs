@@ -28,7 +28,8 @@ const sym = (m) => (m.config?.name || m.base_asset_symbol || "").replace("/USDC"
 
 async function main() {
   const markets = (await j(`${API}/v1/markets`))?.data?.markets ?? [];
-  const live = markets.filter((m) => m.available && !/deprecated/i.test(m.config?.name ?? ""));
+  // "available" was renamed to "active"; accept either so snapshots don't zero out.
+  const live = markets.filter((m) => (m.active ?? m.available ?? true) && !/deprecated/i.test(m.config?.name ?? ""));
 
   const vol = { BTC: 0, ETH: 0, SOL: 0, HYPE: 0, Others: 0 };
   const oi = { BTC: 0, ETH: 0, SOL: 0, HYPE: 0, Others: 0 };

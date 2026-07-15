@@ -23,7 +23,8 @@ export interface MarketCfg {
 export interface Market {
   market_id: string;
   config: MarketCfg;
-  available: boolean;
+  available?: boolean; // legacy tradable flag
+  active?: boolean; // current tradable flag (renamed from "available")
   base_asset_symbol: string;
   display_name?: string;
   mark_price?: string;
@@ -216,7 +217,7 @@ export interface FeedTrade {
 
 export async function getGlobalFeed(perMarket = 12): Promise<FeedTrade[]> {
   const markets = (await getMarkets()).filter(
-    (m) => m.available && !/deprecated/i.test(m.config?.name ?? ""),
+    (m) => (m.active ?? m.available ?? true) && !/deprecated/i.test(m.config?.name ?? ""),
   );
   const chunks = await Promise.all(
     markets.map(async (m) => {

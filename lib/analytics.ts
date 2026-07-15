@@ -29,7 +29,9 @@ export interface MarketRow {
 }
 
 function activeMarkets(ms: Market[]): Market[] {
-  return ms.filter((m) => m.available && !/deprecated/i.test(m.config?.name ?? ""));
+  // RISEx renamed the tradable flag "available" → "active". Accept either (default
+  // included) so a rename can't zero out the market count / 24h volume KPIs.
+  return ms.filter((m) => (m.active ?? m.available ?? true) && !/deprecated/i.test(m.config?.name ?? ""));
 }
 
 export function enrichMarket(m: Market): MarketRow {
