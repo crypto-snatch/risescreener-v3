@@ -84,23 +84,20 @@ export interface LeaderboardSnapshot {
 
 let cache: { at: number; data: LeaderboardSnapshot | null } | null = null;
 
-// In production the snapshot is kept fresh by an external scheduled indexer
-// (e.g. GitHub Actions) that publishes leaderboard.json somewhere fetchable.
-// Set SNAPSHOT_URL to that URL and the deployed app will always read the
-// latest snapshot — no rebuild needed. Falls back to the bundled file locally.
+// The snapshot is kept fresh by a scheduled indexer (GitHub Actions) that commits
+// data/leaderboard.json to this repo. Default to the public raw URL so the deployed
+// app always reads the latest snapshot over HTTP — the bundled file is NOT reliably
+// included in the Vercel serverless bundle, so a filesystem read fails in production.
+// SNAPSHOT_URL overrides; the bundled file is a last-resort local fallback.
+const RAW_URL = "https://raw.githubusercontent.com/crypto-snatch/risescreener-v3/main/data/leaderboard.json";
+
 export async function getSnapshot(): Promise<LeaderboardSnapshot | null> {
   if (cache && Date.now() - cache.at < 15_000) return cache.data;
-  const url = process.env.SNAPSHOT_URL;
+  const url = process.env.SNAPSHOT_URL || RAW_URL;
   try {
-    let data: LeaderboardSnapshot;
-    if (url) {
-      const res = await fetch(url, { next: { revalidate: 120 } });
-      if (!res.ok) throw new Error(`snapshot ${res.status}`);
-      data = (await res.json()) as LeaderboardSnapshot;
-    } else {
-      const raw = await readFile(join(process.cwd(), "data", "leaderboard.json"), "utf8");
-      data = JSON.parse(raw) as LeaderboardSnapshot;
-    }
+    const res = await fetch(url, { next: { revalidate: 120 } });
+    if (!res.ok) throw new Error(`snapshot ${res.status}`);
+    const data = (await res.json()) as LeaderboardSnapshot;
     cache = { at: Date.now(), data };
     return data;
   } catch {

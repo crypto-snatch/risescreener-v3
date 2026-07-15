@@ -19,7 +19,7 @@ export interface Summary {
 
 // Default to the public raw URL so production reads the daily-committed snapshot
 // without needing an env var; SUMMARY_URL overrides, local file is last resort.
-const RAW_URL = "https://raw.githubusercontent.com/crypto-snatch/risescreener/main/data/summary.json";
+const RAW_URL = "https://raw.githubusercontent.com/crypto-snatch/risescreener-v3/main/data/summary.json";
 
 let cache: { at: number; data: Summary | null } | null = null;
 

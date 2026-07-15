@@ -19,15 +19,21 @@ export type CoinDay = { t: number; BTC: number; ETH: number; SOL: number; HYPE: 
 
 let cache: { at: number; data: DuneData | null } | null = null;
 
+// Default to the public raw URL so the deployed app reads the cron-committed
+// Dune snapshot over HTTP; the bundled file is not reliably present in the
+// Vercel serverless bundle. DUNE_URL overrides; local file is a last resort.
+const RAW_URL = "https://raw.githubusercontent.com/crypto-snatch/risescreener-v3/main/data/dune.json";
+
 export async function getDune(): Promise<DuneData | null> {
   if (cache && Date.now() - cache.at < 30_000) return cache.data;
-  const url = process.env.DUNE_URL;
+  const url = process.env.DUNE_URL || RAW_URL;
   try {
     let raw: string;
-    if (url) {
+    try {
       const r = await fetch(url, { next: { revalidate: 300 } });
+      if (!r.ok) throw new Error(`dune ${r.status}`);
       raw = await r.text();
-    } else {
+    } catch {
       raw = await readFile(join(process.cwd(), "data", "dune.json"), "utf8");
     }
     const data = JSON.parse(raw) as DuneData;
