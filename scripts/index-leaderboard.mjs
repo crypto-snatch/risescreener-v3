@@ -87,13 +87,10 @@ async function enumerateAccounts() {
 
 async function getMarkets() {
   const d = await j(`${API}/v1/markets`);
-  return (d?.data?.markets || []).filter((m) => m.available);
-}
-async function getMark(id) {
-  const d = await j(`${API}/v1/orderbook?market_id=${id}&limit=1`);
-  const bid = Number(d?.data?.bids?.[0]?.price) || 0;
-  const ask = Number(d?.data?.asks?.[0]?.price) || 0;
-  return bid && ask ? (bid + ask) / 2 : bid || ask || 0;
+  // The API renamed the tradable flag "available" → "active". Accept either (and
+  // default to included) so a future rename can't silently empty the market set —
+  // an empty set zeroes every mark/symbol and collapses OI, skew and the liq map.
+  return (d?.data?.markets || []).filter((m) => m.active ?? m.available ?? true);
 }
 
 async function mapLimit(items, limit, fn) {
@@ -177,14 +174,15 @@ async function main() {
   const symbols = {};
   const marks = {};
   const mmf = {};
-  await Promise.all(
-    markets.map(async (m) => {
-      symbols[m.market_id] = (m.config?.name || m.base_asset_symbol || "?").replace("/USDC", "");
-      mmf[m.market_id] = Number(m.config?.maintenance_margin_factor) / WAD || 0;
-      marks[m.market_id] = await getMark(m.market_id);
-    }),
-  );
+  for (const m of markets) {
+    symbols[m.market_id] = (m.config?.name || m.base_asset_symbol || "?").replace("/USDC", "");
+    // maintenance_margin_factor is now returned in basis points (e.g. 37.5), not WAD.
+    mmf[m.market_id] = Number(m.config?.maintenance_margin_factor) / 1e4 || 0;
+    // mark_price ships in the markets payload (human-scaled) — no per-market orderbook call needed.
+    marks[m.market_id] = Number(m.mark_price) || 0;
+  }
   console.log(`Loaded ${markets.length} markets + marks.`);
+  if (!markets.length) throw new Error("no active markets — API shape changed? aborting to avoid committing zeroed data");
 
   const t0 = Date.now();
   const rows = await mapLimit(accounts, 20, (a) => scoreAccount(a, marks, mmf, symbols));
