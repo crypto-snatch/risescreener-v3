@@ -37,14 +37,28 @@ function Seg({ rwa, onChange }: { rwa: boolean; onChange: (v: boolean) => void }
   );
 }
 
+// RWA markets were listed recently, so the RWA series is a short tail on a long
+// history. In RWA mode, crop the x-axis to the window where RWA actually trades
+// (from its first active day, with a minimum width) instead of one lonely bar
+// pinned to the right of the full timeline.
+const MIN_WIN = 10;
+
 export default function ClassCharts({ volPoints, volGroups, oiSlices }: { volPoints: Pt[]; volGroups: string[]; oiSlices: Slice[] }) {
   const [rwa, setRwa] = useState(false);
   const groups = rwa ? ["RWA"] : volGroups;
   const oiData = (rwa ? oiSlices.filter((s) => s.rwa) : oiSlices).map(({ name, value, color }) => ({ name, value, color }));
 
+  let volPts = volPoints;
+  if (rwa) {
+    const first = volPoints.findIndex((p) => (p.RWA || 0) > 0);
+    const floor = Math.max(0, volPoints.length - MIN_WIN);
+    const start = first < 0 ? floor : Math.min(first, floor);
+    volPts = volPoints.slice(start);
+  }
+
   return (
     <>
-      <SeriesChart title={rwa ? "Cum Vol · RWA" : "Cum Vol"} points={volPoints} mode="bars" extraKey="cum" extraLabel="Cumulative" groups={groups} toolbar={<Seg rwa={rwa} onChange={setRwa} />} />
+      <SeriesChart title={rwa ? "Cum Vol · RWA" : "Cum Vol"} points={volPts} mode="bars" extraKey="cum" extraLabel="Cumulative" groups={groups} toolbar={<Seg rwa={rwa} onChange={setRwa} />} />
       <Panel pad="14px 16px">
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
           <div style={{ fontSize: 14, fontWeight: 700 }}>{rwa ? "OI · RWA" : "OI"}</div>
