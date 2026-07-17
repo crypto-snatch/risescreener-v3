@@ -4,9 +4,8 @@ import { getDune } from "@/lib/dune";
 import { usd, compact, price } from "@/lib/format";
 import { Panel, Stat } from "@/components/ui";
 import ShredPulse from "@/components/ShredPulse";
-import SeriesChart from "@/components/SeriesChart";
 import { AreaTrend } from "@/components/charts";
-import OiDonut from "@/components/OiDonut";
+import ClassCharts from "@/components/ClassCharts";
 import { isRwa, RWA_COLORS } from "@/lib/sectors";
 
 export const revalidate = 20;
@@ -30,24 +29,19 @@ export default async function Overview() {
   const topLoser = [...tradable].sort((a, b) => a.changePct - b.changePct).slice(0, 5);
   const pct = (r: MarketRow) => `${r.changePct >= 0 ? "+" : ""}${r.changePct.toFixed(2)}%`;
 
-  // ── asset-class split (live, per-market): Crypto vs RWA (gold/silver) ──
+  // ── asset-class split (live, per-market): RWA = gold + silver ──
   const sum = (arr: MarketRow[], f: (r: MarketRow) => number) => arr.reduce((s, r) => s + f(r), 0);
-  const rwaRows = tradable.filter((r) => isRwa(r.symbol));
-  const cryptoRows = tradable.filter((r) => !isRwa(r.symbol));
-  const oiRwa = sum(rwaRows, (r) => r.oiUsd);
-  const oiCrypto = sum(cryptoRows, (r) => r.oiUsd);
-  const oiLive = oiRwa + oiCrypto;
-  const vol24Rwa = sum(rwaRows, (r) => r.volume24h);
-  const vol24Crypto = sum(cryptoRows, (r) => r.volume24h);
-  const cumRwa = dune?.totals.cumVolumeRwa;
-  const cumCrypto = dune?.totals.cumVolumeCrypto;
-  const splitHint = (a: number, b: number) => `Crypto ${usd(a)} · RWA ${usd(b)}`;
+  const oiRwa = sum(tradable.filter((r) => isRwa(r.symbol)), (r) => r.oiUsd);
+  const oiLive = sum(tradable, (r) => r.oiUsd);
+  const vol24Rwa = sum(tradable.filter((r) => isRwa(r.symbol)), (r) => r.volume24h);
+  const rwaOiPct = oiLive > 0 ? (oiRwa / oiLive) * 100 : 0;
 
   const volPoints = dune?.volume ?? [];
   const tvlPoints = (dune?.tvl ?? []).map((x) => ({ t: x.t, tvl: x.tvl }));
-  // OI donut from live rows, grouped by asset class: crypto first, RWA (gold/silver) clustered at the end.
+  // OI slices from live rows (crypto first, RWA clustered at the end); the All/RWA
+  // toggle in ClassCharts filters these to the metals on demand.
   let cf = 0;
-  const oiDonut = [...tradable]
+  const oiSlices = [...tradable]
     .filter((r) => r.oiUsd > 0)
     .sort((a, b) => {
       const ca = isRwa(a.symbol) ? 1 : 0, cb = isRwa(b.symbol) ? 1 : 0;
@@ -56,6 +50,7 @@ export default async function Overview() {
     .map((r) => ({
       name: r.symbol,
       value: r.oiUsd,
+      rwa: isRwa(r.symbol),
       color: isRwa(r.symbol)
         ? (RWA_COLORS[r.symbol] ?? "#e6c069")
         : (OI_COLORS[r.symbol] ?? CRYPTO_FALLBACK[cf++ % CRYPTO_FALLBACK.length]),
@@ -67,13 +62,10 @@ export default async function Overview() {
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: 10 }}>
         <Stat big label="TVL" value={usd(dune?.totals.tvl ?? p.tvl)} tone="accent" />
-        <Stat big label="Total open interest" value={usd(dune?.totals.oi ?? p.totalOiUsd)} hint={splitHint(oiCrypto, oiRwa)} />
-        <Stat big label="OI · Crypto" value={usd(oiCrypto)} hint={oiLive > 0 ? `${((oiCrypto / oiLive) * 100).toFixed(1)}% of OI` : undefined} />
-        <Stat big label="OI · RWA" value={usd(oiRwa)} hint={oiLive > 0 ? `${((oiRwa / oiLive) * 100).toFixed(1)}% · gold + silver` : "gold + silver"} />
-        <Stat big label="24h volume" value={usd(p.totalVolume24h)} hint={splitHint(vol24Crypto, vol24Rwa)} />
+        <Stat big label="Total open interest" value={usd(dune?.totals.oi ?? p.totalOiUsd)} />
+        <Stat big label="24h volume" value={usd(p.totalVolume24h)} />
         <Stat big label="Cumulative volume" value={usd(dune?.totals.cumVolume ?? 0)} tone="accent" />
-        <Stat big label="Cum Vol · Crypto" value={cumCrypto != null ? usd(cumCrypto) : "—"} hint={cumCrypto == null ? "pending data refresh" : undefined} />
-        <Stat big label="Cum Vol · RWA" value={cumRwa != null ? usd(cumRwa) : "—"} hint={cumRwa == null ? "pending data refresh" : "gold + silver"} />
+        <Stat big label="RWA · Gold + Silver" value={usd(oiRwa)} color="#e6c069" edge="#e6c069" hint={`${rwaOiPct.toFixed(1)}% of OI · 24h ${usd(vol24Rwa)}`} />
         <Stat big label="Total fees" value={usd(dune?.totals.cumFees ?? 0)} />
         <Stat big label="Accounts" value={compact(dune?.totals.accounts ?? p.wallets.total)} />
         <Stat big label="Listed markets" value={String(p.listedMarkets)} />
@@ -81,21 +73,7 @@ export default async function Overview() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(380px,1fr))", gap: 16 }}>
-        <SeriesChart title="Cum Vol" points={volPoints} mode="bars" extraKey="cum" extraLabel="Cumulative" groups={VOL_GROUPS} />
-        <Panel pad="14px 16px">
-          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 10 }}>
-            <div style={{ fontSize: 14, fontWeight: 700 }}>OI</div>
-            <div style={{ display: "flex", gap: 12, fontSize: 10.5, color: "var(--muted-2)" }}>
-              <span><span style={{ display: "inline-block", width: 8, height: 8, borderRadius: 2, background: "#34cfa2", marginRight: 5 }} />Crypto</span>
-              <span><span style={{ display: "inline-block", width: 8, height: 8, borderRadius: 2, background: "#e6c069", marginRight: 5 }} />RWA</span>
-            </div>
-          </div>
-          {oiDonut.length > 0 ? (
-            <OiDonut data={oiDonut} height={340} />
-          ) : (
-            <div style={{ height: 340, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--muted)", fontSize: 12 }}>no data</div>
-          )}
-        </Panel>
+        <ClassCharts volPoints={volPoints} volGroups={VOL_GROUPS} oiSlices={oiSlices} />
         <Panel pad="14px 16px">
           <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}>TVL</div>
           {tvlPoints.length > 1 ? (

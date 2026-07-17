@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { ResponsiveContainer, ComposedChart, Bar, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { usd } from "@/lib/format";
 import ChartCard from "@/components/ChartCard";
@@ -17,6 +17,7 @@ export default function SeriesChart({
   extraKey,
   extraLabel,
   groups = DEFAULT_GROUPS,
+  toolbar,
 }: {
   title: string;
   points: Pt[];
@@ -24,6 +25,7 @@ export default function SeriesChart({
   extraKey: "total" | "cum";
   extraLabel: string;
   groups?: string[];
+  toolbar?: ReactNode;
 }) {
   const COINS = groups;
   // precompute total + cumulative
@@ -58,7 +60,7 @@ export default function SeriesChart({
   );
 
   return (
-    <ChartCard title={title} height={300} controls={toggles} filename={`risescreener-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>
+    <ChartCard title={title} height={300} controls={toggles} toolbar={toolbar} filename={`risescreener-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>
       {data.length < 2 ? (
         <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--muted)", fontSize: 12, textAlign: "center", lineHeight: 1.6 }}>
           Builds from periodic snapshots.<br />
