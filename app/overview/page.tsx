@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getProtocol, getMarketRows, isUpcoming, type MarketRow } from "@/lib/analytics";
 import { getDune } from "@/lib/dune";
 import { usd, compact, price } from "@/lib/format";
-import { Panel, Stat, SectionLabel } from "@/components/ui";
+import { Panel, Stat } from "@/components/ui";
 import ShredPulse from "@/components/ShredPulse";
 import { AreaTrend } from "@/components/charts";
 import ClassCharts from "@/components/ClassCharts";
@@ -61,33 +61,24 @@ export default async function Overview() {
     <div className="screen" data-page="overview" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
       <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800 }}>Overview</h1>
 
-      <div>
-        <SectionLabel>Total</SectionLabel>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: 10 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 18, alignItems: "flex-start" }}>
+        <StatGroup label="Total" count={4}>
           <Stat big label="TVL" value={usd(dune?.totals.tvl ?? p.tvl)} tone="accent" />
           <Stat big label="Total open interest" value={usd(dune?.totals.oi ?? p.totalOiUsd)} />
           <Stat big label="24h volume" value={usd(p.totalVolume24h)} />
           <Stat big label="Cumulative volume" value={usd(dune?.totals.cumVolume ?? 0)} tone="accent" />
-        </div>
-      </div>
-
-      <div>
-        <SectionLabel>RWA</SectionLabel>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: 10 }}>
-          <Stat big label="Open interest" value={usd(oiRwa)} color="#e6c069" edge="#e6c069" hint={`${rwaOiPct.toFixed(1)}% of total OI`} />
-          <Stat big label="24h volume" value={usd(vol24Rwa)} color="#e6c069" edge="#e6c069" />
-          <Stat big label="Cumulative volume" value={cumRwa != null ? usd(cumRwa) : "—"} color="#e6c069" edge="#e6c069" hint={cumRwa == null ? "pending data refresh" : undefined} />
-        </div>
-      </div>
-
-      <div>
-        <SectionLabel>Markets</SectionLabel>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: 10 }}>
+        </StatGroup>
+        <StatGroup label="RWA" count={3} accent="#e6c069">
+          <Stat big label="Open interest" value={usd(oiRwa)} color="#e6c069" hint={`${rwaOiPct.toFixed(1)}% of total OI`} />
+          <Stat big label="24h volume" value={usd(vol24Rwa)} color="#e6c069" />
+          <Stat big label="Cumulative volume" value={cumRwa != null ? usd(cumRwa) : "—"} color="#e6c069" hint={cumRwa == null ? "pending data refresh" : undefined} />
+        </StatGroup>
+        <StatGroup label="Markets" count={4}>
           <Stat big label="Total fees" value={usd(dune?.totals.cumFees ?? 0)} />
           <Stat big label="Accounts" value={compact(dune?.totals.accounts ?? p.wallets.total)} />
           <Stat big label="Listed markets" value={String(p.listedMarkets)} />
           <Stat big label="Upcoming markets" value={String(p.upcomingMarkets)} />
-        </div>
+        </StatGroup>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(380px,1fr))", gap: 16 }}>
@@ -109,6 +100,23 @@ export default async function Overview() {
         <TopTable title="Top Volume" rows={topVol} render={(r) => usd(r.volume24h)} />
         <TopTable title="Top Gainer (24h)" rows={topGainer} render={pct} tone={(r) => (r.changePct >= 0 ? "long" : "short")} />
         <TopTable title="Top Loser (24h)" rows={topLoser} render={pct} tone={(r) => (r.changePct >= 0 ? "long" : "short")} />
+      </div>
+    </div>
+  );
+}
+
+// A tab-like group header sitting above a horizontal row of stat tiles. Groups
+// share one band (flex-wrap), each sized proportional to its tile count so tiles
+// stay uniform width across groups; a group wraps as a unit on narrow screens.
+function StatGroup({ label, count, accent, children }: { label: string; count: number; accent?: string; children: React.ReactNode }) {
+  return (
+    <div style={{ flex: `${count} 1 ${count * 132}px`, minWidth: count * 118, display: "flex", flexDirection: "column", gap: 9 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "0 2px 7px", borderBottom: "1px solid var(--hair)", fontSize: 10, letterSpacing: ".15em", textTransform: "uppercase", color: accent ?? "var(--muted-2)", fontWeight: 600 }}>
+        {accent && <span style={{ width: 7, height: 7, borderRadius: 2, background: accent }} />}
+        {label}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${count}, minmax(0,1fr))`, gap: 10 }}>
+        {children}
       </div>
     </div>
   );
