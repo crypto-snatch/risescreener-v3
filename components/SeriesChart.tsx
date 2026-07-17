@@ -6,7 +6,7 @@ import { usd } from "@/lib/format";
 import ChartCard from "@/components/ChartCard";
 
 const DEFAULT_GROUPS = ["BTC", "ETH", "SOL", "HYPE", "Others"];
-const COLORS: Record<string, string> = { BTC: "#f7931a", ETH: "#8aa0c8", SOL: "#14f195", HYPE: "#2ee6b6", RWA: "#e6c069", Others: "#6a7c8e" };
+const COLORS: Record<string, string> = { BTC: "#f7931a", ETH: "#8aa0c8", SOL: "#14f195", HYPE: "#2ee6b6", RWA: "#e6c069", XAU: "#e6c069", XAG: "#c9d1d9", Others: "#6a7c8e" };
 
 type Pt = { t: number } & Record<string, number>;
 

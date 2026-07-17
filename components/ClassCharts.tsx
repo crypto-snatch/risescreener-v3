@@ -45,7 +45,7 @@ const MIN_WIN = 10;
 
 export default function ClassCharts({ volPoints, volGroups, oiSlices }: { volPoints: Pt[]; volGroups: string[]; oiSlices: Slice[] }) {
   const [rwa, setRwa] = useState(false);
-  const groups = rwa ? ["RWA"] : volGroups;
+  const groups = rwa ? ["XAU", "XAG"] : volGroups; // RWA view splits into gold + silver
   const oiData = (rwa ? oiSlices.filter((s) => s.rwa) : oiSlices).map(({ name, value, color }) => ({ name, value, color }));
 
   let volPts = volPoints;

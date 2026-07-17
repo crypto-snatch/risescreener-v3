@@ -108,7 +108,10 @@ async function main() {
   // volume / fees / liq-fees by market → per-day { BTC, ETH, SOL, HYPE, RWA, Others }.
   // Volume splits metals (XAU/XAG) into their own "RWA" band; fees/liq keep the
   // prior grouping (RWA folded into "Others") so those charts don't shift.
-  const blank = (t) => ({ t, BTC: 0, ETH: 0, SOL: 0, HYPE: 0, RWA: 0, Others: 0 });
+  // Volume keeps per-metal bands (XAU/XAG) plus their RWA aggregate; the "All"
+  // view stacks the RWA band, the "RWA" view stacks XAU + XAG. Fees/liq fold RWA
+  // into Others (unchanged) so those charts don't shift.
+  const blank = (t) => ({ t, BTC: 0, ETH: 0, SOL: 0, HYPE: 0, XAU: 0, XAG: 0, RWA: 0, Others: 0 });
   const byDay = new Map();
   const feeDay = new Map();
   const liqFeeDay = new Map();
@@ -117,16 +120,17 @@ async function main() {
     const t = dayMs(r.period);
     if (t >= cutoff) continue;
     const s = sym(r.market_name);
-    const volGroup = RWA.includes(s) ? "RWA" : GROUPS.includes(s) ? s : "Others";
     const feeGroup = GROUPS.includes(s) ? s : "Others"; // RWA stays in Others for fees/liq
     if (!byDay.has(t)) byDay.set(t, blank(t));
     if (!feeDay.has(t)) feeDay.set(t, blank(t));
     if (!liqFeeDay.has(t)) liqFeeDay.set(t, blank(t));
     const vol = Math.round(r.daily_volume_usd || 0);
-    byDay.get(t)[volGroup] += vol;
+    const day = byDay.get(t);
+    if (RWA.includes(s)) { day[s] += vol; day.RWA += vol; cumVolRwa += vol; } // per-metal + aggregate
+    else if (GROUPS.includes(s)) day[s] += vol;
+    else day.Others += vol;
     feeDay.get(t)[feeGroup] += Math.round(r.daily_total_fees_usd || 0);
     liqFeeDay.get(t)[feeGroup] += Math.round(r.daily_liquidation_fees_usd || 0);
-    if (RWA.includes(s)) cumVolRwa += vol;
   }
   const volume = [...byDay.values()].sort((a, b) => a.t - b.t);
   const feesByMarket = [...feeDay.values()].sort((a, b) => a.t - b.t);
