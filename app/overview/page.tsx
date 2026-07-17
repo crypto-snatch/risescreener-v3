@@ -61,7 +61,7 @@ export default async function Overview() {
     <div className="screen" data-page="overview" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
       <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800 }}>Overview</h1>
 
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 18, alignItems: "flex-start" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 18, alignItems: "stretch" }}>
         <StatGroup label="Total" count={4}>
           <Stat big label="TVL" value={usd(dune?.totals.tvl ?? p.tvl)} tone="accent" />
           <Stat big label="Total open interest" value={usd(dune?.totals.oi ?? p.totalOiUsd)} />
@@ -115,7 +115,7 @@ function StatGroup({ label, count, accent, children }: { label: string; count: n
         {accent && <span style={{ width: 7, height: 7, borderRadius: 2, background: accent }} />}
         {label}
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: `repeat(${count}, minmax(0,1fr))`, gap: 10 }}>
+      <div style={{ flex: 1, display: "grid", gridTemplateColumns: `repeat(${count}, minmax(0,1fr))`, gap: 10 }}>
         {children}
       </div>
     </div>
