@@ -23,6 +23,7 @@ const Q = {
   liqTotals: 6949906,
 };
 const GROUPS = ["BTC", "ETH", "SOL", "HYPE"];
+const RWA = ["XAU", "XAG"]; // real-world-asset perps (gold, silver)
 const sym = (name) => (name || "").replace("/USDC", "");
 
 const startTodayUTC = () => {
@@ -104,21 +105,28 @@ async function main() {
   const d = new Date(execMs);
   const cutoff = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
 
-  // volume / fees / liq-fees by market → per-day { BTC, ETH, SOL, HYPE, Others }
-  const blank = (t) => ({ t, BTC: 0, ETH: 0, SOL: 0, HYPE: 0, Others: 0 });
+  // volume / fees / liq-fees by market → per-day { BTC, ETH, SOL, HYPE, RWA, Others }.
+  // Volume splits metals (XAU/XAG) into their own "RWA" band; fees/liq keep the
+  // prior grouping (RWA folded into "Others") so those charts don't shift.
+  const blank = (t) => ({ t, BTC: 0, ETH: 0, SOL: 0, HYPE: 0, RWA: 0, Others: 0 });
   const byDay = new Map();
   const feeDay = new Map();
   const liqFeeDay = new Map();
+  let cumVolRwa = 0; // all-time (complete days) RWA volume, for the cumulative split
   for (const r of vbm) {
     const t = dayMs(r.period);
     if (t >= cutoff) continue;
-    const g = GROUPS.includes(sym(r.market_name)) ? sym(r.market_name) : "Others";
+    const s = sym(r.market_name);
+    const volGroup = RWA.includes(s) ? "RWA" : GROUPS.includes(s) ? s : "Others";
+    const feeGroup = GROUPS.includes(s) ? s : "Others"; // RWA stays in Others for fees/liq
     if (!byDay.has(t)) byDay.set(t, blank(t));
     if (!feeDay.has(t)) feeDay.set(t, blank(t));
     if (!liqFeeDay.has(t)) liqFeeDay.set(t, blank(t));
-    byDay.get(t)[g] += Math.round(r.daily_volume_usd || 0);
-    feeDay.get(t)[g] += Math.round(r.daily_total_fees_usd || 0);
-    liqFeeDay.get(t)[g] += Math.round(r.daily_liquidation_fees_usd || 0);
+    const vol = Math.round(r.daily_volume_usd || 0);
+    byDay.get(t)[volGroup] += vol;
+    feeDay.get(t)[feeGroup] += Math.round(r.daily_total_fees_usd || 0);
+    liqFeeDay.get(t)[feeGroup] += Math.round(r.daily_liquidation_fees_usd || 0);
+    if (RWA.includes(s)) cumVolRwa += vol;
   }
   const volume = [...byDay.values()].sort((a, b) => a.t - b.t);
   const feesByMarket = [...feeDay.values()].sort((a, b) => a.t - b.t);
@@ -137,11 +145,15 @@ async function main() {
   const latestTvl = tvlSeries[tvlSeries.length - 1]?.tvl ?? 0;
   const latestAccts = accountsSeries[accountsSeries.length - 1]?.cumAccounts ?? 0;
   const totalOi = Math.round(oi[0]?.total_oi_usd || 0);
+  const cumVolume = Math.round(latest.cumulative_volume_usd || 0);
+  cumVolRwa = Math.round(cumVolRwa);
 
   const data = {
     generatedAt: new Date().toISOString(),
     totals: {
-      cumVolume: Math.round(latest.cumulative_volume_usd || 0),
+      cumVolume,
+      cumVolumeRwa: cumVolRwa,
+      cumVolumeCrypto: Math.max(0, cumVolume - cumVolRwa),
       cumFees: Math.round(latest.cumulative_total_fees_usd || 0),
       cumTrades: latest.cumulative_trades || 0,
       accounts: latestAccts,

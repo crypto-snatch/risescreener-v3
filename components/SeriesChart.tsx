@@ -5,8 +5,8 @@ import { ResponsiveContainer, ComposedChart, Bar, Line, XAxis, YAxis, Tooltip, C
 import { usd } from "@/lib/format";
 import ChartCard from "@/components/ChartCard";
 
-const COINS = ["BTC", "ETH", "SOL", "HYPE", "Others"] as const;
-const COLORS: Record<string, string> = { BTC: "#f7931a", ETH: "#8aa0c8", SOL: "#14f195", HYPE: "#2ee6b6", Others: "#6a7c8e" };
+const DEFAULT_GROUPS = ["BTC", "ETH", "SOL", "HYPE", "Others"];
+const COLORS: Record<string, string> = { BTC: "#f7931a", ETH: "#8aa0c8", SOL: "#14f195", HYPE: "#2ee6b6", RWA: "#e6c069", Others: "#6a7c8e" };
 
 type Pt = { t: number } & Record<string, number>;
 
@@ -16,13 +16,16 @@ export default function SeriesChart({
   mode,
   extraKey,
   extraLabel,
+  groups = DEFAULT_GROUPS,
 }: {
   title: string;
   points: Pt[];
   mode: "bars" | "lines";
   extraKey: "total" | "cum";
   extraLabel: string;
+  groups?: string[];
 }) {
+  const COINS = groups;
   // precompute total + cumulative
   let run = 0;
   const data = points.map((p) => {

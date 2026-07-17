@@ -5,7 +5,8 @@ import { join } from "node:path";
 // In production a cron refreshes it and the app reads it via DUNE_URL (raw URL).
 export interface DuneData {
   generatedAt: string;
-  totals: { cumVolume: number; cumFees: number; cumTrades: number; accounts: number; tvl: number; oi: number };
+  // cumVolume{Crypto,Rwa} are optional: older snapshots (pre-RWA split) omit them.
+  totals: { cumVolume: number; cumVolumeCrypto?: number; cumVolumeRwa?: number; cumFees: number; cumTrades: number; accounts: number; tvl: number; oi: number };
   volume: CoinDay[];
   feesByMarket: CoinDay[];
   liqFeesByMarket: CoinDay[];
@@ -15,7 +16,8 @@ export interface DuneData {
   accounts: { t: number; newAccounts: number; activeTraders: number; cumAccounts: number }[];
   oiByMarket: { symbol: string; oiUsd: number }[];
 }
-export type CoinDay = { t: number; BTC: number; ETH: number; SOL: number; HYPE: number; Others: number };
+// RWA optional for backward-compat with snapshots written before the split.
+export type CoinDay = { t: number; BTC: number; ETH: number; SOL: number; HYPE: number; RWA?: number; Others: number };
 
 let cache: { at: number; data: DuneData | null } | null = null;
 
