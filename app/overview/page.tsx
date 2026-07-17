@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getProtocol, getMarketRows, isUpcoming, type MarketRow } from "@/lib/analytics";
 import { getDune } from "@/lib/dune";
 import { usd, compact, price } from "@/lib/format";
-import { Panel, Stat } from "@/components/ui";
+import { Panel, Stat, SectionLabel } from "@/components/ui";
 import ShredPulse from "@/components/ShredPulse";
 import { AreaTrend } from "@/components/charts";
 import ClassCharts from "@/components/ClassCharts";
@@ -35,6 +35,7 @@ export default async function Overview() {
   const oiLive = sum(tradable, (r) => r.oiUsd);
   const vol24Rwa = sum(tradable.filter((r) => isRwa(r.symbol)), (r) => r.volume24h);
   const rwaOiPct = oiLive > 0 ? (oiRwa / oiLive) * 100 : 0;
+  const cumRwa = dune?.totals.cumVolumeRwa;
 
   const volPoints = dune?.volume ?? [];
   const tvlPoints = (dune?.tvl ?? []).map((x) => ({ t: x.t, tvl: x.tvl }));
@@ -60,16 +61,33 @@ export default async function Overview() {
     <div className="screen" data-page="overview" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
       <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800 }}>Overview</h1>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: 10 }}>
-        <Stat big label="TVL" value={usd(dune?.totals.tvl ?? p.tvl)} tone="accent" />
-        <Stat big label="Total open interest" value={usd(dune?.totals.oi ?? p.totalOiUsd)} />
-        <Stat big label="24h volume" value={usd(p.totalVolume24h)} />
-        <Stat big label="Cumulative volume" value={usd(dune?.totals.cumVolume ?? 0)} tone="accent" />
-        <Stat big label="RWA · Gold + Silver" value={usd(oiRwa)} color="#e6c069" edge="#e6c069" hint={`${rwaOiPct.toFixed(1)}% of OI · 24h ${usd(vol24Rwa)}`} />
-        <Stat big label="Total fees" value={usd(dune?.totals.cumFees ?? 0)} />
-        <Stat big label="Accounts" value={compact(dune?.totals.accounts ?? p.wallets.total)} />
-        <Stat big label="Listed markets" value={String(p.listedMarkets)} />
-        <Stat big label="Upcoming markets" value={String(p.upcomingMarkets)} />
+      <div>
+        <SectionLabel>Total</SectionLabel>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: 10 }}>
+          <Stat big label="TVL" value={usd(dune?.totals.tvl ?? p.tvl)} tone="accent" />
+          <Stat big label="Total open interest" value={usd(dune?.totals.oi ?? p.totalOiUsd)} />
+          <Stat big label="24h volume" value={usd(p.totalVolume24h)} />
+          <Stat big label="Cumulative volume" value={usd(dune?.totals.cumVolume ?? 0)} tone="accent" />
+        </div>
+      </div>
+
+      <div>
+        <SectionLabel>RWA</SectionLabel>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: 10 }}>
+          <Stat big label="Open interest" value={usd(oiRwa)} color="#e6c069" edge="#e6c069" hint={`${rwaOiPct.toFixed(1)}% of total OI`} />
+          <Stat big label="24h volume" value={usd(vol24Rwa)} color="#e6c069" edge="#e6c069" />
+          <Stat big label="Cumulative volume" value={cumRwa != null ? usd(cumRwa) : "—"} color="#e6c069" edge="#e6c069" hint={cumRwa == null ? "pending data refresh" : undefined} />
+        </div>
+      </div>
+
+      <div>
+        <SectionLabel>Markets</SectionLabel>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: 10 }}>
+          <Stat big label="Total fees" value={usd(dune?.totals.cumFees ?? 0)} />
+          <Stat big label="Accounts" value={compact(dune?.totals.accounts ?? p.wallets.total)} />
+          <Stat big label="Listed markets" value={String(p.listedMarkets)} />
+          <Stat big label="Upcoming markets" value={String(p.upcomingMarkets)} />
+        </div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(380px,1fr))", gap: 16 }}>
