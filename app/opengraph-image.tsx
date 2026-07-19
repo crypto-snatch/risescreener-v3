@@ -11,43 +11,56 @@ const ACCENT_2 = "#7d93c8";
 const INK = "#e8f2ee";
 const MUTED = "#8ca3a0";
 
+// Green magnifying-glass brand tile (matches app/icon.svg), inlined as a data URI
+const MARK =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#2EE88E"/><g fill="none" stroke="#0b0f0e" stroke-linecap="round"><circle cx="43" cy="43" r="21" stroke-width="10"/><path d="M59 59 L80 80" stroke-width="12"/></g></svg>'
+  );
+
 export default function OpengraphImage() {
   return new ImageResponse(
     (
       <div
         style={{
+          position: "relative",
           width: "100%",
           height: "100%",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "72px 80px",
-          background:
-            "radial-gradient(1100px 620px at 82% -10%, rgba(52,207,162,0.16), rgba(7,14,12,0) 60%), radial-gradient(900px 520px at 0% 120%, rgba(125,147,200,0.14), rgba(7,14,12,0) 55%), #070e0c",
+          background: "#070e0c",
           color: INK,
           fontFamily: "sans-serif",
         }}
       >
+        {/* Ambient glows (satori-safe radial gradients, no size/position prefix) */}
+        <div
+          style={{
+            position: "absolute",
+            top: -160,
+            right: -120,
+            width: 760,
+            height: 560,
+            background: "radial-gradient(circle, rgba(52,207,162,0.20), rgba(7,14,12,0) 62%)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: -180,
+            left: -140,
+            width: 760,
+            height: 560,
+            background: "radial-gradient(circle, rgba(125,147,200,0.18), rgba(7,14,12,0) 62%)",
+          }}
+        />
+
         {/* Brand mark */}
         <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
-          <div
-            style={{
-              display: "flex",
-              width: 84,
-              height: 84,
-              borderRadius: 22,
-              background: "#0a1512",
-              border: "1px solid rgba(52,207,162,0.35)",
-              alignItems: "flex-end",
-              justifyContent: "center",
-              gap: 8,
-              padding: "0 16px 18px",
-            }}
-          >
-            <div style={{ display: "flex", width: 12, height: 20, borderRadius: 3, background: ACCENT }} />
-            <div style={{ display: "flex", width: 12, height: 32, borderRadius: 3, background: ACCENT }} />
-            <div style={{ display: "flex", width: 12, height: 44, borderRadius: 3, background: ACCENT }} />
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={MARK} width={84} height={84} alt="" style={{ borderRadius: 22 }} />
           <div style={{ display: "flex", fontSize: 34, fontWeight: 700, letterSpacing: 2 }}>
             <span style={{ color: ACCENT }}>RISE</span>
             <span style={{ color: INK }}>SCREENER</span>
@@ -55,14 +68,14 @@ export default function OpengraphImage() {
         </div>
 
         {/* Headline */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <div style={{ display: "flex", fontSize: 68, fontWeight: 700, lineHeight: 1.05, letterSpacing: -1 }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", fontSize: 68, fontWeight: 700, lineHeight: 1.1, letterSpacing: -1 }}>
             RISE Chain &amp; RISEx
           </div>
-          <div style={{ display: "flex", fontSize: 68, fontWeight: 700, lineHeight: 1.05, letterSpacing: -1, color: ACCENT }}>
+          <div style={{ display: "flex", fontSize: 68, fontWeight: 700, lineHeight: 1.1, letterSpacing: -1, color: ACCENT }}>
             perps analytics &amp; risk screener
           </div>
-          <div style={{ display: "flex", fontSize: 30, color: MUTED, marginTop: 8 }}>
+          <div style={{ display: "flex", fontSize: 30, color: MUTED, marginTop: 22 }}>
             Live markets · open interest · funding · fees · liquidations · flows
           </div>
         </div>
