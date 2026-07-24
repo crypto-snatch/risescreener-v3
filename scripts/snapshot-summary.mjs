@@ -24,7 +24,12 @@ const usd = (n, opts = {}) => {
   return `${sign}$${b}`;
 };
 const shortAddr = (a) => (!a || a.length < 12 ? a : `${a.slice(0, 6)}…${a.slice(-4)}`);
-const COINS = ["BTC", "ETH", "SOL", "HYPE", "Others"];
+// RWA markets — metals (gold, silver) + crude oil (WTI, Brent). Mirrors lib/sectors.ts.
+const RWA_SYMBOLS = ["XAU", "XAG", "CL", "BZ"];
+// "RWA" is the per-day aggregate band Dune volume writes (see fetch-dune.mjs); it
+// is NOT folded into "Others", so include it here to keep the volume total whole.
+// Fee CoinDays never set RWA (their RWA slice stays 0), so this never double-counts.
+const COINS = ["BTC", "ETH", "SOL", "HYPE", "RWA", "Others"];
 const sumCoins = (o) => (o ? COINS.reduce((s, c) => s + (o[c] || 0), 0) : 0);
 // last COMPLETE UTC day: skip the in-progress current day (its bucket is partial)
 const _now = new Date();
@@ -60,6 +65,15 @@ async function main() {
   const tvlSeries = dune?.tvl || [];
   const tvlChg = tvlSeries.length >= 2 ? tvlSeries[tvlSeries.length - 1].tvl - tvlSeries[tvlSeries.length - 2].tvl : 0;
 
+  // RWA breakout (metals + oil), split out of the crypto totals:
+  //   OI  = live RWA markets from oiByMarket · Vol24h = the RWA volume band on the
+  //   last complete day · CumVol = the all-time RWA aggregate.
+  const rwaOi = (dune?.oiByMarket || []).filter((r) => RWA_SYMBOLS.includes(r.symbol)).reduce((s, r) => s + (r.oiUsd || 0), 0);
+  const rwaOiPct = oiNow > 0 ? (rwaOi / oiNow) * 100 : 0;
+  const rwaVol24 = vi >= 0 ? (volDays[vi].RWA || 0) : 0;
+  const rwaVolChg = vi > 0 ? (volDays[vi].RWA || 0) - (volDays[vi - 1].RWA || 0) : 0;
+  const rwaCumVol = dune?.totals?.cumVolumeRwa ?? 0;
+
   // OI — change vs the previous snapshot (no Dune daily history for OI)
   const oiChg = prev?.raw?.oiNow != null ? oiNow - prev.raw.oiNow : 0;
 
@@ -82,6 +96,11 @@ async function main() {
     { label: "Volume", value: usd(cumVol) },
     { label: "Fees (trade + liq)", value: usd(cumFee) },
   ];
+  const kpisRwa = [
+    { label: "OI", value: usd(rwaOi), delta: rwaOiPct >= 0.05 ? `${rwaOiPct.toFixed(1)}% of OI` : undefined },
+    { label: "24h Vol", value: usd(rwaVol24), delta: d(rwaVolChg) },
+    { label: "Cum Vol", value: usd(rwaCumVol) },
+  ];
   const dl = (n) => (n ? ` (${usd(n, { sign: true })} 24h)` : "");
   const line = (m) => m.map((x) => `${x.m} ${x.a} (${x.v})`).join("  ");
   const text = [
@@ -94,6 +113,10 @@ async function main() {
     `ALL-TIME`,
     `• Volume: ${usd(cumVol)}`,
     `• Fees (trade+liq): ${usd(cumFee)}`, ``,
+    `🏦 RWA (metals + oil)`,
+    `• Open Interest: ${usd(rwaOi)}${rwaOiPct >= 0.05 ? ` (${rwaOiPct.toFixed(1)}% of OI)` : ""}`,
+    `• 24h Volume: ${usd(rwaVol24)}${dl(rwaVolChg)}`,
+    `• Cumulative Vol: ${usd(rwaCumVol)}`, ``,
     `🏆 Top traders`,
     `Volume:  ${line(tops[0].rows)}`,
     `OI:      ${line(tops[1].rows)}`,
@@ -104,8 +127,8 @@ async function main() {
   const out = {
     generatedAt: new Date().toISOString(),
     date,
-    raw: { vol24h, oiNow, tvl, fee24h, cumVol, cumFee },
-    kpis24, kpisTotal, tops, text,
+    raw: { vol24h, oiNow, tvl, fee24h, cumVol, cumFee, rwaOi, rwaVol24, rwaCumVol },
+    kpis24, kpisTotal, kpisRwa, tops, text,
   };
   await mkdir(DATA, { recursive: true });
   await writeFile(OUT, JSON.stringify(out));

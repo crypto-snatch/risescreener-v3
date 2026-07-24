@@ -14,10 +14,11 @@ const POS = "#3fdd9a";
 const NEG = "#ff6b7d";
 const INK = "#e8ecf0";
 const MUT = "#8b95a3";
+const GOLD = "#e6c069"; // RWA accent — matches CLASS_COLOR.RWA
 const CARD_BG = "#0b0e13";
 const HAIR = "rgba(255,255,255,0.07)";
 
-export default function SummaryShare({ date, kpis24, kpisTotal, tops, text }: { date: string; kpis24: Kpi[]; kpisTotal: Kpi[]; tops: Top[]; text: string }) {
+export default function SummaryShare({ date, kpis24, kpisTotal, kpisRwa, tops, text }: { date: string; kpis24: Kpi[]; kpisTotal: Kpi[]; kpisRwa?: Kpi[]; tops: Top[]; text: string }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -88,6 +89,9 @@ export default function SummaryShare({ date, kpis24, kpisTotal, tops, text }: { 
             <KpiBlock heading="All-time" kpis={kpisTotal} />
           </div>
 
+          {/* RWA breakout — metals + oil, split out from the crypto totals */}
+          {kpisRwa && kpisRwa.length > 0 && <RwaStrip kpis={kpisRwa} />}
+
           {/* top traders */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 9 }}>
             {tops.map((t) => (
@@ -132,6 +136,28 @@ export default function SummaryShare({ date, kpis24, kpisTotal, tops, text }: { 
           onFocus={(e) => e.currentTarget.select()}
           style={{ width: "100%", flex: 1, minHeight: 340, resize: "none", background: "rgba(0,0,0,0.28)", border: `1px solid ${HAIR}`, borderRadius: 8, color: "var(--ink)", fontFamily: "var(--font-mono)", fontSize: 12, lineHeight: 1.65, padding: "12px 13px" }}
         />
+      </div>
+    </div>
+  );
+}
+
+// A slim gold-accented strip that breaks out the RWA (metals + oil) slice of the
+// protocol totals — OI / 24h vol / cumulative vol laid out inline.
+function RwaStrip({ kpis }: { kpis: Kpi[] }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 12, padding: "9px 12px", borderRadius: 8, border: `1px solid color-mix(in oklab, ${GOLD} 30%, transparent)`, background: `color-mix(in oklab, ${GOLD} 8%, transparent)` }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+        <span style={{ width: 7, height: 7, borderRadius: 2, background: GOLD }} />
+        <span style={{ fontSize: 9.5, color: GOLD, letterSpacing: ".14em", textTransform: "uppercase", fontWeight: 700 }}>RWA</span>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", marginLeft: "auto" }}>
+        {kpis.map((k) => (
+          <div key={k.label} style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+            <span style={{ fontSize: 10, color: MUT, whiteSpace: "nowrap" }}>{k.label}</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: GOLD, fontVariantNumeric: "tabular-nums" }}>{k.value}</span>
+            {k.delta && <span style={{ fontSize: 9.5, color: MUT }}>{k.delta}</span>}
+          </div>
+        ))}
       </div>
     </div>
   );

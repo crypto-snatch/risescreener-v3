@@ -13,6 +13,9 @@ export interface Summary {
   raw: Record<string, number>;
   kpis24: Kpi[];
   kpisTotal: Kpi[];
+  // RWA (real-world assets — metals + oil) broken out separately. Optional so
+  // older snapshots that predate the RWA split still render.
+  kpisRwa?: Kpi[];
   tops: Top[];
   text: string;
 }

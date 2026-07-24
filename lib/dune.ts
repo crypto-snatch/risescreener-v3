@@ -16,8 +16,9 @@ export interface DuneData {
   accounts: { t: number; newAccounts: number; activeTraders: number; cumAccounts: number }[];
   oiByMarket: { symbol: string; oiUsd: number }[];
 }
-// RWA (aggregate) + per-metal XAU/XAG optional for backward-compat with older snapshots.
-export type CoinDay = { t: number; BTC: number; ETH: number; SOL: number; HYPE: number; XAU?: number; XAG?: number; RWA?: number; Others: number };
+// RWA (aggregate) + per-market metals (XAU/XAG) and oil (CL/BZ) are optional for
+// backward-compat with older snapshots that predate each market's listing.
+export type CoinDay = { t: number; BTC: number; ETH: number; SOL: number; HYPE: number; XAU?: number; XAG?: number; CL?: number; BZ?: number; RWA?: number; Others: number };
 
 let cache: { at: number; data: DuneData | null } | null = null;
 

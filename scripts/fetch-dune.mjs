@@ -23,7 +23,7 @@ const Q = {
   liqTotals: 6949906,
 };
 const GROUPS = ["BTC", "ETH", "SOL", "HYPE"];
-const RWA = ["XAU", "XAG"]; // real-world-asset perps (gold, silver)
+const RWA = ["XAU", "XAG", "CL", "BZ"]; // real-world-asset perps — metals (gold, silver) + crude oil (WTI, Brent)
 const sym = (name) => (name || "").replace("/USDC", "");
 
 const startTodayUTC = () => {
@@ -111,7 +111,8 @@ async function main() {
   // Volume keeps per-metal bands (XAU/XAG) plus their RWA aggregate; the "All"
   // view stacks the RWA band, the "RWA" view stacks XAU + XAG. Fees/liq fold RWA
   // into Others (unchanged) so those charts don't shift.
-  const blank = (t) => ({ t, BTC: 0, ETH: 0, SOL: 0, HYPE: 0, XAU: 0, XAG: 0, RWA: 0, Others: 0 });
+  // per-day bucket: crypto groups + one field per RWA market + the RWA aggregate + Others
+  const blank = (t) => ({ t, BTC: 0, ETH: 0, SOL: 0, HYPE: 0, ...Object.fromEntries(RWA.map((s) => [s, 0])), RWA: 0, Others: 0 });
   const byDay = new Map();
   const feeDay = new Map();
   const liqFeeDay = new Map();

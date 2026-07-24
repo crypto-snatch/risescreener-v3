@@ -4,12 +4,16 @@ import { getSnapshot } from "@/lib/snapshot";
 import { getTimeseries } from "@/lib/timeseries";
 import { getSummary } from "@/lib/summary";
 import { usd, shortAddr } from "@/lib/format";
+import { RWA_SYMBOLS } from "@/lib/sectors";
 import SummaryShare from "@/components/SummaryShare";
 
 export const revalidate = 60;
 export const metadata = { title: "Summary — RiseScreener" };
 
-const COINS = ["BTC", "ETH", "SOL", "HYPE", "Others"] as const;
+// "RWA" is the per-day aggregate volume band (not folded into "Others"), so it is
+// summed here to keep the volume total whole; fee CoinDays leave RWA at 0, so it
+// never double-counts fees. Mirrors scripts/snapshot-summary.mjs.
+const COINS = ["BTC", "ETH", "SOL", "HYPE", "RWA", "Others"] as const;
 const sumCoins = (o?: Partial<Record<(typeof COINS)[number], number>>) =>
   o ? COINS.reduce((s, c) => s + (o[c] || 0), 0) : 0;
 
@@ -35,7 +39,7 @@ export default async function SummaryPage() {
   if (snap) {
     return (
       <Frame>
-        <SummaryShare date={snap.date} kpis24={snap.kpis24} kpisTotal={snap.kpisTotal} tops={snap.tops} text={snap.text} />
+        <SummaryShare date={snap.date} kpis24={snap.kpis24} kpisTotal={snap.kpisTotal} kpisRwa={snap.kpisRwa} tops={snap.tops} text={snap.text} />
       </Frame>
     );
   }
@@ -78,6 +82,13 @@ export default async function SummaryPage() {
   }
   const oiChg = base && sumCoins(base.oi) ? oiNow - sumCoins(base.oi) : 0;
 
+  // RWA breakout (metals + oil), split out of the crypto totals.
+  const rwaOi = (dune?.oiByMarket ?? []).filter((r) => RWA_SYMBOLS.includes(r.symbol)).reduce((s, r) => s + (r.oiUsd || 0), 0);
+  const rwaOiPct = oiNow > 0 ? (rwaOi / oiNow) * 100 : 0;
+  const rwaVol24 = vi >= 0 ? (volDays[vi].RWA || 0) : 0;
+  const rwaVolChg = vi > 0 ? (volDays[vi].RWA || 0) - (volDays[vi - 1].RWA || 0) : 0;
+  const rwaCumVol = dune?.totals.cumVolumeRwa ?? 0;
+
   const date = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" });
   const d = (n: number) => (n ? usd(n, { sign: true }) : undefined);
 
@@ -100,6 +111,11 @@ export default async function SummaryPage() {
     { label: "Volume", value: usd(cumVol) },
     { label: "Fees (trade + liq)", value: usd(cumFee) },
   ];
+  const kpisRwa: ShareProps["kpisRwa"] = [
+    { label: "OI", value: usd(rwaOi), delta: rwaOiPct >= 0.05 ? `${rwaOiPct.toFixed(1)}% of OI` : undefined },
+    { label: "24h Vol", value: usd(rwaVol24), delta: d(rwaVolChg) },
+    { label: "Cum Vol", value: usd(rwaCumVol) },
+  ];
 
   const dl = (n: number) => (n ? ` (${usd(n, { sign: true })} 24h)` : "");
   const line = (m: { m: string; a: string; v: string }[]) => m.map((x) => `${x.m} ${x.a} (${x.v})`).join("  ");
@@ -113,6 +129,10 @@ export default async function SummaryPage() {
     `ALL-TIME`,
     `• Volume: ${usd(cumVol)}`,
     `• Fees (trade+liq): ${usd(cumFee)}`, ``,
+    `🏦 RWA (metals + oil)`,
+    `• Open Interest: ${usd(rwaOi)}${rwaOiPct >= 0.05 ? ` (${rwaOiPct.toFixed(1)}% of OI)` : ""}`,
+    `• 24h Volume: ${usd(rwaVol24)}${dl(rwaVolChg)}`,
+    `• Cumulative Vol: ${usd(rwaCumVol)}`, ``,
     `🏆 Top traders`,
     `Volume:  ${line(tops[0].rows)}`,
     `OI:      ${line(tops[1].rows)}`,
@@ -122,7 +142,7 @@ export default async function SummaryPage() {
 
   return (
     <Frame>
-      <SummaryShare date={date} kpis24={kpis24} kpisTotal={kpisTotal} tops={tops} text={text} />
+      <SummaryShare date={date} kpis24={kpis24} kpisTotal={kpisTotal} kpisRwa={kpisRwa} tops={tops} text={text} />
     </Frame>
   );
 }

@@ -4,9 +4,10 @@ import { useState } from "react";
 import SeriesChart from "@/components/SeriesChart";
 import OiDonut from "@/components/OiDonut";
 import { Panel } from "@/components/ui";
+import { RWA_SYMBOLS } from "@/lib/sectors";
 
 // Cum Vol + OI cards share one All/RWA toggle: flipping it filters BOTH charts
-// to the RWA (gold + silver) markets. Crypto stays implicit in the "All" view.
+// to the RWA (metals + oil) markets. Crypto stays implicit in the "All" view.
 type Slice = { name: string; value: number; color: string; rwa: boolean };
 type Pt = { t: number } & Record<string, number>;
 
@@ -45,7 +46,7 @@ const MIN_WIN = 10;
 
 export default function ClassCharts({ volPoints, volGroups, oiSlices }: { volPoints: Pt[]; volGroups: string[]; oiSlices: Slice[] }) {
   const [rwa, setRwa] = useState(false);
-  const groups = rwa ? ["XAU", "XAG"] : volGroups; // RWA view splits into gold + silver
+  const groups = rwa ? RWA_SYMBOLS : volGroups; // RWA view splits into each RWA market (metals + oil)
   const oiData = (rwa ? oiSlices.filter((s) => s.rwa) : oiSlices).map(({ name, value, color }) => ({ name, value, color }));
 
   let volPts = volPoints;

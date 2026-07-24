@@ -29,7 +29,7 @@ export default async function Overview() {
   const topLoser = [...tradable].sort((a, b) => a.changePct - b.changePct).slice(0, 5);
   const pct = (r: MarketRow) => `${r.changePct >= 0 ? "+" : ""}${r.changePct.toFixed(2)}%`;
 
-  // ── asset-class split (live, per-market): RWA = gold + silver ──
+  // ── asset-class split (live, per-market): RWA = metals (gold, silver) + oil (WTI, Brent) ──
   const sum = (arr: MarketRow[], f: (r: MarketRow) => number) => arr.reduce((s, r) => s + f(r), 0);
   const oiRwa = sum(tradable.filter((r) => isRwa(r.symbol)), (r) => r.oiUsd);
   const oiLive = sum(tradable, (r) => r.oiUsd);
