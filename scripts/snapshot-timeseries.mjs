@@ -39,6 +39,20 @@ async function main() {
     vol[g] += Number(m.quote_volume_24h) || 0;
     oi[g] += Number(m.open_interest) * mark;
   }
+
+  // Guard: a failed/empty /v1/markets response (API outage, shape change, or an
+  // all-deprecated filter) yields no markets, which would append a false OI=$0 /
+  // Vol=$0 point and crater the trend charts — while the protocol is actually
+  // fine (TVL comes from a separate source). Skip the snapshot instead of
+  // recording the artifact; the line charts just bridge the short gap.
+  // (This happened 2026-07-14→15, ~26h of zeroed OI/Vol.)
+  const totOi = oi.BTC + oi.ETH + oi.SOL + oi.HYPE + oi.Others;
+  const totVol = vol.BTC + vol.ETH + vol.SOL + vol.HYPE + vol.Others;
+  if (live.length === 0 || (totOi === 0 && totVol === 0)) {
+    console.error(`⚠️ /v1/markets empty (live=${live.length}, OI=$${totOi.toFixed(0)}, vol=$${totVol.toFixed(0)}) — skipping snapshot to avoid a false zero point`);
+    process.exit(0);
+  }
+
   const round = (o) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, Math.round(v)]));
 
   let tvl = 0;
