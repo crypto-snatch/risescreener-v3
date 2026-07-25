@@ -262,17 +262,29 @@ async function main() {
     const fd = await j(`${API}/v1/trade-history?account=${account}&limit=1000`);
     const arr = (fd?.data?.trades || fd?.data?.fills || []).slice().sort((a, b) => Number(a.time) - Number(b.time));
     const vol = {}, pnl = {}, net = {};
-    let cum = 0, netTok = 0;
+    let cum = 0;
+    // Reconstructed OI must be tracked PER MARKET: net token position and price
+    // differ wildly across markets (BTC ~$100k vs DOGE ~$0.1). Summing token
+    // sizes across markets and multiplying by one fill's price produced absurd
+    // spikes (a single wallet showing $100M+ OI vs ~$26M protocol-wide). Instead
+    // keep a per-market running net position and value each at its own last
+    // price, then sum — a sane, additive dollar notional.
+    const netTokByMkt = {}; // market_id -> running net tokens (BUY +, SELL −)
+    const lastPxByMkt = {}; // market_id -> most recent fill price (period-appropriate valuation)
     for (const f of arr) {
       const ms = Number(f.time) / 1e6;
       const priceN = Number(f.price), sizeN = Number(f.size);
+      const mkt = f.market_id;
       cum += Number(f.realized_pnl || 0);
-      netTok += (f.side === "BUY" ? 1 : -1) * sizeN;
+      netTokByMkt[mkt] = (netTokByMkt[mkt] || 0) + (f.side === "BUY" ? 1 : -1) * sizeN;
+      lastPxByMkt[mkt] = priceN;
       if (ms < START) continue; // pre-window fills only advance anchors
       const day = Math.floor(ms / DAY) * DAY;
       vol[day] = (vol[day] || 0) + priceN * sizeN;
       pnl[day] = cum;
-      net[day] = Math.abs(netTok) * priceN;
+      let oiUsd = 0;
+      for (const m in netTokByMkt) oiUsd += Math.abs(netTokByMkt[m]) * (lastPxByMkt[m] || 0);
+      net[day] = oiUsd;
     }
     return { vol, pnl, net };
   }
