@@ -23,7 +23,10 @@ const Q = {
   liqTotals: 6949906,
 };
 const GROUPS = ["BTC", "ETH", "SOL", "HYPE"];
-const RWA = ["XAU", "XAG", "CL", "BZ"]; // real-world-asset perps — metals (gold, silver) + crude oil (WTI, Brent)
+// RWA perps split into two classes (mirrors lib/sectors.ts):
+const CMD = ["XAU", "XAG", "CL", "BZ"]; // Commodities — metals (gold, silver) + crude oil (WTI, Brent)
+const STK = ["SNDK", "SPCX"]; // Stocks — tokenized equities (SanDisk, SpaceX)
+const RWA = [...CMD, ...STK]; // umbrella
 const sym = (name) => (name || "").replace("/USDC", "");
 
 const startTodayUTC = () => {
@@ -105,18 +108,17 @@ async function main() {
   const d = new Date(execMs);
   const cutoff = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
 
-  // volume / fees / liq-fees by market → per-day { BTC, ETH, SOL, HYPE, RWA, Others }.
-  // Volume splits metals (XAU/XAG) into their own "RWA" band; fees/liq keep the
-  // prior grouping (RWA folded into "Others") so those charts don't shift.
-  // Volume keeps per-metal bands (XAU/XAG) plus their RWA aggregate; the "All"
-  // view stacks the RWA band, the "RWA" view stacks XAU + XAG. Fees/liq fold RWA
-  // into Others (unchanged) so those charts don't shift.
-  // per-day bucket: crypto groups + one field per RWA market + the RWA aggregate + Others
-  const blank = (t) => ({ t, BTC: 0, ETH: 0, SOL: 0, HYPE: 0, ...Object.fromEntries(RWA.map((s) => [s, 0])), RWA: 0, Others: 0 });
+  // volume / fees / liq-fees by market → per-day buckets. Volume buckets carry
+  // crypto groups + one field per RWA market + class aggregates ("Commodities",
+  // "Stocks" — chart bands read these by name) + the "RWA" umbrella + Others.
+  // Fees/liq keep the prior grouping (RWA folded into "Others") so those charts
+  // don't shift.
+  const blank = (t) => ({ t, BTC: 0, ETH: 0, SOL: 0, HYPE: 0, ...Object.fromEntries(RWA.map((s) => [s, 0])), Commodities: 0, Stocks: 0, RWA: 0, Others: 0 });
   const byDay = new Map();
   const feeDay = new Map();
   const liqFeeDay = new Map();
-  let cumVolRwa = 0; // all-time (complete days) RWA volume, for the cumulative split
+  let cumVolCmd = 0; // all-time (complete days) per-class volume, for the cumulative split
+  let cumVolStk = 0;
   for (const r of vbm) {
     const t = dayMs(r.period);
     if (t >= cutoff) continue;
@@ -127,7 +129,8 @@ async function main() {
     if (!liqFeeDay.has(t)) liqFeeDay.set(t, blank(t));
     const vol = Math.round(r.daily_volume_usd || 0);
     const day = byDay.get(t);
-    if (RWA.includes(s)) { day[s] += vol; day.RWA += vol; cumVolRwa += vol; } // per-metal + aggregate
+    if (CMD.includes(s)) { day[s] += vol; day.Commodities += vol; day.RWA += vol; cumVolCmd += vol; }
+    else if (STK.includes(s)) { day[s] += vol; day.Stocks += vol; day.RWA += vol; cumVolStk += vol; }
     else if (GROUPS.includes(s)) day[s] += vol;
     else day.Others += vol;
     feeDay.get(t)[feeGroup] += Math.round(r.daily_total_fees_usd || 0);
@@ -151,13 +154,17 @@ async function main() {
   const latestAccts = accountsSeries[accountsSeries.length - 1]?.cumAccounts ?? 0;
   const totalOi = Math.round(oi[0]?.total_oi_usd || 0);
   const cumVolume = Math.round(latest.cumulative_volume_usd || 0);
-  cumVolRwa = Math.round(cumVolRwa);
+  cumVolCmd = Math.round(cumVolCmd);
+  cumVolStk = Math.round(cumVolStk);
+  const cumVolRwa = cumVolCmd + cumVolStk;
 
   const data = {
     generatedAt: new Date().toISOString(),
     totals: {
       cumVolume,
       cumVolumeRwa: cumVolRwa,
+      cumVolumeCmd: cumVolCmd,
+      cumVolumeStk: cumVolStk,
       cumVolumeCrypto: Math.max(0, cumVolume - cumVolRwa),
       cumFees: Math.round(latest.cumulative_total_fees_usd || 0),
       cumTrades: latest.cumulative_trades || 0,

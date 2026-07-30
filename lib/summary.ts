@@ -13,9 +13,11 @@ export interface Summary {
   raw: Record<string, number>;
   kpis24: Kpi[];
   kpisTotal: Kpi[];
-  // RWA (real-world assets — metals + oil) broken out separately. Optional so
-  // older snapshots that predate the RWA split still render.
+  // RWA broken out by class — Commodities (metals + oil) and Stocks. kpisRwa is
+  // the legacy combined strip; all optional so older snapshots still render.
   kpisRwa?: Kpi[];
+  kpisCmd?: Kpi[];
+  kpisStk?: Kpi[];
   tops: Top[];
   text: string;
 }

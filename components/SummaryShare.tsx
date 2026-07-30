@@ -14,11 +14,12 @@ const POS = "#3fdd9a";
 const NEG = "#ff6b7d";
 const INK = "#e8ecf0";
 const MUT = "#8b95a3";
-const GOLD = "#e6c069"; // RWA accent — matches CLASS_COLOR.RWA
+const GOLD = "#e6c069"; // Commodities accent — matches CLASS_COLOR.Commodities
+const AZURE = "#5fa8ff"; // Stocks accent — matches CLASS_COLOR.Stocks
 const CARD_BG = "#0b0e13";
 const HAIR = "rgba(255,255,255,0.07)";
 
-export default function SummaryShare({ date, kpis24, kpisTotal, kpisRwa, tops, text }: { date: string; kpis24: Kpi[]; kpisTotal: Kpi[]; kpisRwa?: Kpi[]; tops: Top[]; text: string }) {
+export default function SummaryShare({ date, kpis24, kpisTotal, kpisRwa, kpisCmd, kpisStk, tops, text }: { date: string; kpis24: Kpi[]; kpisTotal: Kpi[]; kpisRwa?: Kpi[]; kpisCmd?: Kpi[]; kpisStk?: Kpi[]; tops: Top[]; text: string }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -89,8 +90,16 @@ export default function SummaryShare({ date, kpis24, kpisTotal, kpisRwa, tops, t
             <KpiBlock heading="All-time" kpis={kpisTotal} />
           </div>
 
-          {/* RWA breakout — metals + oil, split out from the crypto totals */}
-          {kpisRwa && kpisRwa.length > 0 && <RwaStrip kpis={kpisRwa} />}
+          {/* RWA breakout by class — Commodities + Stocks; legacy snapshots fall
+              back to the combined RWA strip */}
+          {kpisCmd && kpisCmd.length > 0 ? (
+            <>
+              <ClassStrip label="Commodities" accent={GOLD} kpis={kpisCmd} />
+              {kpisStk && kpisStk.length > 0 && <ClassStrip label="Stocks" accent={AZURE} kpis={kpisStk} />}
+            </>
+          ) : (
+            kpisRwa && kpisRwa.length > 0 && <ClassStrip label="RWA" accent={GOLD} kpis={kpisRwa} />
+          )}
 
           {/* top traders */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 9 }}>
@@ -141,20 +150,20 @@ export default function SummaryShare({ date, kpis24, kpisTotal, kpisRwa, tops, t
   );
 }
 
-// A slim gold-accented strip that breaks out the RWA (metals + oil) slice of the
-// protocol totals — OI / 24h vol / cumulative vol laid out inline.
-function RwaStrip({ kpis }: { kpis: Kpi[] }) {
+// A slim accented strip that breaks out one RWA class (Commodities, Stocks) of
+// the protocol totals — OI / 24h vol / cumulative vol laid out inline.
+function ClassStrip({ label, accent, kpis }: { label: string; accent: string; kpis: Kpi[] }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 12, padding: "9px 12px", borderRadius: 8, border: `1px solid color-mix(in oklab, ${GOLD} 30%, transparent)`, background: `color-mix(in oklab, ${GOLD} 8%, transparent)` }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 12, padding: "9px 12px", borderRadius: 8, border: `1px solid color-mix(in oklab, ${accent} 30%, transparent)`, background: `color-mix(in oklab, ${accent} 8%, transparent)` }}>
       <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
-        <span style={{ width: 7, height: 7, borderRadius: 2, background: GOLD }} />
-        <span style={{ fontSize: 9.5, color: GOLD, letterSpacing: ".14em", textTransform: "uppercase", fontWeight: 700 }}>RWA</span>
+        <span style={{ width: 7, height: 7, borderRadius: 2, background: accent }} />
+        <span style={{ fontSize: 9.5, color: accent, letterSpacing: ".14em", textTransform: "uppercase", fontWeight: 700 }}>{label}</span>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", marginLeft: "auto" }}>
         {kpis.map((k) => (
           <div key={k.label} style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
             <span style={{ fontSize: 10, color: MUT, whiteSpace: "nowrap" }}>{k.label}</span>
-            <span style={{ fontSize: 13, fontWeight: 700, color: GOLD, fontVariantNumeric: "tabular-nums" }}>{k.value}</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: accent, fontVariantNumeric: "tabular-nums" }}>{k.value}</span>
             {k.delta && <span style={{ fontSize: 9.5, color: MUT }}>{k.delta}</span>}
           </div>
         ))}

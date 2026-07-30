@@ -4,7 +4,7 @@ import { getSnapshot } from "@/lib/snapshot";
 import { getTimeseries } from "@/lib/timeseries";
 import { getSummary } from "@/lib/summary";
 import { usd, shortAddr } from "@/lib/format";
-import { RWA_SYMBOLS } from "@/lib/sectors";
+import { CMD_SYMBOLS, STOCK_SYMBOLS } from "@/lib/sectors";
 import SummaryShare from "@/components/SummaryShare";
 
 export const revalidate = 60;
@@ -39,7 +39,7 @@ export default async function SummaryPage() {
   if (snap) {
     return (
       <Frame>
-        <SummaryShare date={snap.date} kpis24={snap.kpis24} kpisTotal={snap.kpisTotal} kpisRwa={snap.kpisRwa} tops={snap.tops} text={snap.text} />
+        <SummaryShare date={snap.date} kpis24={snap.kpis24} kpisTotal={snap.kpisTotal} kpisRwa={snap.kpisRwa} kpisCmd={snap.kpisCmd} kpisStk={snap.kpisStk} tops={snap.tops} text={snap.text} />
       </Frame>
     );
   }
@@ -82,12 +82,22 @@ export default async function SummaryPage() {
   }
   const oiChg = base && sumCoins(base.oi) ? oiNow - sumCoins(base.oi) : 0;
 
-  // RWA breakout (metals + oil), split out of the crypto totals.
-  const rwaOi = (dune?.oiByMarket ?? []).filter((r) => RWA_SYMBOLS.includes(r.symbol)).reduce((s, r) => s + (r.oiUsd || 0), 0);
-  const rwaOiPct = oiNow > 0 ? (rwaOi / oiNow) * 100 : 0;
-  const rwaVol24 = vi >= 0 ? (volDays[vi].RWA || 0) : 0;
-  const rwaVolChg = vi > 0 ? (volDays[vi].RWA || 0) - (volDays[vi - 1].RWA || 0) : 0;
-  const rwaCumVol = dune?.totals.cumVolumeRwa ?? 0;
+  // RWA breakout by class — Commodities vs Stocks — split out of the crypto
+  // totals. Older dune.json (pre-split) only has the RWA umbrella band — fold
+  // it into Commodities. Mirrors scripts/snapshot-summary.mjs.
+  const classStats = (symbols: string[], bandKey: "Commodities" | "Stocks", cum: number) => {
+    const oi = (dune?.oiByMarket ?? []).filter((r) => symbols.includes(r.symbol)).reduce((s, r) => s + (r.oiUsd || 0), 0);
+    const band = (d?: (typeof volDays)[number]) => d?.[bandKey] ?? (bandKey === "Commodities" ? d?.RWA : undefined) ?? 0;
+    return {
+      oi,
+      oiPct: oiNow > 0 ? (oi / oiNow) * 100 : 0,
+      vol24: vi >= 0 ? band(volDays[vi]) : 0,
+      volChg: vi > 0 ? band(volDays[vi]) - band(volDays[vi - 1]) : 0,
+      cumVol: cum,
+    };
+  };
+  const cmd = classStats(CMD_SYMBOLS, "Commodities", dune?.totals.cumVolumeCmd ?? dune?.totals.cumVolumeRwa ?? 0);
+  const stk = classStats(STOCK_SYMBOLS, "Stocks", dune?.totals.cumVolumeStk ?? 0);
 
   const date = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" });
   const d = (n: number) => (n ? usd(n, { sign: true }) : undefined);
@@ -111,11 +121,13 @@ export default async function SummaryPage() {
     { label: "Volume", value: usd(cumVol) },
     { label: "Fees (trade + liq)", value: usd(cumFee) },
   ];
-  const kpisRwa: ShareProps["kpisRwa"] = [
-    { label: "OI", value: usd(rwaOi), delta: rwaOiPct >= 0.05 ? `${rwaOiPct.toFixed(1)}% of OI` : undefined },
-    { label: "24h Vol", value: usd(rwaVol24), delta: d(rwaVolChg) },
-    { label: "Cum Vol", value: usd(rwaCumVol) },
+  const classKpis = (c: typeof cmd): NonNullable<ShareProps["kpisCmd"]> => [
+    { label: "OI", value: usd(c.oi), delta: c.oiPct >= 0.05 ? `${c.oiPct.toFixed(1)}% of OI` : undefined },
+    { label: "24h Vol", value: usd(c.vol24), delta: d(c.volChg) },
+    { label: "Cum Vol", value: usd(c.cumVol) },
   ];
+  const kpisCmd = classKpis(cmd);
+  const kpisStk = classKpis(stk);
 
   const dl = (n: number) => (n ? ` (${usd(n, { sign: true })} 24h)` : "");
   const line = (m: { m: string; a: string; v: string }[]) => m.map((x) => `${x.m} ${x.a} (${x.v})`).join("  ");
@@ -129,10 +141,14 @@ export default async function SummaryPage() {
     `ALL-TIME`,
     `• Volume: ${usd(cumVol)}`,
     `• Fees (trade+liq): ${usd(cumFee)}`, ``,
-    `🏦 RWA (metals + oil)`,
-    `• Open Interest: ${usd(rwaOi)}${rwaOiPct >= 0.05 ? ` (${rwaOiPct.toFixed(1)}% of OI)` : ""}`,
-    `• 24h Volume: ${usd(rwaVol24)}${dl(rwaVolChg)}`,
-    `• Cumulative Vol: ${usd(rwaCumVol)}`, ``,
+    `🏦 Commodities (metals + oil)`,
+    `• Open Interest: ${usd(cmd.oi)}${cmd.oiPct >= 0.05 ? ` (${cmd.oiPct.toFixed(1)}% of OI)` : ""}`,
+    `• 24h Volume: ${usd(cmd.vol24)}${dl(cmd.volChg)}`,
+    `• Cumulative Vol: ${usd(cmd.cumVol)}`, ``,
+    `📈 Stocks`,
+    `• Open Interest: ${usd(stk.oi)}${stk.oiPct >= 0.05 ? ` (${stk.oiPct.toFixed(1)}% of OI)` : ""}`,
+    `• 24h Volume: ${usd(stk.vol24)}${dl(stk.volChg)}`,
+    `• Cumulative Vol: ${usd(stk.cumVol)}`, ``,
     `🏆 Top traders`,
     `Volume:  ${line(tops[0].rows)}`,
     `OI:      ${line(tops[1].rows)}`,
@@ -142,7 +158,7 @@ export default async function SummaryPage() {
 
   return (
     <Frame>
-      <SummaryShare date={date} kpis24={kpis24} kpisTotal={kpisTotal} kpisRwa={kpisRwa} tops={tops} text={text} />
+      <SummaryShare date={date} kpis24={kpis24} kpisTotal={kpisTotal} kpisCmd={kpisCmd} kpisStk={kpisStk} tops={tops} text={text} />
     </Frame>
   );
 }

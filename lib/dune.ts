@@ -5,8 +5,8 @@ import { join } from "node:path";
 // In production a cron refreshes it and the app reads it via DUNE_URL (raw URL).
 export interface DuneData {
   generatedAt: string;
-  // cumVolume{Crypto,Rwa} are optional: older snapshots (pre-RWA split) omit them.
-  totals: { cumVolume: number; cumVolumeCrypto?: number; cumVolumeRwa?: number; cumFees: number; cumTrades: number; accounts: number; tvl: number; oi: number };
+  // cumVolume{Crypto,Rwa,Cmd,Stk} are optional: older snapshots (pre-split) omit them.
+  totals: { cumVolume: number; cumVolumeCrypto?: number; cumVolumeRwa?: number; cumVolumeCmd?: number; cumVolumeStk?: number; cumFees: number; cumTrades: number; accounts: number; tvl: number; oi: number };
   volume: CoinDay[];
   feesByMarket: CoinDay[];
   liqFeesByMarket: CoinDay[];
@@ -16,9 +16,10 @@ export interface DuneData {
   accounts: { t: number; newAccounts: number; activeTraders: number; cumAccounts: number }[];
   oiByMarket: { symbol: string; oiUsd: number }[];
 }
-// RWA (aggregate) + per-market metals (XAU/XAG) and oil (CL/BZ) are optional for
-// backward-compat with older snapshots that predate each market's listing.
-export type CoinDay = { t: number; BTC: number; ETH: number; SOL: number; HYPE: number; XAU?: number; XAG?: number; CL?: number; BZ?: number; RWA?: number; Others: number };
+// Per-market RWA fields, the class aggregates (Commodities/Stocks) and the RWA
+// umbrella are optional for backward-compat with older snapshots that predate
+// each market's listing.
+export type CoinDay = { t: number; BTC: number; ETH: number; SOL: number; HYPE: number; XAU?: number; XAG?: number; CL?: number; BZ?: number; SNDK?: number; SPCX?: number; Commodities?: number; Stocks?: number; RWA?: number; Others: number };
 
 let cache: { at: number; data: DuneData | null } | null = null;
 

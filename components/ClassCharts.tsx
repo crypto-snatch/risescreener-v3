@@ -4,33 +4,35 @@ import { useState } from "react";
 import SeriesChart from "@/components/SeriesChart";
 import OiDonut from "@/components/OiDonut";
 import { Panel } from "@/components/ui";
-import { RWA_SYMBOLS } from "@/lib/sectors";
+import { CMD_SYMBOLS, STOCK_SYMBOLS, CLASS_COLOR, type AssetClass } from "@/lib/sectors";
 
-// Cum Vol + OI cards share one All/RWA toggle: flipping it filters BOTH charts
-// to the RWA (metals + oil) markets. Crypto stays implicit in the "All" view.
-type Slice = { name: string; value: number; color: string; rwa: boolean };
+// Cum Vol + OI cards share one All/Commodities/Stocks toggle: flipping it
+// filters BOTH charts to that asset class. Crypto stays implicit in "All".
+type Slice = { name: string; value: number; color: string; cls: AssetClass };
 type Pt = { t: number } & Record<string, number>;
 
-const GOLD = "#e6c069";
+type Mode = "All" | "Commodities" | "Stocks";
+const MODE_ACCENT: Record<Mode, string | undefined> = { All: undefined, Commodities: CLASS_COLOR.Commodities, Stocks: CLASS_COLOR.Stocks };
 
-function Seg({ rwa, onChange }: { rwa: boolean; onChange: (v: boolean) => void }) {
-  const opts: [string, boolean][] = [["All", false], ["RWA", true]];
+function Seg({ mode, onChange }: { mode: Mode; onChange: (v: Mode) => void }) {
+  const opts: Mode[] = ["All", "Commodities", "Stocks"];
   return (
     <div style={{ display: "inline-flex", border: "1px solid var(--hair)", borderRadius: 7, overflow: "hidden" }}>
-      {opts.map(([label, val]) => {
-        const on = rwa === val;
+      {opts.map((m) => {
+        const on = mode === m;
+        const accent = MODE_ACCENT[m];
         return (
           <button
-            key={label}
-            onClick={() => onChange(val)}
+            key={m}
+            onClick={() => onChange(m)}
             style={{
-              padding: "3px 11px", fontSize: 11, cursor: "pointer", border: "none", font: "inherit",
-              background: on ? (val ? "color-mix(in oklab, " + GOLD + " 22%, transparent)" : "rgba(255,255,255,0.09)") : "transparent",
-              color: on ? (val ? GOLD : "var(--ink)") : "var(--muted)",
+              padding: "3px 10px", fontSize: 11, cursor: "pointer", border: "none", font: "inherit",
+              background: on ? (accent ? `color-mix(in oklab, ${accent} 22%, transparent)` : "rgba(255,255,255,0.09)") : "transparent",
+              color: on ? (accent ?? "var(--ink)") : "var(--muted)",
               fontWeight: on ? 700 : 400,
             }}
           >
-            {label}
+            {m}
           </button>
         );
       })}
@@ -38,32 +40,35 @@ function Seg({ rwa, onChange }: { rwa: boolean; onChange: (v: boolean) => void }
   );
 }
 
-// RWA markets were listed recently, so the RWA series is a short tail on a long
-// history. In RWA mode, crop the x-axis to the window where RWA actually trades
-// (from its first active day, with a minimum width) instead of one lonely bar
-// pinned to the right of the full timeline.
+// RWA markets were listed recently, so their series are short tails on a long
+// history. In a class view, crop the x-axis to the window where that class
+// actually trades (from its first active day, with a minimum width) instead of
+// a few lonely bars pinned to the right of the full timeline.
 const MIN_WIN = 10;
 
 export default function ClassCharts({ volPoints, volGroups, oiSlices }: { volPoints: Pt[]; volGroups: string[]; oiSlices: Slice[] }) {
-  const [rwa, setRwa] = useState(false);
-  const groups = rwa ? RWA_SYMBOLS : volGroups; // RWA view splits into each RWA market (metals + oil)
-  const oiData = (rwa ? oiSlices.filter((s) => s.rwa) : oiSlices).map(({ name, value, color }) => ({ name, value, color }));
+  const [mode, setMode] = useState<Mode>("All");
+  const groups = mode === "Commodities" ? CMD_SYMBOLS : mode === "Stocks" ? STOCK_SYMBOLS : volGroups; // class views split into per-market bands
+  const oiData = oiSlices
+    .filter((s) => (mode === "All" ? true : s.cls === mode))
+    .map(({ name, value, color }) => ({ name, value, color }));
 
   let volPts = volPoints;
-  if (rwa) {
-    const first = volPoints.findIndex((p) => (p.RWA || 0) > 0);
+  if (mode !== "All") {
+    const first = volPoints.findIndex((p) => (p[mode] || 0) > 0); // aggregate field carries the class name
     const floor = Math.max(0, volPoints.length - MIN_WIN);
     const start = first < 0 ? floor : Math.min(first, floor);
     volPts = volPoints.slice(start);
   }
 
+  const suffix = mode === "All" ? "" : ` · ${mode}`;
   return (
     <>
-      <SeriesChart title={rwa ? "Cum Vol · RWA" : "Cum Vol"} points={volPts} mode="bars" extraKey="cum" extraLabel="Cumulative" groups={groups} toolbar={<Seg rwa={rwa} onChange={setRwa} />} />
+      <SeriesChart title={`Cum Vol${suffix}`} points={volPts} mode="bars" extraKey="cum" extraLabel="Cumulative" groups={groups} toolbar={<Seg mode={mode} onChange={setMode} />} />
       <Panel pad="14px 16px">
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-          <div style={{ fontSize: 14, fontWeight: 700 }}>{rwa ? "OI · RWA" : "OI"}</div>
-          <Seg rwa={rwa} onChange={setRwa} />
+          <div style={{ fontSize: 14, fontWeight: 700 }}>{`OI${suffix}`}</div>
+          <Seg mode={mode} onChange={setMode} />
         </div>
         {oiData.length > 0 ? (
           <OiDonut data={oiData} height={340} />

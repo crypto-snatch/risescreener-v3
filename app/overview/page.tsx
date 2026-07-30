@@ -6,7 +6,8 @@ import { Panel, Stat } from "@/components/ui";
 import ShredPulse from "@/components/ShredPulse";
 import { AreaTrend } from "@/components/charts";
 import ClassCharts from "@/components/ClassCharts";
-import { isRwa, RWA_COLORS } from "@/lib/sectors";
+import RwaStats from "@/components/RwaStats";
+import { assetClassOf, RWA_COLORS, type AssetClass } from "@/lib/sectors";
 
 export const revalidate = 20;
 
@@ -16,8 +17,8 @@ const OI_COLORS: Record<string, string> = {
 };
 // crypto slice fallbacks for markets not in OI_COLORS
 const CRYPTO_FALLBACK = ["#6e857e", "#5b8def", "#c77dd6", "#46c9b0", "#cdb36a", "#7fd6a0"];
-// Cum Vol stacked bands: crypto coins + an RWA (metals) band
-const VOL_GROUPS = ["BTC", "ETH", "SOL", "HYPE", "RWA", "Others"];
+// Cum Vol stacked bands: crypto coins + one band per RWA class
+const VOL_GROUPS = ["BTC", "ETH", "SOL", "HYPE", "Commodities", "Stocks", "Others"];
 
 export default async function Overview() {
   const [p, rows, dune] = await Promise.all([getProtocol(), getMarketRows(), getDune()]);
@@ -29,33 +30,40 @@ export default async function Overview() {
   const topLoser = [...tradable].sort((a, b) => a.changePct - b.changePct).slice(0, 5);
   const pct = (r: MarketRow) => `${r.changePct >= 0 ? "+" : ""}${r.changePct.toFixed(2)}%`;
 
-  // ── asset-class split (live, per-market): RWA = metals (gold, silver) + oil (WTI, Brent) ──
+  // ── asset-class split (live, per-market): Commodities (metals + oil) vs Stocks ──
   const sum = (arr: MarketRow[], f: (r: MarketRow) => number) => arr.reduce((s, r) => s + f(r), 0);
-  const oiRwa = sum(tradable.filter((r) => isRwa(r.symbol)), (r) => r.oiUsd);
   const oiLive = sum(tradable, (r) => r.oiUsd);
-  const vol24Rwa = sum(tradable.filter((r) => isRwa(r.symbol)), (r) => r.volume24h);
-  const rwaOiPct = oiLive > 0 ? (oiRwa / oiLive) * 100 : 0;
-  const cumRwa = dune?.totals.cumVolumeRwa;
+  const classStats = (cls: AssetClass, cum: number | null) => {
+    const mine = tradable.filter((r) => assetClassOf(r.symbol) === cls);
+    const oi = sum(mine, (r) => r.oiUsd);
+    return { oi, oiPct: oiLive > 0 ? (oi / oiLive) * 100 : 0, vol24: sum(mine, (r) => r.volume24h), cum };
+  };
+  const cmdStats = classStats("Commodities", dune?.totals.cumVolumeCmd ?? null);
+  const stkStats = classStats("Stocks", dune?.totals.cumVolumeStk ?? null);
 
   const volPoints = dune?.volume ?? [];
   const tvlPoints = (dune?.tvl ?? []).map((x) => ({ t: x.t, tvl: x.tvl }));
-  // OI slices from live rows (crypto first, RWA clustered at the end); the All/RWA
-  // toggle in ClassCharts filters these to the metals on demand.
+  // OI slices from live rows (crypto first, then RWA clustered at the end); the
+  // All/Commodities/Stocks toggle in ClassCharts filters these by class.
+  const CLS_ORDER: Record<AssetClass, number> = { Crypto: 0, Commodities: 1, Stocks: 2 };
   let cf = 0;
   const oiSlices = [...tradable]
     .filter((r) => r.oiUsd > 0)
     .sort((a, b) => {
-      const ca = isRwa(a.symbol) ? 1 : 0, cb = isRwa(b.symbol) ? 1 : 0;
+      const ca = CLS_ORDER[assetClassOf(a.symbol)], cb = CLS_ORDER[assetClassOf(b.symbol)];
       return ca !== cb ? ca - cb : b.oiUsd - a.oiUsd;
     })
-    .map((r) => ({
-      name: r.symbol,
-      value: r.oiUsd,
-      rwa: isRwa(r.symbol),
-      color: isRwa(r.symbol)
-        ? (RWA_COLORS[r.symbol] ?? "#e6c069")
-        : (OI_COLORS[r.symbol] ?? CRYPTO_FALLBACK[cf++ % CRYPTO_FALLBACK.length]),
-    }));
+    .map((r) => {
+      const cls = assetClassOf(r.symbol);
+      return {
+        name: r.symbol,
+        value: r.oiUsd,
+        cls,
+        color: cls !== "Crypto"
+          ? (RWA_COLORS[r.symbol] ?? "#e6c069")
+          : (OI_COLORS[r.symbol] ?? CRYPTO_FALLBACK[cf++ % CRYPTO_FALLBACK.length]),
+      };
+    });
 
   return (
     <div className="screen" data-page="overview" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
@@ -68,11 +76,7 @@ export default async function Overview() {
           <Stat big label="24h volume" value={usd(p.totalVolume24h)} />
           <Stat big label="Cumulative volume" value={usd(dune?.totals.cumVolume ?? 0)} tone="accent" />
         </StatGroup>
-        <StatGroup label="RWA" count={3} accent="#e6c069">
-          <Stat big label="Open interest" value={usd(oiRwa)} color="#e6c069" hint={`${rwaOiPct.toFixed(1)}% of total OI`} />
-          <Stat big label="24h volume" value={usd(vol24Rwa)} color="#e6c069" />
-          <Stat big label="Cumulative volume" value={cumRwa != null ? usd(cumRwa) : "—"} color="#e6c069" hint={cumRwa == null ? "pending data refresh" : undefined} />
-        </StatGroup>
+        <RwaStats cmd={cmdStats} stk={stkStats} />
         <StatGroup label="Markets" count={4}>
           <Stat big label="Total fees" value={usd(dune?.totals.cumFees ?? 0)} />
           <Stat big label="Accounts" value={compact(dune?.totals.accounts ?? p.wallets.total)} />
