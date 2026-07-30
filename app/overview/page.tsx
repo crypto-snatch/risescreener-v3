@@ -38,8 +38,9 @@ export default async function Overview() {
     const oi = sum(mine, (r) => r.oiUsd);
     return { oi, oiPct: oiLive > 0 ? (oi / oiLive) * 100 : 0, vol24: sum(mine, (r) => r.volume24h), cum };
   };
-  const cmdStats = classStats("Commodities", dune?.totals.cumVolumeCmd ?? null);
-  const stkStats = classStats("Stocks", dune?.totals.cumVolumeStk ?? null);
+  // `|| null`: 0 also means "not in Dune yet" (newly listed class) → show "—"
+  const cmdStats = classStats("Commodities", dune?.totals.cumVolumeCmd || dune?.totals.cumVolumeRwa || null);
+  const stkStats = classStats("Stocks", dune?.totals.cumVolumeStk || null);
 
   const volPoints = dune?.volume ?? [];
   const tvlPoints = (dune?.tvl ?? []).map((x) => ({ t: x.t, tvl: x.tvl }));

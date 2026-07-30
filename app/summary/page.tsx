@@ -1,4 +1,4 @@
-import { getProtocol } from "@/lib/analytics";
+import { getProtocol, getMarketRows } from "@/lib/analytics";
 import { getDune } from "@/lib/dune";
 import { getSnapshot } from "@/lib/snapshot";
 import { getTimeseries } from "@/lib/timeseries";
@@ -44,7 +44,7 @@ export default async function SummaryPage() {
     );
   }
 
-  const [p, dune, lb, ts] = await Promise.all([getProtocol(), getDune(), getSnapshot(), getTimeseries()]);
+  const [p, mkts, dune, lb, ts] = await Promise.all([getProtocol(), getMarketRows(), getDune(), getSnapshot(), getTimeseries()]);
 
   const oiNow = dune?.totals.oi ?? p.totalOiUsd;
   const tvl = dune?.totals.tvl ?? p.tvl;
@@ -85,19 +85,29 @@ export default async function SummaryPage() {
   // RWA breakout by class — Commodities vs Stocks — split out of the crypto
   // totals. Older dune.json (pre-split) only has the RWA umbrella band — fold
   // it into Commodities. Mirrors scripts/snapshot-summary.mjs.
-  const classStats = (symbols: string[], bandKey: "Commodities" | "Stocks", cum: number) => {
-    const oi = (dune?.oiByMarket ?? []).filter((r) => symbols.includes(r.symbol)).reduce((s, r) => s + (r.oiUsd || 0), 0);
+  const classStats = (symbols: string[], bandKey: "Commodities" | "Stocks", cum: number | null) => {
+    // OI prefers Dune's oiByMarket, falling back per-market to live rows for
+    // markets Dune doesn't list yet (newly listed, e.g. the stock perps).
+    const duneOi = new Map((dune?.oiByMarket ?? []).map((r) => [r.symbol, r.oiUsd || 0]));
+    const liveBy = new Map(mkts.map((r) => [r.symbol, r]));
+    const oi = symbols.reduce((s, sym) => s + (duneOi.get(sym) ?? liveBy.get(sym)?.oiUsd ?? 0), 0);
     const band = (d?: (typeof volDays)[number]) => d?.[bandKey] ?? (bandKey === "Commodities" ? d?.RWA : undefined) ?? 0;
+    let vol24 = vi >= 0 ? band(volDays[vi]) : 0;
+    let volChg = vi > 0 ? band(volDays[vi]) - band(volDays[vi - 1]) : 0;
+    if (!vol24) {
+      vol24 = symbols.reduce((s, sym) => s + (liveBy.get(sym)?.volume24h ?? 0), 0);
+      volChg = 0;
+    }
     return {
       oi,
       oiPct: oiNow > 0 ? (oi / oiNow) * 100 : 0,
-      vol24: vi >= 0 ? band(volDays[vi]) : 0,
-      volChg: vi > 0 ? band(volDays[vi]) - band(volDays[vi - 1]) : 0,
+      vol24,
+      volChg,
       cumVol: cum,
     };
   };
-  const cmd = classStats(CMD_SYMBOLS, "Commodities", dune?.totals.cumVolumeCmd ?? dune?.totals.cumVolumeRwa ?? 0);
-  const stk = classStats(STOCK_SYMBOLS, "Stocks", dune?.totals.cumVolumeStk ?? 0);
+  const cmd = classStats(CMD_SYMBOLS, "Commodities", dune?.totals.cumVolumeCmd || dune?.totals.cumVolumeRwa || null);
+  const stk = classStats(STOCK_SYMBOLS, "Stocks", dune?.totals.cumVolumeStk || null);
 
   const date = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" });
   const d = (n: number) => (n ? usd(n, { sign: true }) : undefined);

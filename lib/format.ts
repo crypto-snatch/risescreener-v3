@@ -14,7 +14,7 @@ export function num(v: string | number | undefined | null): number {
   return Number.isFinite(n) ? n : 0;
 }
 
-export function usd(n: number, opts: { sign?: boolean } = {}): string {
+export function usd(n: number | null | undefined, opts: { sign?: boolean } = {}): string {
   if (n == null || !Number.isFinite(n)) return "—";
   const sign = opts.sign && n > 0 ? "+" : n < 0 ? "−" : "";
   const a = Math.abs(n);

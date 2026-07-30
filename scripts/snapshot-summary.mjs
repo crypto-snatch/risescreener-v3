@@ -38,10 +38,31 @@ const START_TODAY_UTC = Date.UTC(_now.getUTCFullYear(), _now.getUTCMonth(), _now
 const lastComplete = (arr) => { for (let i = arr.length - 1; i >= 0; i--) if (arr[i].t < START_TODAY_UTC && sumCoins(arr[i]) > 0) return i; return -1; };
 const readJson = async (p) => { try { return JSON.parse(await readFile(p, "utf8")); } catch { return null; } };
 
+// Live markets from the RISEx API — fallback for markets the Dune dashboard
+// queries don't cover yet (newly listed, e.g. the stock perps). open_interest is
+// in base units, quote_volume_24h in USD (mirrors lib/analytics.ts).
+async function liveMarkets() {
+  try {
+    const r = await fetch("https://api.rise.trade/v1/markets");
+    if (!r.ok) return [];
+    const j = await r.json();
+    return (j?.data?.markets || [])
+      .filter((m) => m.active)
+      .map((m) => ({
+        symbol: String(m.base_asset_symbol || "").replace("/USDC", ""),
+        oiUsd: Number(m.open_interest || 0) * Number(m.mark_price || 0),
+        vol24: Number(m.quote_volume_24h || 0),
+      }));
+  } catch {
+    return [];
+  }
+}
+
 async function main() {
   const dune = await readJson(join(DATA, "dune.json"));
   const lb = await readJson(join(DATA, "leaderboard.json"));
   const prev = await readJson(OUT);
+  const live = await liveMarkets();
 
   const oiNow = dune?.totals?.oi ?? 0;
   const tvl = dune?.totals?.tvl ?? 0;
@@ -70,15 +91,28 @@ async function main() {
   // totals: OI = live markets from oiByMarket · Vol24h = the class volume band
   // on the last complete day · CumVol = the all-time class aggregate. Older
   // dune.json (pre-split) only has the RWA umbrella — fold it into Commodities.
+  // OI prefers Dune's oiByMarket but falls back per-market to the live API for
+  // markets Dune doesn't list yet; 24h vol likewise falls back to the live
+  // rolling window (≈ the completed UTC day at the 00:00 snapshot) when the
+  // Dune band is empty.
   const classStats = (symbols, bandKey, cumKey, cumFallback = 0) => {
-    const oi = (dune?.oiByMarket || []).filter((r) => symbols.includes(r.symbol)).reduce((s, r) => s + (r.oiUsd || 0), 0);
+    const duneOi = new Map((dune?.oiByMarket || []).map((r) => [r.symbol, r.oiUsd || 0]));
+    const liveBy = new Map(live.map((m) => [m.symbol, m]));
+    const oi = symbols.reduce((s, sym) => s + (duneOi.get(sym) ?? liveBy.get(sym)?.oiUsd ?? 0), 0);
     const band = (d) => d?.[bandKey] ?? (bandKey === "Commodities" ? d?.RWA : undefined) ?? 0;
+    let vol24 = vi >= 0 ? band(volDays[vi]) : 0;
+    let volChg = vi > 0 ? band(volDays[vi]) - band(volDays[vi - 1]) : 0;
+    if (!vol24) {
+      vol24 = symbols.reduce((s, sym) => s + (liveBy.get(sym)?.vol24 ?? 0), 0);
+      volChg = 0;
+    }
     return {
       oi,
       oiPct: oiNow > 0 ? (oi / oiNow) * 100 : 0,
-      vol24: vi >= 0 ? band(volDays[vi]) : 0,
-      volChg: vi > 0 ? band(volDays[vi]) - band(volDays[vi - 1]) : 0,
-      cumVol: dune?.totals?.[cumKey] ?? cumFallback,
+      vol24,
+      volChg,
+      // 0 → null so the strip shows "—" while Dune still lacks the class's markets
+      cumVol: (dune?.totals?.[cumKey] || cumFallback) || null,
     };
   };
   const cmd = classStats(CMD_SYMBOLS, "Commodities", "cumVolumeCmd", dune?.totals?.cumVolumeRwa ?? 0);
