@@ -9,7 +9,8 @@ const DEFAULT_GROUPS = ["BTC", "ETH", "SOL", "HYPE", "Others"];
 const COLORS: Record<string, string> = {
   BTC: "#f7931a", ETH: "#8aa0c8", SOL: "#14f195", HYPE: "#2ee6b6",
   RWA: "#e6c069", Commodities: "#e6c069", Stocks: "#5fa8ff",
-  XAU: "#e6c069", XAG: "#c9d1d9", CL: "#d98a4a", BZ: "#b06b3a", SNDK: "#e0685f", SPCX: "#7ea6e0",
+  XAU: "#e6c069", XAG: "#c9d1d9", CL: "#d98a4a", BZ: "#b06b3a",
+  SNDK: "#e0685f", SPCX: "#7ea6e0", MU: "#4fb3c9", DRAM: "#9d8ce0",
   Others: "#6a7c8e",
 };
 

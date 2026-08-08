@@ -19,7 +19,7 @@ export interface DuneData {
 // Per-market RWA fields, the class aggregates (Commodities/Stocks) and the RWA
 // umbrella are optional for backward-compat with older snapshots that predate
 // each market's listing.
-export type CoinDay = { t: number; BTC: number; ETH: number; SOL: number; HYPE: number; XAU?: number; XAG?: number; CL?: number; BZ?: number; SNDK?: number; SPCX?: number; Commodities?: number; Stocks?: number; RWA?: number; Others: number };
+export type CoinDay = { t: number; BTC: number; ETH: number; SOL: number; HYPE: number; XAU?: number; XAG?: number; CL?: number; BZ?: number; SNDK?: number; SPCX?: number; MU?: number; DRAM?: number; Commodities?: number; Stocks?: number; RWA?: number; Others: number };
 
 let cache: { at: number; data: DuneData | null } | null = null;
 

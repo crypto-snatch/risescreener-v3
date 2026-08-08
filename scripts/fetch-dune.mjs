@@ -25,7 +25,7 @@ const Q = {
 const GROUPS = ["BTC", "ETH", "SOL", "HYPE"];
 // RWA perps split into two classes (mirrors lib/sectors.ts):
 const CMD = ["XAU", "XAG", "CL", "BZ"]; // Commodities — metals (gold, silver) + crude oil (WTI, Brent)
-const STK = ["SNDK", "SPCX"]; // Stocks — tokenized equities (SanDisk, SpaceX)
+const STK = ["SNDK", "SPCX", "MU", "DRAM"]; // Stocks — equities/ETFs (SanDisk, SpaceX, Micron, Roundhill Memory ETF)
 const RWA = [...CMD, ...STK]; // umbrella
 const sym = (name) => (name || "").replace("/USDC", "");
 
@@ -136,9 +136,26 @@ async function main() {
     feeDay.get(t)[feeGroup] += Math.round(r.daily_total_fees_usd || 0);
     liqFeeDay.get(t)[feeGroup] += Math.round(r.daily_liquidation_fees_usd || 0);
   }
-  const volume = [...byDay.values()].sort((a, b) => a.t - b.t);
-  const feesByMarket = [...feeDay.values()].sort((a, b) => a.t - b.t);
-  const liqFeesByMarket = [...liqFeeDay.values()].sort((a, b) => a.t - b.t);
+  let volume = [...byDay.values()].sort((a, b) => a.t - b.t);
+  let feesByMarket = [...feeDay.values()].sort((a, b) => a.t - b.t);
+  let liqFeesByMarket = [...liqFeeDay.values()].sort((a, b) => a.t - b.t);
+
+  // Dune's RISE ingestion stalls from time to time (it did on 2026-08-04): the
+  // query keeps returning rows for the newest days, but with zero volume/fees.
+  // Those are missing days, not zero-volume days — kept, they draw a cliff to
+  // zero on every chart and make the daily recap treat a stale day as complete.
+  // Drop the all-zero tail (the three series share day keys).
+  const dayTotal = (d) => Object.keys(d).reduce((s, k) => (k === "t" ? s : s + d[k]), 0);
+  let end = volume.length;
+  while (end > 0 && dayTotal(volume[end - 1]) === 0) end--;
+  if (end > 0 && end < volume.length) {
+    const lastT = volume[end - 1].t;
+    const trim = (a) => a.filter((d) => d.t <= lastT);
+    console.warn(`⚠️ dropping ${volume.length - end} trailing all-zero day(s) — Dune data looks stalled after ${new Date(lastT).toISOString().slice(0, 10)}`);
+    volume = trim(volume);
+    feesByMarket = trim(feesByMarket);
+    liqFeesByMarket = trim(liqFeesByMarket);
+  }
 
   const tvlSeries = tvl
     .map((r) => ({ t: dayMs(r.day), tvl: Math.round(r.cumulative_tvl || 0), deposits: Math.round(r.deposits || 0), withdrawals: Math.round(r.withdrawals || 0), net: Math.round(r.net_flow || 0) }))

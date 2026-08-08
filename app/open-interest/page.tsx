@@ -16,7 +16,9 @@ const PALETTE = ["#f7931a", "#8aa0c8", "#34cfa2", "#14f195", "#c79bff", "#e8737f
 export default async function OpenInterestPage() {
   const [rows, p, ts, dune] = await Promise.all([getMarketRows(), getProtocol(), getTimeseries(), getDune()]);
   const tradable = rows.filter((r) => !isUpcoming(r)).sort((a, b) => b.oiUsd - a.oiUsd);
-  const totalOi = dune?.totals.oi ?? tradable.reduce((s, r) => s + r.oiUsd, 0);
+  // live per-market sum first — it matches the table/donut below and stays fresh
+  // when Dune's daily refresh stalls; Dune's total is the fallback.
+  const totalOi = tradable.reduce((s, r) => s + r.oiUsd, 0) || dune?.totals.oi || 0;
   const top = tradable[0];
   const avgUtil = tradable.length ? tradable.reduce((s, r) => s + r.oiUtilPct, 0) / tradable.length : 0;
 

@@ -72,8 +72,12 @@ export default async function Overview() {
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 18, alignItems: "stretch" }}>
         <StatGroup label="Total" count={4}>
-          <Stat big label="TVL" value={usd(dune?.totals.tvl ?? p.tvl)} tone="accent" />
-          <Stat big label="Total open interest" value={usd(dune?.totals.oi ?? p.totalOiUsd)} />
+          {/* TVL and OI read live (on-chain collateral balance / per-market OI)
+              with Dune only as a fallback: Dune's daily refresh stalls for days
+              at a time (it did on 2026-08-04), and preferring it left this tile
+              disagreeing with the live OI donut below. */}
+          <Stat big label="TVL" value={usd(p.tvl || dune?.totals.tvl || 0)} tone="accent" />
+          <Stat big label="Total open interest" value={usd(p.totalOiUsd || dune?.totals.oi || 0)} />
           <Stat big label="24h volume" value={usd(p.totalVolume24h)} />
           <Stat big label="Cumulative volume" value={usd(dune?.totals.cumVolume ?? 0)} tone="accent" />
         </StatGroup>

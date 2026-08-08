@@ -26,7 +26,7 @@ const usd = (n, opts = {}) => {
 const shortAddr = (a) => (!a || a.length < 12 ? a : `${a.slice(0, 6)}…${a.slice(-4)}`);
 // RWA classes — Commodities (metals + oil) and Stocks. Mirrors lib/sectors.ts.
 const CMD_SYMBOLS = ["XAU", "XAG", "CL", "BZ"];
-const STK_SYMBOLS = ["SNDK", "SPCX"];
+const STK_SYMBOLS = ["SNDK", "SPCX", "MU", "DRAM"];
 // "RWA" is the per-day aggregate band Dune volume writes (see fetch-dune.mjs); it
 // is NOT folded into "Others", so include it here to keep the volume total whole.
 // Fee CoinDays never set RWA (their RWA slice stays 0), so this never double-counts.
@@ -64,16 +64,23 @@ async function main() {
   const prev = await readJson(OUT);
   const live = await liveMarkets();
 
-  const oiNow = dune?.totals?.oi ?? 0;
-  const tvl = dune?.totals?.tvl ?? 0;
+  // OI from the live markets (Dune's is a stale copy of the same number).
+  const oiNow = live.reduce((s, m) => s + m.oiUsd, 0) || dune?.totals?.oi || 0;
   const cumVol = dune?.totals?.cumVolume ?? 0;
   const cumFee = (dune?.fees?.total ?? 0) + (dune?.liqTotals?.fees ?? 0); // trade + liquidation
 
-  // 24h VOLUME — last complete UTC day from Dune + day-over-day delta
+  // 24h VOLUME — last complete UTC day from Dune + day-over-day delta.
+  // When Dune's newest complete day is older than yesterday its ingestion has
+  // stalled (it did on 2026-08-04); a recap dated today must not quote a
+  // days-old figure, so fall back to the live rolling 24h window with no delta.
   const volDays = dune?.volume || [];
   const vi = lastComplete(volDays);
-  const vol24h = vi >= 0 ? sumCoins(volDays[vi]) : 0;
-  const volChg = vi > 0 ? sumCoins(volDays[vi]) - sumCoins(volDays[vi - 1]) : 0;
+  const volStale = vi < 0 || volDays[vi].t < START_TODAY_UTC - 86_400_000;
+  const liveVol24 = live.reduce((s, m) => s + m.vol24, 0);
+  const useLiveVol = volStale && liveVol24 > 0;
+  const vol24h = useLiveVol ? liveVol24 : vi >= 0 ? sumCoins(volDays[vi]) : 0;
+  const volChg = useLiveVol ? 0 : vi > 0 ? sumCoins(volDays[vi]) - sumCoins(volDays[vi - 1]) : 0;
+  if (volStale) console.warn(`⚠️ Dune volume stalled (last complete day ${vi >= 0 ? new Date(volDays[vi].t).toISOString().slice(0, 10) : "none"}) — 24h volume ${useLiveVol ? "from live API" : "unavailable"}; fees stay on the last Dune day`);
 
   // 24h FEES (trade+liq) — last complete UTC day + day-over-day delta
   const fd = dune?.feesByMarket || [];
@@ -83,25 +90,33 @@ async function main() {
   const fee24h = li >= 0 ? dayFee(li) : 0;
   const feeChg = li > 0 ? dayFee(li) - dayFee(li - 1) : 0;
 
-  // TVL — current value + day-over-day change of the TVL series
+  // TVL — current value + day-over-day change of the TVL series. If Dune's TVL
+  // series has stalled, use the newest live on-chain reading our own timeseries
+  // cron records (same Blockscout balance the app's getTvl reads) and drop the
+  // day-over-day delta, which would otherwise be a stale number's stale change.
   const tvlSeries = dune?.tvl || [];
-  const tvlChg = tvlSeries.length >= 2 ? tvlSeries[tvlSeries.length - 1].tvl - tvlSeries[tvlSeries.length - 2].tvl : 0;
+  const tvlStale = !tvlSeries.length || tvlSeries[tvlSeries.length - 1].t < START_TODAY_UTC - 86_400_000;
+  const ts = (await readJson(join(DATA, "timeseries.json"))) || [];
+  const liveTvl = Array.isArray(ts) ? ts[ts.length - 1]?.tvl || 0 : 0;
+  const tvl = tvlStale ? liveTvl || dune?.totals?.tvl || 0 : dune.totals.tvl;
+  const tvlChg = tvlStale || tvlSeries.length < 2 ? 0 : tvlSeries[tvlSeries.length - 1].tvl - tvlSeries[tvlSeries.length - 2].tvl;
 
   // RWA breakout split by class — Commodities vs Stocks — out of the crypto
   // totals: OI = live markets from oiByMarket · Vol24h = the class volume band
   // on the last complete day · CumVol = the all-time class aggregate. Older
   // dune.json (pre-split) only has the RWA umbrella — fold it into Commodities.
-  // OI prefers Dune's oiByMarket but falls back per-market to the live API for
-  // markets Dune doesn't list yet; 24h vol likewise falls back to the live
-  // rolling window (≈ the completed UTC day at the 00:00 snapshot) when the
-  // Dune band is empty.
+  // OI comes from the live API per market (Dune's oiByMarket is a frozen copy of
+  // the same "now" number and misses newly listed markets), falling back to Dune
+  // only for a market the live call didn't return; 24h vol falls back to the live
+  // rolling window (≈ the completed UTC day at the 00:00 snapshot) when the Dune
+  // band is empty or stalled.
   const classStats = (symbols, bandKey, cumKey, cumFallback = 0) => {
     const duneOi = new Map((dune?.oiByMarket || []).map((r) => [r.symbol, r.oiUsd || 0]));
     const liveBy = new Map(live.map((m) => [m.symbol, m]));
-    const oi = symbols.reduce((s, sym) => s + (duneOi.get(sym) ?? liveBy.get(sym)?.oiUsd ?? 0), 0);
+    const oi = symbols.reduce((s, sym) => s + (liveBy.get(sym)?.oiUsd ?? duneOi.get(sym) ?? 0), 0);
     const band = (d) => d?.[bandKey] ?? (bandKey === "Commodities" ? d?.RWA : undefined) ?? 0;
-    let vol24 = vi >= 0 ? band(volDays[vi]) : 0;
-    let volChg = vi > 0 ? band(volDays[vi]) - band(volDays[vi - 1]) : 0;
+    let vol24 = useLiveVol || vi < 0 ? 0 : band(volDays[vi]);
+    let volChg = useLiveVol || vi < 1 ? 0 : band(volDays[vi]) - band(volDays[vi - 1]);
     if (!vol24) {
       vol24 = symbols.reduce((s, sym) => s + (liveBy.get(sym)?.vol24 ?? 0), 0);
       volChg = 0;

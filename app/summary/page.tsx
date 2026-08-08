@@ -46,8 +46,8 @@ export default async function SummaryPage() {
 
   const [p, mkts, dune, lb, ts] = await Promise.all([getProtocol(), getMarketRows(), getDune(), getSnapshot(), getTimeseries()]);
 
-  const oiNow = dune?.totals.oi ?? p.totalOiUsd;
-  const tvl = dune?.totals.tvl ?? p.tvl;
+  // OI from live rows (Dune's is a stale copy of the same number).
+  const oiNow = p.totalOiUsd || dune?.totals.oi || 0;
   const cumVol = dune?.totals.cumVolume ?? 0;
   const cumFee = (dune?.fees.total ?? 0) + (dune?.liqTotals.fees ?? 0);
   // last COMPLETE UTC day: skip the in-progress current day (its bucket is partial)
@@ -55,11 +55,16 @@ export default async function SummaryPage() {
   const startTodayUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
   const lastComplete = (arr: { t: number }[]) => { for (let i = arr.length - 1; i >= 0; i--) if (arr[i].t < startTodayUTC && sumCoins(arr[i] as Record<string, number>)) return i; return -1; };
 
-  // Volume — last complete UTC day from Dune + day-over-day delta
+  // Volume — last complete UTC day from Dune + day-over-day delta. If Dune's
+  // newest complete day predates yesterday its ingestion has stalled, so use the
+  // live rolling 24h window instead of quoting a days-old figure (mirrors
+  // scripts/snapshot-summary.mjs).
   const volDays = dune?.volume ?? [];
   const vi = lastComplete(volDays);
-  const vol24h = vi >= 0 ? sumCoins(volDays[vi]) : p.totalVolume24h;
-  const volChg = vi > 0 ? sumCoins(volDays[vi]) - sumCoins(volDays[vi - 1]) : 0;
+  const volStale = vi < 0 || volDays[vi].t < startTodayUTC - 86_400_000;
+  const useLiveVol = volStale && p.totalVolume24h > 0;
+  const vol24h = useLiveVol ? p.totalVolume24h : vi >= 0 ? sumCoins(volDays[vi]) : p.totalVolume24h;
+  const volChg = useLiveVol || vi < 1 ? 0 : sumCoins(volDays[vi]) - sumCoins(volDays[vi - 1]);
 
   // Fees (trade+liq) — last complete UTC day + day-over-day delta
   const feeDays = dune?.feesByMarket ?? [];
@@ -69,9 +74,12 @@ export default async function SummaryPage() {
   const fee24h = li >= 0 ? dayFee(li) : 0;
   const feeChg = li > 0 ? dayFee(li) - dayFee(li - 1) : 0;
 
-  // TVL — current + day-over-day change of the TVL series
+  // TVL — live on-chain balance (Dune only as a fallback), with the day-over-day
+  // change from Dune's series while that series is current.
   const tvlSeries = dune?.tvl ?? [];
-  const tvlChg = tvlSeries.length >= 2 ? tvlSeries[tvlSeries.length - 1].tvl - tvlSeries[tvlSeries.length - 2].tvl : 0;
+  const tvlStale = !tvlSeries.length || tvlSeries[tvlSeries.length - 1].t < startTodayUTC - 86_400_000;
+  const tvl = p.tvl || dune?.totals.tvl || 0;
+  const tvlChg = tvlStale || tvlSeries.length < 2 ? 0 : tvlSeries[tvlSeries.length - 1].tvl - tvlSeries[tvlSeries.length - 2].tvl;
 
   // OI — change vs ~24h ago from our timeseries (no Dune daily OI history)
   let base: (typeof ts)[number] | null = null;
@@ -86,14 +94,14 @@ export default async function SummaryPage() {
   // totals. Older dune.json (pre-split) only has the RWA umbrella band — fold
   // it into Commodities. Mirrors scripts/snapshot-summary.mjs.
   const classStats = (symbols: string[], bandKey: "Commodities" | "Stocks", cum: number | null) => {
-    // OI prefers Dune's oiByMarket, falling back per-market to live rows for
-    // markets Dune doesn't list yet (newly listed, e.g. the stock perps).
+    // OI from live rows (Dune's oiByMarket is a frozen copy of the same "now"
+    // number and misses newly listed markets); Dune is the per-market fallback.
     const duneOi = new Map((dune?.oiByMarket ?? []).map((r) => [r.symbol, r.oiUsd || 0]));
     const liveBy = new Map(mkts.map((r) => [r.symbol, r]));
-    const oi = symbols.reduce((s, sym) => s + (duneOi.get(sym) ?? liveBy.get(sym)?.oiUsd ?? 0), 0);
+    const oi = symbols.reduce((s, sym) => s + (liveBy.get(sym)?.oiUsd ?? duneOi.get(sym) ?? 0), 0);
     const band = (d?: (typeof volDays)[number]) => d?.[bandKey] ?? (bandKey === "Commodities" ? d?.RWA : undefined) ?? 0;
-    let vol24 = vi >= 0 ? band(volDays[vi]) : 0;
-    let volChg = vi > 0 ? band(volDays[vi]) - band(volDays[vi - 1]) : 0;
+    let vol24 = useLiveVol || vi < 0 ? 0 : band(volDays[vi]);
+    let volChg = useLiveVol || vi < 1 ? 0 : band(volDays[vi]) - band(volDays[vi - 1]);
     if (!vol24) {
       vol24 = symbols.reduce((s, sym) => s + (liveBy.get(sym)?.volume24h ?? 0), 0);
       volChg = 0;

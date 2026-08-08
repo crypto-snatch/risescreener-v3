@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getDune } from "@/lib/dune";
+import { getTvl } from "@/lib/analytics";
 import { usd, compact } from "@/lib/format";
 
 export const revalidate = 120;
@@ -13,9 +14,10 @@ const FEATURES = [
 ];
 
 export default async function Welcome() {
-  const dune = await getDune();
+  const [dune, tvlLive] = await Promise.all([getDune(), getTvl()]);
   const kpis = [
-    { label: "TVL", value: usd(dune?.totals.tvl ?? 0) },
+    // live on-chain TVL (Dune's copy can sit days stale); the rest is Dune-only
+    { label: "TVL", value: usd(tvlLive || dune?.totals.tvl || 0) },
     { label: "Cumulative volume", value: usd(dune?.totals.cumVolume ?? 0) },
     { label: "Accounts", value: compact(dune?.totals.accounts ?? 0) },
     { label: "Protocol fees", value: usd(dune?.totals.cumFees ?? 0) },

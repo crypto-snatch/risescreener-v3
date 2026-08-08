@@ -34,7 +34,8 @@ export default async function MarketsPage() {
       {/* summary */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px,1fr))", gap: 10 }}>
         <Stat big label="24h Volume" value={usd(p.totalVolume24h)} tone="accent" />
-        <Stat big label="Total Open Interest" value={usd(dune?.totals.oi ?? p.totalOiUsd)} />
+        {/* live OI, same source as the sector breakdown below (Dune's copy lags) */}
+        <Stat big label="Total Open Interest" value={usd(p.totalOiUsd || dune?.totals.oi || 0)} />
         <Stat big label="Cumulative Volume" value={usd(dune?.totals.cumVolume ?? 0)} />
         <Stat big label="Markets" value={String(p.marketsCount)} hint={`${p.listedMarkets} listed · ${p.upcomingMarkets} upcoming`} />
       </div>

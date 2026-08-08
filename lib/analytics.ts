@@ -103,8 +103,12 @@ export async function getTvl(): Promise<number> {
 }
 
 // ── protocol-level KPIs (summary screener) ──
-// live on-chain but presented as upcoming (no live price feed yet)
-const FORCE_UPCOMING = new Set(["ONDO", "VVV", "LIT"]);
+// Manual override: markets that are live on-chain but have no real price feed
+// yet, so they should read as "upcoming". Empty as of 2026-08-08 — VVV and LIT
+// now quote and trade for real (and ONDO is flagged inactive by the API, so it
+// never reaches here). Leaving them pinned here hid their OI from the sector
+// donut and undercounted "Listed markets".
+const FORCE_UPCOMING = new Set<string>([]);
 export function isUpcoming(r: MarketRow): boolean {
   return r.mark <= 0 || FORCE_UPCOMING.has(r.symbol);
 }
