@@ -18,6 +18,9 @@ export interface TsPoint {
   tvl: number;
   traders: number;
   realTraders: number;
+  // Per-market 24h volume, kept once a day on the first snapshot after 00:00
+  // UTC — the day-sized record lib/volume.ts rebuilds Dune's gaps from.
+  volBy?: Record<string, number>;
 }
 
 let cache: { at: number; data: TsPoint[] } | null = null;

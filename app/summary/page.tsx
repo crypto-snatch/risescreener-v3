@@ -2,6 +2,7 @@ import { getProtocol, getMarketRows } from "@/lib/analytics";
 import { getDune } from "@/lib/dune";
 import { getSnapshot } from "@/lib/snapshot";
 import { getTimeseries } from "@/lib/timeseries";
+import { patchVolume } from "@/lib/volume";
 import { getSummary } from "@/lib/summary";
 import { usd, shortAddr } from "@/lib/format";
 import { CMD_SYMBOLS, STOCK_SYMBOLS } from "@/lib/sectors";
@@ -48,7 +49,8 @@ export default async function SummaryPage() {
 
   // OI from live rows (Dune's is a stale copy of the same number).
   const oiNow = p.totalOiUsd || dune?.totals.oi || 0;
-  const cumVol = dune?.totals.cumVolume ?? 0;
+  const patched = patchVolume(dune, ts); // Dune drops days when its ingestion stalls
+  const cumVol = patched.cumVolume;
   const cumFee = (dune?.fees.total ?? 0) + (dune?.liqTotals.fees ?? 0);
   // last COMPLETE UTC day: skip the in-progress current day (its bucket is partial)
   const now = new Date();
@@ -59,7 +61,7 @@ export default async function SummaryPage() {
   // newest complete day predates yesterday its ingestion has stalled, so use the
   // live rolling 24h window instead of quoting a days-old figure (mirrors
   // scripts/snapshot-summary.mjs).
-  const volDays = dune?.volume ?? [];
+  const volDays = patched.volume;
   const vi = lastComplete(volDays);
   const volStale = vi < 0 || volDays[vi].t < startTodayUTC - 86_400_000;
   const useLiveVol = volStale && p.totalVolume24h > 0;

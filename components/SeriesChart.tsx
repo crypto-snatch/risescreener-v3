@@ -14,7 +14,7 @@ const COLORS: Record<string, string> = {
   Others: "#6a7c8e",
 };
 
-type Pt = { t: number } & Record<string, number>;
+type Pt = { t: number; est?: boolean } & Record<string, number | boolean | undefined>;
 
 export default function SeriesChart({
   title,
@@ -37,10 +37,14 @@ export default function SeriesChart({
   // precompute total + cumulative
   let run = 0;
   const data = points.map((p) => {
-    const total = COINS.reduce((s, c) => s + (p[c] || 0), 0);
+    const total = COINS.reduce((s, c) => s + (Number(p[c]) || 0), 0);
     run += total;
     return { ...p, total, cum: run };
   });
+  // Days rebuilt from our own live snapshots because Dune dropped them
+  // (scripts/backfill-volume.mjs) — flagged so the chart never passes an
+  // estimate off as a measured day.
+  const estDays = new Set(points.filter((p) => p.est).map((p) => p.t));
 
   const allKeys = [...COINS, extraKey];
   const [hidden, setHidden] = useState<Set<string>>(new Set());
@@ -62,6 +66,11 @@ export default function SeriesChart({
       <button className="chip" onClick={() => setHidden(allOff ? new Set() : new Set(allKeys))} style={{ cursor: "pointer" }}>
         {allOff ? "Select all" : "Deselect all"}
       </button>
+      {estDays.size > 0 && (
+        <span className="text-muted" style={{ fontSize: 10.5, alignSelf: "center" }}>
+          · {estDays.size} day{estDays.size > 1 ? "s" : ""} estimated from live snapshots
+        </span>
+      )}
     </div>
   );
 
@@ -84,7 +93,7 @@ export default function SeriesChart({
               labelStyle={{ color: "#8b9bad", marginBottom: 4, fontSize: 10.5 }}
               itemStyle={{ color: "#e7edf3" }}
               cursor={{ stroke: "rgba(255,255,255,0.14)", strokeWidth: 1 }}
-              labelFormatter={(t) => xFmt(Number(t))}
+              labelFormatter={(t) => `${xFmt(Number(t))}${estDays.has(Number(t)) ? " · est." : ""}`}
               formatter={(v: number, name: string) => [usd(Number(v)), name]}
             />
             {COINS.filter(visible).map((c) =>

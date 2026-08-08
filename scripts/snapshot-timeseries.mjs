@@ -77,6 +77,17 @@ async function main() {
     const parsed = JSON.parse(await readFile(OUT, "utf8"));
     if (Array.isArray(parsed)) series = parsed;
   } catch {}
+
+  // Once a day, on the first snapshot after 00:00 UTC, keep the per-market
+  // breakdown too: that trailing 24h window ≈ the UTC day that just ended, and
+  // it is the only per-market record of that day we have. lib/volume.ts rebuilds
+  // the Cum Vol chart from it — class bands included — for days Dune drops.
+  const startToday = Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate());
+  const sinceMidnight = point.t - startToday;
+  if (sinceMidnight <= 3 * 3600_000 && !series.some((p) => p.t >= startToday && p.volBy)) {
+    point.volBy = Object.fromEntries(live.map((m) => [sym(m), Math.round(Number(m.quote_volume_24h) || 0)]));
+    console.log(`· per-market volume kept for ${new Date(startToday - 86_400_000).toISOString().slice(0, 10)} (${live.length} markets)`);
+  }
   series.push(point);
   if (series.length > MAX_POINTS) series = series.slice(-MAX_POINTS);
 

@@ -6,7 +6,9 @@ import { join } from "node:path";
 export interface DuneData {
   generatedAt: string;
   // cumVolume{Crypto,Rwa,Cmd,Stk} are optional: older snapshots (pre-split) omit them.
-  totals: { cumVolume: number; cumVolumeCrypto?: number; cumVolumeRwa?: number; cumVolumeCmd?: number; cumVolumeStk?: number; cumFees: number; cumTrades: number; accounts: number; tvl: number; oi: number };
+  // cumVolumeDune/Est: the untouched Dune figure and what scripts/backfill-volume.mjs
+  // added back for days Dune dropped (cumVolume includes it).
+  totals: { cumVolume: number; cumVolumeDune?: number; cumVolumeEst?: number; cumVolumeCrypto?: number; cumVolumeRwa?: number; cumVolumeCmd?: number; cumVolumeStk?: number; cumFees: number; cumTrades: number; accounts: number; tvl: number; oi: number };
   volume: CoinDay[];
   feesByMarket: CoinDay[];
   liqFeesByMarket: CoinDay[];
@@ -19,7 +21,8 @@ export interface DuneData {
 // Per-market RWA fields, the class aggregates (Commodities/Stocks) and the RWA
 // umbrella are optional for backward-compat with older snapshots that predate
 // each market's listing.
-export type CoinDay = { t: number; BTC: number; ETH: number; SOL: number; HYPE: number; XAU?: number; XAG?: number; CL?: number; BZ?: number; SNDK?: number; SPCX?: number; MU?: number; DRAM?: number; Commodities?: number; Stocks?: number; RWA?: number; Others: number };
+// `est` marks a day rebuilt from our own live snapshots (scripts/backfill-volume.mjs).
+export type CoinDay = { t: number; est?: boolean; BTC: number; ETH: number; SOL: number; HYPE: number; XAU?: number; XAG?: number; CL?: number; BZ?: number; SNDK?: number; SPCX?: number; MU?: number; DRAM?: number; Commodities?: number; Stocks?: number; RWA?: number; Others: number };
 
 let cache: { at: number; data: DuneData | null } | null = null;
 

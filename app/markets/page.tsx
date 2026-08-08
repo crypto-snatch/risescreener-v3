@@ -1,5 +1,7 @@
 import { getMarketRows, getProtocol, isUpcoming } from "@/lib/analytics";
 import { getDune } from "@/lib/dune";
+import { getTimeseries } from "@/lib/timeseries";
+import { patchVolume } from "@/lib/volume";
 import { usd } from "@/lib/format";
 import { Stat, SectionLabel, Empty } from "@/components/ui";
 import MarketsTable from "@/components/MarketsTable";
@@ -11,8 +13,9 @@ export const revalidate = 15;
 export const metadata = { title: "Markets — RiseScreener" };
 
 export default async function MarketsPage() {
-  const [rows, p, dune] = await Promise.all([getMarketRows(), getProtocol(), getDune()]);
+  const [rows, p, dune, ts] = await Promise.all([getMarketRows(), getProtocol(), getDune(), getTimeseries()]);
   const tradable = rows.filter((r) => !isUpcoming(r));
+  const cumVolume = patchVolume(dune, ts).cumVolume; // Dune's total misses the days it drops
 
   // OI by sector
   const bySector: Record<string, number> = {};
@@ -36,7 +39,7 @@ export default async function MarketsPage() {
         <Stat big label="24h Volume" value={usd(p.totalVolume24h)} tone="accent" />
         {/* live OI, same source as the sector breakdown below (Dune's copy lags) */}
         <Stat big label="Total Open Interest" value={usd(p.totalOiUsd || dune?.totals.oi || 0)} />
-        <Stat big label="Cumulative Volume" value={usd(dune?.totals.cumVolume ?? 0)} />
+        <Stat big label="Cumulative Volume" value={usd(cumVolume)} />
         <Stat big label="Markets" value={String(p.marketsCount)} hint={`${p.listedMarkets} listed · ${p.upcomingMarkets} upcoming`} />
       </div>
 

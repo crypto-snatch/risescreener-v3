@@ -63,10 +63,31 @@ async function main() {
   const lb = await readJson(join(DATA, "leaderboard.json"));
   const prev = await readJson(OUT);
   const live = await liveMarkets();
+  const ts = (await readJson(join(DATA, "timeseries.json"))) || [];
 
   // OI from the live markets (Dune's is a stale copy of the same number).
   const oiNow = live.reduce((s, m) => s + m.oiUsd, 0) || dune?.totals?.oi || 0;
-  const cumVol = dune?.totals?.cumVolume ?? 0;
+  // All-time volume, topped up with the days Dune dropped. Same reconstruction
+  // as lib/volume.ts (which does it for the charts): the snapshot nearest a
+  // day's end has a trailing 24h window ≈ that day, within 1% of Dune's healthy
+  // days. Only the total is needed here, not the per-market split.
+  const dayEstimate = (t) => {
+    const target = t + 86_400_000;
+    let best = null;
+    for (const p of ts) {
+      const off = Math.abs(p.t - target);
+      if (off <= 3 * 3_600_000 && (!best || off < Math.abs(best.t - target))) best = p;
+    }
+    return best?.vol ? Object.values(best.vol).reduce((s, v) => s + (v || 0), 0) : 0;
+  };
+  const duneDays = new Map((dune?.volume || []).map((d) => [d.t, d]));
+  let cumVolAdd = 0;
+  for (let t = dune?.volume?.[0]?.t ?? START_TODAY_UTC; t < START_TODAY_UTC; t += 86_400_000) {
+    const reported = sumCoins(duneDays.get(t));
+    const est = dayEstimate(t);
+    if (est > 0 && reported < est * 0.7) cumVolAdd += est - reported;
+  }
+  const cumVol = Math.round((dune?.totals?.cumVolume ?? 0) + cumVolAdd);
   const cumFee = (dune?.fees?.total ?? 0) + (dune?.liqTotals?.fees ?? 0); // trade + liquidation
 
   // 24h VOLUME — last complete UTC day from Dune + day-over-day delta.
@@ -96,8 +117,7 @@ async function main() {
   // day-over-day delta, which would otherwise be a stale number's stale change.
   const tvlSeries = dune?.tvl || [];
   const tvlStale = !tvlSeries.length || tvlSeries[tvlSeries.length - 1].t < START_TODAY_UTC - 86_400_000;
-  const ts = (await readJson(join(DATA, "timeseries.json"))) || [];
-  const liveTvl = Array.isArray(ts) ? ts[ts.length - 1]?.tvl || 0 : 0;
+  const liveTvl = ts[ts.length - 1]?.tvl || 0;
   const tvl = tvlStale ? liveTvl || dune?.totals?.tvl || 0 : dune.totals.tvl;
   const tvlChg = tvlStale || tvlSeries.length < 2 ? 0 : tvlSeries[tvlSeries.length - 1].tvl - tvlSeries[tvlSeries.length - 2].tvl;
 

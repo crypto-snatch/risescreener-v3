@@ -9,7 +9,7 @@ import { CMD_SYMBOLS, STOCK_SYMBOLS, CLASS_COLOR, type AssetClass } from "@/lib/
 // Cum Vol + OI cards share one All/Commodities/Stocks toggle: flipping it
 // filters BOTH charts to that asset class. Crypto stays implicit in "All".
 type Slice = { name: string; value: number; color: string; cls: AssetClass };
-type Pt = { t: number } & Record<string, number>;
+type Pt = { t: number; est?: boolean } & Record<string, number | boolean | undefined>;
 
 type Mode = "All" | "Commodities" | "Stocks";
 const MODE_ACCENT: Record<Mode, string | undefined> = { All: undefined, Commodities: CLASS_COLOR.Commodities, Stocks: CLASS_COLOR.Stocks };
@@ -55,7 +55,7 @@ export default function ClassCharts({ volPoints, volGroups, oiSlices }: { volPoi
 
   let volPts = volPoints;
   if (mode !== "All") {
-    const first = volPoints.findIndex((p) => (p[mode] || 0) > 0); // aggregate field carries the class name
+    const first = volPoints.findIndex((p) => (Number(p[mode]) || 0) > 0); // aggregate field carries the class name
     const floor = Math.max(0, volPoints.length - MIN_WIN);
     const start = first < 0 ? floor : Math.min(first, floor);
     volPts = volPoints.slice(start);

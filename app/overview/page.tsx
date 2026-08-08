@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getProtocol, getMarketRows, isUpcoming, type MarketRow } from "@/lib/analytics";
 import { getDune } from "@/lib/dune";
+import { getTimeseries } from "@/lib/timeseries";
+import { patchVolume } from "@/lib/volume";
 import { usd, compact, price } from "@/lib/format";
 import { Panel, Stat } from "@/components/ui";
 import ShredPulse from "@/components/ShredPulse";
@@ -21,7 +23,10 @@ const CRYPTO_FALLBACK = ["#6e857e", "#5b8def", "#c77dd6", "#46c9b0", "#cdb36a", 
 const VOL_GROUPS = ["BTC", "ETH", "SOL", "HYPE", "Commodities", "Stocks", "Others"];
 
 export default async function Overview() {
-  const [p, rows, dune] = await Promise.all([getProtocol(), getMarketRows(), getDune()]);
+  const [p, rows, dune, ts] = await Promise.all([getProtocol(), getMarketRows(), getDune(), getTimeseries()]);
+  // Dune drops days when its RISE ingestion stalls; rebuild them from our own
+  // snapshots so the chart and the cumulative KPI don't flatline. See lib/volume.ts.
+  const vol = patchVolume(dune, ts);
 
   const tradable = rows.filter((r) => !isUpcoming(r));
   const topOI = [...rows].sort((a, b) => b.oiUsd - a.oiUsd).slice(0, 5);
@@ -42,7 +47,7 @@ export default async function Overview() {
   const cmdStats = classStats("Commodities", dune?.totals.cumVolumeCmd || dune?.totals.cumVolumeRwa || null);
   const stkStats = classStats("Stocks", dune?.totals.cumVolumeStk || null);
 
-  const volPoints = dune?.volume ?? [];
+  const volPoints = vol.volume;
   const tvlPoints = (dune?.tvl ?? []).map((x) => ({ t: x.t, tvl: x.tvl }));
   // OI slices from live rows (crypto first, then RWA clustered at the end); the
   // All/Commodities/Stocks toggle in ClassCharts filters these by class.
@@ -79,7 +84,7 @@ export default async function Overview() {
           <Stat big label="TVL" value={usd(p.tvl || dune?.totals.tvl || 0)} tone="accent" />
           <Stat big label="Total open interest" value={usd(p.totalOiUsd || dune?.totals.oi || 0)} />
           <Stat big label="24h volume" value={usd(p.totalVolume24h)} />
-          <Stat big label="Cumulative volume" value={usd(dune?.totals.cumVolume ?? 0)} tone="accent" />
+          <Stat big label="Cumulative volume" value={usd(vol.cumVolume)} tone="accent" />
         </StatGroup>
         <RwaStats cmd={cmdStats} stk={stkStats} />
         <StatGroup label="Markets" count={4}>
