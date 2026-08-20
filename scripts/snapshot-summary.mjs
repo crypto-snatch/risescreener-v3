@@ -26,7 +26,7 @@ const usd = (n, opts = {}) => {
 const shortAddr = (a) => (!a || a.length < 12 ? a : `${a.slice(0, 6)}…${a.slice(-4)}`);
 // RWA classes — Commodities (metals + oil) and Stocks. Mirrors lib/sectors.ts.
 const CMD_SYMBOLS = ["XAU", "XAG", "CL", "BZ"];
-const STK_SYMBOLS = ["SNDK", "SPCX", "MU", "DRAM"];
+const STK_SYMBOLS = ["SNDK", "SPCX", "MU", "DRAM", "INTC", "QQQ", "SPY"];
 // "RWA" is the per-day aggregate band Dune volume writes (see fetch-dune.mjs); it
 // is NOT folded into "Others", so include it here to keep the volume total whole.
 // Fee CoinDays never set RWA (their RWA slice stays 0), so this never double-counts.

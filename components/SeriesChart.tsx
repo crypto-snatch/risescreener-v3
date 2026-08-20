@@ -11,6 +11,7 @@ const COLORS: Record<string, string> = {
   RWA: "#e6c069", Commodities: "#e6c069", Stocks: "#5fa8ff",
   XAU: "#e6c069", XAG: "#c9d1d9", CL: "#d98a4a", BZ: "#b06b3a",
   SNDK: "#e0685f", SPCX: "#7ea6e0", MU: "#4fb3c9", DRAM: "#9d8ce0",
+  INTC: "#6fb98f", QQQ: "#b8c95f", SPY: "#d98cb3",
   Others: "#6a7c8e",
 };
 

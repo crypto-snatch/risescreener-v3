@@ -3,7 +3,7 @@ export const SECTORS: Record<string, string[]> = {
   "Layer 1": ["BTC", "ETH", "SOL", "ZEC", "BNB", "NEAR", "XRP"],
   DeFi: ["HYPE", "AERO", "ONDO", "LIT", "AAVE", "PUMP"], // PUMP = pump.fun launchpad token (app/revenue token, like HYPE/AERO)
   Commodities: ["XAU", "XAG", "CL", "BZ"], // metals (gold, silver) + crude oil (WTI, Brent)
-  Stocks: ["SNDK", "SPCX", "MU", "DRAM"], // equities/ETFs — SanDisk, SpaceX, Micron, Roundhill Memory ETF
+  Stocks: ["SNDK", "SPCX", "MU", "DRAM", "INTC", "QQQ", "SPY"], // equities/ETFs — SanDisk, SpaceX, Micron, Roundhill Memory ETF, Intel, Nasdaq-100, S&P 500
   AI: ["TAO", "VVV"],
   MEME: ["DOGE"],
 };
@@ -23,14 +23,16 @@ export const categoryOf = (sym: string): string => SECTOR_NAMES.find((s) => SECT
 // ── asset class: crypto vs real-world assets ──
 // RWA perps on RISEx split into two classes: Commodities — gold (XAU), silver
 // (XAG), WTI (CL), Brent (BZ) — and Stocks — SanDisk (SNDK), SpaceX (SPCX),
-// Micron (MU) and the Roundhill Memory ETF (DRAM, an equity ETF despite the
-// commodity-sounding ticker). "RWA" remains the umbrella for both.
+// Micron (MU), Intel (INTC), the Roundhill Memory ETF (DRAM, an equity ETF
+// despite the commodity-sounding ticker) and the two index ETFs QQQ (Nasdaq-100)
+// and SPY (S&P 500). "RWA" remains the umbrella for both.
 export const CMD_SYMBOLS = SECTORS.Commodities;
 export const STOCK_SYMBOLS = SECTORS.Stocks;
 export const RWA_SYMBOLS = [...CMD_SYMBOLS, ...STOCK_SYMBOLS]; // umbrella (commodities + stocks)
 export const RWA_NAMES: Record<string, string> = {
   XAU: "Gold", XAG: "Silver", CL: "WTI Crude", BZ: "Brent Crude",
   SNDK: "SanDisk", SPCX: "SpaceX", MU: "Micron", DRAM: "Memory ETF",
+  INTC: "Intel", QQQ: "Nasdaq-100 ETF", SPY: "S&P 500 ETF",
 };
 export type AssetClass = "Crypto" | "Commodities" | "Stocks";
 export const isCommodity = (sym: string): boolean => CMD_SYMBOLS.includes(sym);
@@ -44,4 +46,5 @@ export const CLASS_COLOR: Record<AssetClass, string> = { Crypto: "#34cfa2", Comm
 export const RWA_COLORS: Record<string, string> = {
   XAU: "#e6c069", XAG: "#c9d1d9", CL: "#d98a4a", BZ: "#b06b3a",
   SNDK: "#e0685f", SPCX: "#7ea6e0", MU: "#4fb3c9", DRAM: "#9d8ce0",
+  INTC: "#6fb98f", QQQ: "#b8c95f", SPY: "#d98cb3",
 };

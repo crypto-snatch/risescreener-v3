@@ -22,7 +22,7 @@ export interface DuneData {
 // umbrella are optional for backward-compat with older snapshots that predate
 // each market's listing.
 // `est` marks a day rebuilt from our own live snapshots (scripts/backfill-volume.mjs).
-export type CoinDay = { t: number; est?: boolean; BTC: number; ETH: number; SOL: number; HYPE: number; XAU?: number; XAG?: number; CL?: number; BZ?: number; SNDK?: number; SPCX?: number; MU?: number; DRAM?: number; Commodities?: number; Stocks?: number; RWA?: number; Others: number };
+export type CoinDay = { t: number; est?: boolean; BTC: number; ETH: number; SOL: number; HYPE: number; XAU?: number; XAG?: number; CL?: number; BZ?: number; SNDK?: number; SPCX?: number; MU?: number; DRAM?: number; INTC?: number; QQQ?: number; SPY?: number; Commodities?: number; Stocks?: number; RWA?: number; Others: number };
 
 let cache: { at: number; data: DuneData | null } | null = null;
 

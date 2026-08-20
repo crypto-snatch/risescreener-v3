@@ -25,7 +25,7 @@ const Q = {
 const GROUPS = ["BTC", "ETH", "SOL", "HYPE"];
 // RWA perps split into two classes (mirrors lib/sectors.ts):
 const CMD = ["XAU", "XAG", "CL", "BZ"]; // Commodities — metals (gold, silver) + crude oil (WTI, Brent)
-const STK = ["SNDK", "SPCX", "MU", "DRAM"]; // Stocks — equities/ETFs (SanDisk, SpaceX, Micron, Roundhill Memory ETF)
+const STK = ["SNDK", "SPCX", "MU", "DRAM", "INTC", "QQQ", "SPY"]; // Stocks — equities/ETFs (SanDisk, SpaceX, Micron, Roundhill Memory ETF, Intel, Nasdaq-100, S&P 500)
 const RWA = [...CMD, ...STK]; // umbrella
 const sym = (name) => (name || "").replace("/USDC", "");
 
