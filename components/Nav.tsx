@@ -70,7 +70,7 @@ const ITEMS: NavItem[] = [
 ];
 
 const RAIL = ["/overview", "/markets", "/rwa", "/traders", "/liquidations", "/network", "/global", "/ecosystem"];
-const MOBILE = ["/overview", "/markets", "/rwa", "/ecosystem"];
+const MOBILE = ["/overview", "/markets", "/funding", "/liquidations"];
 
 function activeFor(path: string, href: string) {
   return href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`);
@@ -91,6 +91,19 @@ export default function Nav({ ticker = [] }: { ticker?: TickerMarket[] }) {
       `${item.label} ${item.short} ${item.group} ${item.keywords ?? ""}`.toLowerCase().includes(q),
     );
   }, [query]);
+
+  // Grouped view of the same results. Desktop renders one row per item; mobile
+  // renders each group as a grid of tiles, so the grouping has to be structural
+  // rather than a header injected between flat rows.
+  const grouped = useMemo(() => {
+    const out: { group: string; items: typeof ITEMS }[] = [];
+    for (const item of results) {
+      const last = out[out.length - 1];
+      if (last && last.group === item.group) last.items.push(item);
+      else out.push({ group: item.group, items: [item] });
+    }
+    return out;
+  }, [results]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -116,7 +129,11 @@ export default function Nav({ ticker = [] }: { ticker?: TickerMarket[] }) {
     if (open) {
       setQuery("");
       setCursor(0);
-      window.setTimeout(() => inputRef.current?.focus(), 30);
+      // On phones the sheet is for browsing; autofocusing would cover it with
+      // the on-screen keyboard. Search there is opt-in — tap the field.
+      if (window.matchMedia("(min-width: 1101px)").matches) {
+        window.setTimeout(() => inputRef.current?.focus(), 30);
+      }
     }
   }, [open]);
 
@@ -240,8 +257,9 @@ export default function Nav({ ticker = [] }: { ticker?: TickerMarket[] }) {
       </nav>
 
       {open && (
-        <div className="command-scrim" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setOpen(false)}>
+        <div className="command-scrim" role="presentation" onPointerDown={(event) => event.target === event.currentTarget && setOpen(false)}>
           <section className="command-panel" role="dialog" aria-modal="true" aria-label="Navigate RiseScreener">
+            <div className="command-grab" aria-hidden="true" />
             <div className="command-input-wrap">
               <Icon name="search" />
               <input
@@ -256,27 +274,38 @@ export default function Nav({ ticker = [] }: { ticker?: TickerMarket[] }) {
             </div>
             <div className="command-results">
               {results.length ? (
-                results.map((item, index) => {
-                  const showGroup = index === 0 || results[index - 1]?.group !== item.group;
-                  return (
-                    <div key={item.href}>
-                      {showGroup && <div className="command-group">{item.group}</div>}
-                      <button
-                        className="command-result"
-                        data-active={cursor === index}
-                        onMouseEnter={() => setCursor(index)}
-                        onClick={() => go(item.href)}
-                      >
-                        <span className="command-result-icon"><Icon name={item.icon} /></span>
-                        <span>
-                          <b>{item.label}</b>
-                          <small>{item.keywords?.split(" ").slice(0, 4).join(" · ")}</small>
-                        </span>
-                        <span className="command-arrow">↗</span>
-                      </button>
+                (() => {
+                  let flat = -1;
+                  return grouped.map((section) => (
+                    <div className="command-section" key={section.group}>
+                      <div className="command-group">{section.group}</div>
+                      <div className="command-rows">
+                        {section.items.map((item) => {
+                          flat += 1;
+                          const index = flat;
+                          return (
+                            <button
+                              key={item.href}
+                              className="command-result"
+                              data-active={cursor === index}
+                              data-current={activeFor(path, item.href)}
+                              onMouseEnter={() => setCursor(index)}
+                              onClick={() => go(item.href)}
+                            >
+                              <span className="command-result-icon"><Icon name={item.icon} /></span>
+                              <span className="command-result-text">
+                                <b>{item.label}</b>
+                                <small>{item.keywords?.split(" ").slice(0, 4).join(" · ")}</small>
+                              </span>
+                              <span className="command-result-short">{item.short}</span>
+                              <span className="command-arrow">↗</span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
-                  );
-                })
+                  ));
+                })()
               ) : (
                 <div className="command-zero">
                   <span>No matching destination.</span>

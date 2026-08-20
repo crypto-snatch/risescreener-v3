@@ -1072,7 +1072,7 @@ body[data-theme="light"] .command-panel { background: #fff; }
 
 @media (max-width: 820px) {
   :root { --topbar-h: 50px; }
-  .shell { padding-left: 0; padding-bottom: 76px; }
+  .shell { padding-left: 0; padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
   .atlas-rail { display: none; }
   .atlas-topbar { left: 0; }
   .atlas-mobile-brand { display: flex; }
@@ -1105,6 +1105,23 @@ body[data-theme="light"] .command-panel { background: #fff; }
     color: var(--muted);
     background: transparent;
     font-size: 10px;
+    /* Kill the ~300ms double-tap-zoom wait that made dock taps feel dropped,
+       and give the press an immediate visual acknowledgement. */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    transition: background .12s ease, color .12s ease, transform .1s ease;
+  }
+  .dock-route:active {
+    transform: scale(.93);
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .dock-route:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
   }
   .dock-route svg { width: 17px; height: 17px; }
   .dock-route[data-active="true"] { color: var(--accent); background: var(--accent-soft); }
@@ -1348,4 +1365,101 @@ body[data-theme="light"] .splash-mascot::after {
 }
 @media (prefers-reduced-motion: reduce) {
   .atlas-loading span, .atlas-loading i { animation: none; opacity: .65; }
+}
+
+/* The dock press uses a scale cue; honour a reduced-motion preference by
+   keeping the colour change and dropping the movement. */
+@media (prefers-reduced-motion: reduce) {
+  .dock-route { transition: none; }
+  .dock-route:active { transform: none; }
+}
+
+/* Sheet-only affordances; the desktop palette keeps its row layout. */
+.command-result-short { display: none; }
+.command-grab { display: none; }
+.command-rows { display: flex; flex-direction: column; }
+
+/* ============================================================
+   Mobile: the command palette becomes a bottom sheet of tiles.
+   Every destination is one thumb-sized tap instead of a typed
+   query, and the sheet sits where the thumb already is.
+   ============================================================ */
+@media (max-width: 1100px) {
+  .command-scrim {
+    align-items: flex-end;
+    justify-content: stretch;
+    padding: 0;
+  }
+  .command-panel {
+    width: 100%;
+    max-height: 86vh;
+    max-height: 86dvh;
+    border-width: 1px 0 0;
+    border-radius: 16px 16px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+    animation: sheet-up .2s cubic-bezier(.22, .61, .36, 1);
+  }
+  .command-grab {
+    display: block;
+    width: 38px;
+    height: 4px;
+    margin: 9px auto 1px;
+    border-radius: 999px;
+    background: var(--hair);
+  }
+  .command-input-wrap { height: 52px; }
+  .command-results { padding: 4px 10px 16px; }
+  .command-group { padding: 13px 3px 7px; }
+  .command-rows {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .command-result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 84px;
+    padding: 10px 6px;
+    border-color: var(--hair);
+    border-radius: 11px;
+    text-align: center;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform .1s ease, background .12s ease, border-color .12s ease;
+  }
+  .command-result:active {
+    transform: scale(.95);
+    background: var(--accent-soft);
+    border-color: var(--accent-line);
+  }
+  .command-result[data-current="true"] {
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+  }
+  .command-result[data-current="true"] .command-result-icon { color: var(--accent); border-color: var(--accent-line); }
+  .command-result-text,
+  .command-arrow { display: none; }
+  .command-result-short {
+    display: block;
+    color: var(--ink);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .command-result-icon { width: 30px; height: 30px; }
+  .command-footer { display: none; }
+}
+@keyframes sheet-up { from { transform: translateY(16px); opacity: 0; } }
+
+@media (max-width: 380px) {
+  .command-rows { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .command-panel { animation: none; }
+  .command-result { transition: none; }
+  .command-result:active { transform: none; }
 }
