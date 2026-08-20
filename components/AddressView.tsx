@@ -75,8 +75,14 @@ export default function AddressView({ addr, initial }: { addr: string; initial: 
           <ChartCard title="Position allocation" height={230} legend={allocLegend} filename={`risescreener-wallet-${addr.slice(0, 8)}`}>
             <Donut data={alloc} height="100%" />
           </ChartCard>
-          <div className="glass glow-edge glass-raise" style={{ borderRadius: "var(--r-lg)", padding: "16px 18px", display: "flex", flexDirection: "column", gap: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 700 }}>Directional exposure</div>
+          <ChartCard
+            title="Directional exposure"
+            subtitle="Current long versus short open notional"
+            height={230}
+            modalHeight={400}
+            filename={`risescreener-wallet-exposure-${addr.slice(0, 8)}`}
+          >
+            <div style={{ height: "100%", display: "flex", flexDirection: "column", gap: 16, justifyContent: "center" }}>
             <div>
               <div style={{ display: "flex", height: 22, borderRadius: 6, overflow: "hidden", background: "var(--glass-2)" }}>
                 <span title={`Long ${usd(longUsd)}`} style={{ width: `${longPct}%`, background: "color-mix(in oklab, var(--long) 80%, transparent)", display: "flex", alignItems: "center", paddingLeft: 8, fontSize: 11, color: "#06120d", fontWeight: 700 }}>{longPct >= 12 ? `${longPct.toFixed(0)}%` : ""}</span>
@@ -93,7 +99,8 @@ export default function AddressView({ addr, initial }: { addr: string; initial: 
               <MiniStat label="Net funding" value={usd(positions.reduce((s, p) => s + p.funding, 0), { sign: true })} />
               <MiniStat label="Markets" value={String(new Set(positions.map((p) => p.symbol)).size)} />
             </div>
-          </div>
+            </div>
+          </ChartCard>
         </div>
       )}
 
@@ -227,7 +234,7 @@ function Td({ children, right, mono, color }: { children: React.ReactNode; right
 function MiniStat({ label, value }: { label: string; value: string }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
-      <span style={{ fontSize: 9.5, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--muted-2)" }}>{label}</span>
+      <span style={{ fontSize: 10.5, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--muted)" }}>{label}</span>
       <span className="tnum" style={{ fontSize: 13.5, fontWeight: 600 }}>{value}</span>
     </div>
   );

@@ -36,7 +36,7 @@ export async function getTimeseries(): Promise<TsPoint[]> {
   try {
     let raw: string;
     try {
-      const r = await fetch(url, { next: { revalidate: 120 } });
+      const r = await fetch(url, { next: { revalidate: 120 }, signal: AbortSignal.timeout(8_000) });
       if (!r.ok) throw new Error(`timeseries ${r.status}`);
       raw = await r.text();
     } catch {

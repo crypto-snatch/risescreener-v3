@@ -8,7 +8,7 @@ import ChartCard from "@/components/ChartCard";
 
 const LONG = "#3fdd9a";
 const SHORT = "#ff6b7d";
-const TICK = "#647588";
+const TICK = "#9aa6b2";
 
 const priceFmt = (p: number) => (p >= 1000 ? `$${(p / 1000).toFixed(1)}K` : `$${p.toFixed(p < 10 ? 3 : 2)}`);
 
@@ -38,8 +38,8 @@ export default function LiqMap({ markets, height = 460 }: { markets: LiqMapMarke
       <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical" margin={{ top: 4, right: 12, left: 4, bottom: 0 }} barCategoryGap={1}>
-          <XAxis type="number" tick={{ fill: TICK, fontSize: 10, fontFamily: "var(--font)" }} stroke="rgba(255,255,255,0.10)" tickLine={false} axisLine={false} tickFormatter={(v) => usd(Number(v))} />
-          <YAxis type="category" dataKey="label" width={62} tick={{ fill: TICK, fontSize: 9.5, fontFamily: "var(--font)" }} stroke="rgba(255,255,255,0.10)" tickLine={false} axisLine={false} interval={1} reversed={false} />
+          <XAxis type="number" tick={{ fill: TICK, fontSize: 11, fontFamily: "var(--font)" }} stroke="rgba(255,255,255,0.10)" tickLine={false} axisLine={false} tickFormatter={(v) => usd(Number(v))} />
+          <YAxis type="category" dataKey="label" width={64} tick={{ fill: TICK, fontSize: 10.5, fontFamily: "var(--font)" }} stroke="rgba(255,255,255,0.10)" tickLine={false} axisLine={false} interval={1} reversed={false} />
           <Tooltip
             contentStyle={{ background: "rgba(10,14,20,0.94)", border: "1px solid rgba(255,255,255,0.10)", borderRadius: 10, fontSize: 11.5, padding: "8px 11px", fontFamily: "var(--font)" }}
             labelStyle={{ color: "#8b9bad", marginBottom: 4, fontSize: 10.5 }}

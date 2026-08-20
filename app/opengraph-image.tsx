@@ -6,7 +6,7 @@ export const alt = "RiseScreener — RISE Chain & RISEx analytics";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const ACCENT = "#34cfa2";
+const ACCENT = "#2ee88e";
 const ACCENT_2 = "#7d93c8";
 const INK = "#e8f2ee";
 const MUTED = "#8ca3a0";
@@ -35,28 +35,6 @@ export default function OpengraphImage() {
           fontFamily: "sans-serif",
         }}
       >
-        {/* Ambient glows (satori-safe radial gradients, no size/position prefix) */}
-        <div
-          style={{
-            position: "absolute",
-            top: -160,
-            right: -120,
-            width: 760,
-            height: 560,
-            background: "radial-gradient(circle, rgba(52,207,162,0.20), rgba(7,14,12,0) 62%)",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: -180,
-            left: -140,
-            width: 760,
-            height: 560,
-            background: "radial-gradient(circle, rgba(125,147,200,0.18), rgba(7,14,12,0) 62%)",
-          }}
-        />
-
         {/* Brand mark */}
         <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}

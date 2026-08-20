@@ -1,15 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import Link from "next/link";
-import Nav from "@/components/Nav";
-import TxSearch from "@/components/TxSearch";
-import ThemeToggle from "@/components/ThemeToggle";
+import Nav, { type TickerMarket } from "@/components/Nav";
+import { getMarketRows } from "@/lib/analytics";
+import AutoRefresh from "@/components/AutoRefresh";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://risescreener.com"),
-  title: "RiseScreener — RISE Chain & RISEx analytics",
+  title: "RiseScreener — RISE Chain analytics, ecosystem & markets",
   description:
-    "Analytics & risk screener for RISE Chain and the RISEx perps DEX — live markets, open interest, funding, fees, liquidations, traders and protocol flows.",
+    "The home for RISE Chain — RISEx perps analytics (markets, OI, funding, liquidations, traders, flows), the full ecosystem directory, and global crypto-market context.",
   openGraph: {
     title: "RiseScreener — RISE Chain & RISEx analytics",
     description:
@@ -28,17 +27,34 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#070e0c",
+  themeColor: "#0b0f0e",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const revalidate = 30;
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  let ticker: TickerMarket[] = [];
+  try {
+    ticker = (await getMarketRows())
+      .filter((market) => market.active && market.mark > 0)
+      .slice(0, 12)
+      .map((market) => ({
+        id: market.marketId,
+        symbol: market.symbol,
+        mark: market.mark,
+        changePct: market.changePct,
+      }));
+  } catch {
+    ticker = [];
+  }
+
   return (
     <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
           rel="stylesheet"
         />
       </head>
@@ -50,44 +66,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <div className="bg-atmos" />
         <div className="shell">
-          <header className="sticky-head">
-            <div className="glass" style={{ borderRadius: 0, borderLeft: "none", borderRight: "none", borderTop: "none" }}>
-              <div className="topbar-inner" style={{ padding: "6px 22px" }}>
-                <div className="topbar-side">
-                  <Link href="/" style={{ display: "inline-flex", alignItems: "center", flexShrink: 0 }}>
-                    <span className="wm" style={{ fontSize: 17 }}>
-                      <span className="text-accent">RISE</span>
-                      <span style={{ color: "var(--ink)" }}>SCREENER</span>
-                    </span>
-                  </Link>
-                </div>
-                <div className="navbar-wrap"><Nav /></div>
-                <div className="topbar-side topbar-right">
-                  <ThemeToggle />
-                  <div className="search-wrap" style={{ flexShrink: 1, width: 150 }}>
-                    <TxSearch />
-                  </div>
-                  <a
-                    href="https://www.rise.trade/invite/risescreener"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="chip tag-accent hide-mobile"
-                    style={{ padding: "6px 9px", fontSize: 11, fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0 }}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/risex.png" alt="" width={14} height={14} style={{ display: "block", borderRadius: 3 }} />
-                    Trade ↗
-                  </a>
-                </div>
-              </div>
-            </div>
-          </header>
+          <Nav ticker={ticker} />
+          <AutoRefresh />
 
           <main className="page-main">{children}</main>
 
           <footer className="page-foot" style={{ fontSize: 11, color: "var(--muted-2)", lineHeight: 1.6 }}>
-            Data from RISEx public API + RISE Chain (RPC / Blockscout). Unofficial, read-only. Not
-            affiliated with RISE. Figures are estimates; trend charts build from periodic snapshots.
+            Data from RISEx public API, RiseScan, Dune and RISE Chain. Live views refresh every 30 seconds
+            while visible; historical datasets follow their stated source cadence. Unofficial, read-only.
           </footer>
         </div>
       </body>

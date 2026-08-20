@@ -43,7 +43,7 @@ const readJson = async (p) => { try { return JSON.parse(await readFile(p, "utf8"
 // in base units, quote_volume_24h in USD (mirrors lib/analytics.ts).
 async function liveMarkets() {
   try {
-    const r = await fetch("https://api.rise.trade/v1/markets");
+    const r = await fetch("https://api.rise.trade/v1/markets", { signal: AbortSignal.timeout(8_000) });
     if (!r.ok) return [];
     const j = await r.json();
     return (j?.data?.markets || [])

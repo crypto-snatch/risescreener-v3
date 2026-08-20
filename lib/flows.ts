@@ -43,7 +43,7 @@ export async function getFlows(maxPages = 4): Promise<FlowsResult> {
   let pages = 0;
   try {
     while (url && pages < maxPages) {
-      const r: { items?: RawLog[]; next_page_params?: Record<string, unknown> } = await fetch(url, { next: { revalidate: 30 } }).then((x) => x.json());
+      const r: { items?: RawLog[]; next_page_params?: Record<string, unknown> } = await fetch(url, { next: { revalidate: 30 }, signal: AbortSignal.timeout(8_000) }).then((x) => x.json());
       for (const it of r.items ?? []) {
         const t0 = (it.topics?.[0] || "").slice(0, 10);
         const isDep = t0 === DEP;

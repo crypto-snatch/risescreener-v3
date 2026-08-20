@@ -3,7 +3,7 @@ import { num } from "./format";
 
 async function api<T>(path: string, revalidate = 10): Promise<T | null> {
   try {
-    const r = await fetch(`${RISEX_API}${path}`, { next: { revalidate } });
+    const r = await fetch(`${RISEX_API}${path}`, { next: { revalidate }, signal: AbortSignal.timeout(8_000) });
     if (!r.ok) return null;
     const j = (await r.json()) as { data: T };
     return j.data;
@@ -21,14 +21,51 @@ export interface Candle {
   c: number;
   v: number;
 }
-export async function getCandles(marketId: string | number, resolution = "60", limit = 200): Promise<Candle[]> {
+
+export type CandleInterval = "1m" | "5m" | "15m" | "1h" | "1d" | "1w";
+
+const INTERVAL_NS: Record<CandleInterval, bigint> = {
+  "1m": 60_000_000_000n,
+  "5m": 300_000_000_000n,
+  "15m": 900_000_000_000n,
+  "1h": 3_600_000_000_000n,
+  "1d": 86_400_000_000_000n,
+  "1w": 604_800_000_000_000n,
+};
+
+/**
+ * RISEx expects interval/from/to as nanoseconds. Supplying the retired
+ * `resolution` parameter silently falls back to the most recent 1-hour window,
+ * so always send an explicit bounded range here.
+ */
+export async function getCandles(
+  marketId: string | number,
+  interval: CandleInterval = "5m",
+  limit = 288,
+): Promise<Candle[]> {
+  const step = INTERVAL_NS[interval];
+  const to = BigInt(Date.now()) * 1_000_000n;
+  // Ask for two extra bars to absorb a partial leading/trailing bucket.
+  const from = to - step * BigInt(Math.max(2, limit + 2));
   const d = await api<{ data?: RawCandle[] } | RawCandle[]>(
-    `/v1/markets/id/${marketId}/trading-view-data?resolution=${resolution}`,
-    30,
+    `/v1/markets/id/${marketId}/trading-view-data?interval=${step.toString()}&from=${from.toString()}&to=${to.toString()}`,
+    15,
   );
   const arr = (Array.isArray(d) ? d : d?.data) ?? [];
-  return arr
-    .map((k) => ({ t: Math.floor(num(k.time) / 1_000_000), o: num(k.open), h: num(k.high), l: num(k.low), c: num(k.close), v: num(k.volume) }))
+  const byTime = new Map<number, Candle>();
+  for (const k of arr) {
+    const candle = {
+      t: Math.floor(num(k.time) / 1_000_000),
+      o: num(k.open),
+      h: num(k.high),
+      l: num(k.low),
+      c: num(k.close),
+      v: num(k.volume),
+    };
+    if (candle.t > 0 && candle.c > 0) byTime.set(candle.t, candle);
+  }
+  return [...byTime.values()]
+    .sort((a, b) => a.t - b.t)
     .slice(-limit);
 }
 interface RawCandle {

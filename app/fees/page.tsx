@@ -5,25 +5,27 @@ import SeriesChart from "@/components/SeriesChart";
 import ChartCard from "@/components/ChartCard";
 import FeeBreakdown from "@/components/FeeBreakdown";
 import { Donut, Spark } from "@/components/charts";
+import { dayTotal, patchVolume } from "@/lib/volume";
+import { getTimeseries } from "@/lib/timeseries";
 
 export const revalidate = 60;
 export const metadata = { title: "Fees & Revenue — RiseScreener" };
 
-const COINS = ["BTC", "ETH", "SOL", "HYPE", "Others"] as const;
-const COIN_COLOR: Record<string, string> = { BTC: "#f7931a", ETH: "#8aa0c8", SOL: "#14f195", HYPE: "#34cfa2", Others: "#6a7c8e" };
+const GROUPS = ["BTC", "ETH", "SOL", "HYPE", "Commodities", "Stocks", "Others"] as const;
+const COIN_COLOR: Record<string, string> = { BTC: "#f7931a", ETH: "#8aa0c8", SOL: "#14f195", HYPE: "#34cfa2", Commodities: "#e6c069", Stocks: "#5fa8ff", Others: "#6a7c8e" };
 
 function monthlyTotals(days: CoinDay[]): number[] {
   const m = new Map<string, number>();
   for (const d of days) {
     const dt = new Date(d.t);
     const k = `${dt.getUTCFullYear()}-${String(dt.getUTCMonth()).padStart(2, "0")}`;
-    const tot = COINS.reduce((s, c) => s + (d[c] || 0), 0);
+    const tot = dayTotal(d);
     m.set(k, (m.get(k) || 0) + tot);
   }
   return [...m.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1)).map((e) => e[1]);
 }
 function sumByCoin(days: CoinDay[]) {
-  return COINS.map((c) => ({ name: c, value: days.reduce((s, d) => s + (d[c] || 0), 0), color: COIN_COLOR[c] }))
+  return GROUPS.map((c) => ({ name: c, value: days.reduce((s, d) => s + Number(d[c] || 0), 0), color: COIN_COLOR[c] }))
     .filter((x) => x.value > 0)
     .sort((a, b) => b.value - a.value);
 }
@@ -31,7 +33,7 @@ function sumByCoin(days: CoinDay[]) {
 function FeeKpi({ label, value, sub, spark, color = "var(--accent)" }: { label: string; value: string; sub?: string; spark?: number[]; color?: string }) {
   return (
     <div className="glass glow-edge stat-card" style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 4, minHeight: 112 }}>
-      <div style={{ fontSize: 9.5, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--muted-2)" }}>{label}</div>
+      <div style={{ fontSize: 10.5, letterSpacing: ".11em", textTransform: "uppercase", color: "var(--muted)" }}>{label}</div>
       <div className="tnum" style={{ fontSize: 21, fontWeight: 700, letterSpacing: "-.015em", lineHeight: 1.05 }}>{value}</div>
       {spark && spark.length > 1 ? (
         <div style={{ height: 30, marginTop: 2, marginLeft: -4, marginRight: -4 }}><Spark data={spark} color={color} height={30} /></div>
@@ -44,19 +46,20 @@ function FeeKpi({ label, value, sub, spark, color = "var(--accent)" }: { label: 
 }
 
 export default async function FeesPage() {
-  const dune = await getDune();
+  const [dune, timeseries] = await Promise.all([getDune(), getTimeseries()]);
   if (!dune) return <div className="screen"><h1 style={{ fontSize: 22, fontWeight: 700 }}>Fees &amp; Revenue</h1><Empty>Dune snapshot not available.</Empty></div>;
 
   const { fees, totals } = dune;
   const feeDaily = dune.feesByMarket ?? [];
   const liqDaily = dune.liqFeesByMarket ?? [];
   // daily fee series (last 60d) — fluctuating snapshots, not a monotonic cumulative line
-  const dailyTot = feeDaily.map((d) => COINS.reduce((s, c) => s + (d[c] || 0), 0)).slice(-60);
-  const dailyLiq = liqDaily.map((d) => COINS.reduce((s, c) => s + (d[c] || 0), 0)).slice(-60);
+  const dailyTot = feeDaily.map(dayTotal).slice(-60);
+  const dailyLiq = liqDaily.map(dayTotal).slice(-60);
   const feeTot = fees.taker + fees.maker + fees.liq || 1;
   const takerSpark = dailyTot.map((v) => v * (fees.taker / feeTot));
   const makerSpark = dailyTot.map((v) => v * (fees.maker / feeTot));
-  const feeBps = totals.cumVolume > 0 ? (totals.cumFees / totals.cumVolume) * 10_000 : 0;
+  const cumulativeVolume = patchVolume(dune, timeseries).cumVolume;
+  const feeBps = cumulativeVolume > 0 ? (totals.cumFees / cumulativeVolume) * 10_000 : 0;
 
   const byMarket = sumByCoin(feeDaily);
   const dTotal = byMarket.reduce((s, m) => s + m.value, 0) || 1;
@@ -107,8 +110,8 @@ export default async function FeesPage() {
 
       {/* charts */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px,1fr))", gap: 16, alignItems: "stretch" }}>
-        <SeriesChart title="Fees by market ($/day)" points={feeDaily} mode="bars" extraKey="cum" extraLabel="Cumulative" />
-        <ChartCard title="Fees by market · all-time" height={300} legend={feeLegend} filename="risescreener-fees-by-market">
+        <SeriesChart title="Fees by market ($/day)" subtitle="Complete UTC-day Dune buckets · RWA split by asset class" points={feeDaily} mode="bars" extraKey="cum" extraLabel="Cumulative" />
+        <ChartCard title="Fees by market · all-time" subtitle="Trading fee contribution by market group" height={300} legend={feeLegend} filename="risescreener-fees-by-market">
           {byMarket.length ? <Donut data={byMarket} height="100%" /> : <Empty>No fee data.</Empty>}
         </ChartCard>
       </div>

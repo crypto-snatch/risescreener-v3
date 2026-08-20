@@ -6,6 +6,7 @@ async function api<T>(path: string, revalidate = 5): Promise<T> {
   const res = await fetch(`${RISEX_API}${path}`, {
     headers: { accept: "application/json" },
     next: { revalidate },
+    signal: AbortSignal.timeout(8_000),
   });
   if (!res.ok) throw new Error(`RISEx ${path} -> ${res.status}`);
   const json = (await res.json()) as { data: T };
@@ -17,6 +18,7 @@ export interface MarketCfg {
   name: string;
   max_leverage: string;
   open_interest_limit: string;
+  step_size: string;
   step_price: string;
   maintenance_margin_factor: string;
 }
@@ -51,10 +53,17 @@ export function change24hPct(m: Market): number {
 
 let _markets: { at: number; data: Market[] } | null = null;
 export async function getMarkets(): Promise<Market[]> {
-  if (_markets && Date.now() - _markets.at < 60_000) return _markets.data;
-  const data = await api<{ markets: Market[] }>("/v1/markets", 60);
-  _markets = { at: Date.now(), data: data.markets };
-  return data.markets;
+  if (_markets && Date.now() - _markets.at < 15_000) return _markets.data;
+  try {
+    const data = await api<{ markets: Market[] }>("/v1/markets", 15);
+    const markets = Array.isArray(data?.markets) ? data.markets : [];
+    _markets = { at: Date.now(), data: markets };
+    return markets;
+  } catch {
+    // Preserve the last good snapshot during a transient API/TLS/rate-limit failure.
+    // With no prior snapshot, callers receive [] and render their local empty state.
+    return _markets?.data ?? [];
+  }
 }
 
 export async function getMarketMap(): Promise<Map<string, Market>> {
@@ -138,7 +147,8 @@ export function enrichPosition(
   const uPnl = (mark - entry) * sizeTok * dir;
   const uPnlPct = margin > 0 ? (uPnl / margin) * 100 : 0;
   // crude liquidation estimate: entry adjusted by (1/lev - mmf) in the adverse direction
-  const mmFrac = mmf / 100; // maintenance_margin_factor is a percent-like figure
+  // RISEx returns maintenance_margin_factor in basis points (e.g. 37.5 = 0.375%).
+  const mmFrac = mmf / 10_000;
   const liqMove = entry * (1 / lev - mmFrac);
   const liqApprox = lev > 0 ? entry - dir * liqMove : null;
   return {
@@ -271,12 +281,53 @@ export interface RawOpenOrder {
 }
 export async function getOpenOrders(account: string): Promise<RawOpenOrder[]> {
   try {
-    const d = await api<{ orders: RawOpenOrder[] }>(
+    const d = await api<{ orders: ApiOpenOrder[] }>(
       `/v1/orders/open?account=${account}`,
       5,
     );
-    return d.orders ?? [];
+    const orders = d.orders ?? [];
+    if (!orders.length) return [];
+    const marketMap = await getMarketMap().catch(() => new Map<string, Market>());
+    return orders.map((order, index) => {
+      const marketId = String(order.market_id ?? "");
+      const config = marketMap.get(marketId)?.config;
+      const priceValue = order.price != null
+        ? num(order.price)
+        : num(order.price_ticks) * num(config?.step_price);
+      const sizeValue = order.size != null
+        ? num(order.size)
+        : num(order.size_steps) * num(config?.step_size);
+      const remainingValue = order.remaining_size != null
+        ? num(order.remaining_size)
+        : order.remaining_size_steps != null
+          ? num(order.remaining_size_steps) * num(config?.step_size)
+          : sizeValue;
+      const sideValue = String(order.side).toUpperCase();
+      const side: "BUY" | "SELL" =
+        sideValue === "BUY" || sideValue === "0" ? "BUY" : "SELL";
+      return {
+        order_id: String(order.order_id ?? order.id ?? `open-${marketId}-${index}`),
+        market_id: marketId,
+        side,
+        price: String(priceValue),
+        size: String(sizeValue),
+        remaining_size: String(remainingValue),
+      };
+    });
   } catch {
     return [];
   }
+}
+
+interface ApiOpenOrder {
+  order_id?: string | number;
+  id?: string | number;
+  market_id?: string | number;
+  side?: "BUY" | "SELL" | string | number;
+  price?: string | number;
+  size?: string | number;
+  remaining_size?: string | number;
+  price_ticks?: string | number;
+  size_steps?: string | number;
+  remaining_size_steps?: string | number;
 }

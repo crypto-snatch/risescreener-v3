@@ -31,10 +31,10 @@ export default async function FlowsPage() {
 
       {(tvlSeries.length > 1 || netSeries.length > 1) && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px,1fr))", gap: 16, alignItems: "stretch" }}>
-          <ChartCard title="TVL over time" height={280} filename="risescreener-tvl">
+          <ChartCard title="TVL over time" subtitle="Daily collateral snapshots · current partial day excluded" height={280} filename="risescreener-tvl">
             {tvlSeries.length > 1 ? <AreaTrend data={tvlSeries} xKey="t" yKey="v" yPreset="usd" valueName="TVL" height="100%" /> : <Empty>No data.</Empty>}
           </ChartCard>
-          <ChartCard title="Net flow · daily (30d)" height={280} filename="risescreener-net-flow">
+          <ChartCard title="Net flow · daily (30d)" subtitle="Deposits minus withdrawals per complete UTC day" height={280} filename="risescreener-net-flow">
             {netSeries.length > 1 ? <Bars data={netSeries} xKey="label" yKey="v" colorBySign height={280} /> : <Empty>No data.</Empty>}
           </ChartCard>
         </div>

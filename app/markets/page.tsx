@@ -1,21 +1,21 @@
 import { getMarketRows, getProtocol, isUpcoming } from "@/lib/analytics";
 import { getDune } from "@/lib/dune";
-import { getTimeseries } from "@/lib/timeseries";
-import { patchVolume } from "@/lib/volume";
 import { usd } from "@/lib/format";
 import { Stat, SectionLabel, Empty } from "@/components/ui";
 import MarketsTable from "@/components/MarketsTable";
 import ChartCard from "@/components/ChartCard";
 import { Donut, GroupBars } from "@/components/charts";
 import { categoryOf, CAT_COLOR } from "@/lib/sectors";
+import { getTimeseries } from "@/lib/timeseries";
+import { patchVolume } from "@/lib/volume";
 
 export const revalidate = 15;
 export const metadata = { title: "Markets — RiseScreener" };
 
 export default async function MarketsPage() {
-  const [rows, p, dune, ts] = await Promise.all([getMarketRows(), getProtocol(), getDune(), getTimeseries()]);
+  const [rows, p, dune, timeseries] = await Promise.all([getMarketRows(), getProtocol(), getDune(), getTimeseries()]);
+  const patchedVolume = patchVolume(dune, timeseries);
   const tradable = rows.filter((r) => !isUpcoming(r));
-  const cumVolume = patchVolume(dune, ts).cumVolume; // Dune's total misses the days it drops
 
   // OI by sector
   const bySector: Record<string, number> = {};
@@ -37,18 +37,17 @@ export default async function MarketsPage() {
       {/* summary */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px,1fr))", gap: 10 }}>
         <Stat big label="24h Volume" value={usd(p.totalVolume24h)} tone="accent" />
-        {/* live OI, same source as the sector breakdown below (Dune's copy lags) */}
-        <Stat big label="Total Open Interest" value={usd(p.totalOiUsd || dune?.totals.oi || 0)} />
-        <Stat big label="Cumulative Volume" value={usd(cumVolume)} />
-        <Stat big label="Markets" value={String(p.marketsCount)} hint={`${p.listedMarkets} listed · ${p.upcomingMarkets} upcoming`} />
+        <Stat big label="Total Open Interest" value={usd(p.totalOiUsd)} hint="live RISEx books" />
+        <Stat big label="Cumulative Volume" value={usd(patchedVolume.cumVolume)} hint={patchedVolume.estDays ? `${patchedVolume.estDays} missing Dune day${patchedVolume.estDays === 1 ? "" : "s"} rebuilt` : undefined} />
+        <Stat big label="Active Markets" value={String(p.marketsCount)} hint="matches the current RISEx venue" />
       </div>
 
       {/* analytics charts */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px,1fr))", gap: 16, alignItems: "stretch" }}>
-        <ChartCard title="Open interest by sector" height={280} legend={sectorLegend} filename="risescreener-oi-by-sector">
+        <ChartCard title="Open interest by sector" subtitle="Live RISEx notional · sector share" height={280} legend={sectorLegend} filename="risescreener-oi-by-sector">
           {sectorOi.length ? <Donut data={sectorOi} height="100%" /> : <Empty>No data.</Empty>}
         </ChartCard>
-        <ChartCard title="Top markets by open interest" height={280} filename="risescreener-oi-leaders">
+        <ChartCard title="Top markets by open interest" subtitle="Live USD notional · largest eight active markets" height={280} filename="risescreener-oi-leaders">
           {oiLeaders.length ? <GroupBars data={oiLeaders} height={280} /> : <Empty>No data.</Empty>}
         </ChartCard>
       </div>

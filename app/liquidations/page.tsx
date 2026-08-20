@@ -7,22 +7,41 @@ import ChartCard from "@/components/ChartCard";
 import LiqHeatmap from "@/components/LiqHeatmap";
 import LiqMap from "@/components/LiqMap";
 import { Donut } from "@/components/charts";
+import { LiqLevels } from "@/components/viz";
+import { getMarketRows } from "@/lib/analytics";
+import { getLiquidationHeatmap } from "@/lib/risescan";
+import { price as fmtPx } from "@/lib/format";
+import { dayTotal as sumDay } from "@/lib/volume";
 
 export const revalidate = 60;
 export const metadata = { title: "Liquidations — RiseScreener" };
 
-const COINS = ["BTC", "ETH", "SOL", "HYPE", "Others"] as const;
-const COIN_COLOR: Record<string, string> = { BTC: "#f7931a", ETH: "#8aa0c8", SOL: "#14f195", HYPE: "#34cfa2", Others: "#6a7c8e" };
+const GROUPS = ["BTC", "ETH", "SOL", "HYPE", "Commodities", "Stocks", "Others"] as const;
+const COIN_COLOR: Record<string, string> = { BTC: "#f7931a", ETH: "#8aa0c8", SOL: "#14f195", HYPE: "#34cfa2", Commodities: "#e6c069", Stocks: "#5fa8ff", Others: "#6a7c8e" };
 
 function sumByCoin(days: CoinDay[]): { name: string; value: number; color: string }[] {
-  return COINS.map((c) => ({ name: c, value: days.reduce((s, d) => s + (d[c] || 0), 0), color: COIN_COLOR[c] }))
+  return GROUPS.map((c) => ({ name: c, value: days.reduce((s, d) => s + Number(d[c] || 0), 0), color: COIN_COLOR[c] }))
     .filter((x) => x.value > 0)
     .sort((a, b) => b.value - a.value);
 }
 
 export default async function LiquidationsPage() {
-  const [dune, snap] = await Promise.all([getDune(), getSnapshot()]);
+  const [dune, snap, rows] = await Promise.all([getDune(), getSnapshot(), getMarketRows()]);
   if (!dune) return <div className="screen"><h1 style={{ fontSize: 22, fontWeight: 700 }}>Liquidations</h1><Empty>Dune snapshot not available.</Empty></div>;
+
+  // real liquidation heatmaps (RISEx Analytics API) for the two deepest markets
+  const topMkts = rows.filter((r) => r.active && r.mark > 0).sort((a, b) => b.oiUsd - a.oiUsd).slice(0, 2);
+  const heatmaps = await Promise.all(topMkts.map((m) => getLiquidationHeatmap(m.marketId).catch(() => [])));
+  const liqHeat = topMkts.map((m, i) => ({ symbol: m.symbol, mark: m.mark, bins: heatmaps[i] })).filter((x) => x.bins.length > 0);
+  // Give every returned price band a real row. The API currently returns about
+  // 30–35 bands for the deepest markets; a short fixed plot forced an internal
+  // scrollbar and made the bottom levels look clipped.
+  const bandChartHeight = Math.max(
+    720,
+    // 144px reserves the title/legend/mark lanes even when the legend wraps
+    // on a 390px viewport; 128px left the final ETH band clipped by 11px.
+    ...liqHeat.map((market) => market.bins.filter((bin) => bin.longUsd + bin.shortUsd > 0).length * 18 + 144),
+  );
 
   const liq = dune.liqTotals;
   const avgSize = liq.count > 0 ? liq.volume / liq.count : 0;
@@ -32,14 +51,13 @@ export default async function LiquidationsPage() {
   const liqLegend = byMarket.map((m) => ({ name: m.name, color: m.color, value: usd(m.value), pct: (m.value / liqTotal) * 100 }));
 
   // "24h" = most recent day that actually had liquidations (Dune drops the partial current day)
-  const dayTotal = (d: CoinDay) => COINS.reduce((s, c) => s + (d[c] || 0), 0);
-  const lastDay = [...liqDays].reverse().find((d) => dayTotal(d) > 0);
-  const by24 = lastDay ? COINS.map((c) => ({ name: c, value: lastDay[c] || 0, color: COIN_COLOR[c] })).filter((x) => x.value > 0).sort((a, b) => b.value - a.value) : [];
+  const lastDay = [...liqDays].reverse().find((d) => sumDay(d) > 0);
+  const by24 = lastDay ? GROUPS.map((c) => ({ name: c, value: Number(lastDay[c] || 0), color: COIN_COLOR[c] })).filter((x) => x.value > 0).sort((a, b) => b.value - a.value) : [];
   const fees24 = by24.reduce((s, m) => s + m.value, 0);
 
   const heatAll = byMarket.map((m) => ({ name: m.name, size: m.value, color: m.color }));
   const heat24 = by24.map((m) => ({ name: m.name, size: m.value, color: m.color }));
-  const marketRows = COINS.map((c) => ({ sym: c, color: COIN_COLOR[c], all: byMarket.find((m) => m.name === c)?.value ?? 0, d24: lastDay?.[c] ?? 0 })).filter((r) => r.all > 0).sort((a, b) => b.all - a.all);
+  const marketRows = GROUPS.map((c) => ({ sym: c, color: COIN_COLOR[c], all: byMarket.find((m) => m.name === c)?.value ?? 0, d24: Number(lastDay?.[c] ?? 0) })).filter((r) => r.all > 0).sort((a, b) => b.all - a.all);
 
   const atRisk = (snap?.atRisk ?? []).filter((p) => p.distPct != null);
   const liqMap = snap?.liqMap ?? [];
@@ -59,14 +77,38 @@ export default async function LiquidationsPage() {
         <Stat big label="Avg liquidation" value={usd(avgSize)} hint="volume ÷ count" />
       </div>
 
-      {/* dual heat maps: 24h + all-time */}
+      {liqHeat.length > 0 && (
+        <div>
+          <SectionLabel>Liquidation heatmap · notional at risk by price level</SectionLabel>
+          <div className="liquidation-band-grid" style={{ display: "grid", gridTemplateColumns: `repeat(${liqHeat.length}, minmax(0,1fr))`, gap: 16, alignItems: "start" }}>
+            {liqHeat.map((h) => (
+              <ChartCard
+                key={h.symbol}
+                title={`${h.symbol} liquidation bands`}
+                subtitle="Indexed position notional grouped by estimated liquidation price"
+                height={bandChartHeight}
+                modalHeight={bandChartHeight}
+                toolbar={<span className="tnum text-muted" style={{ fontSize: 11.5 }}>mark ${fmtPx(h.mark)}</span>}
+                filename={`risescreener-${h.symbol.toLowerCase()}-liquidation-bands`}
+              >
+                <LiqLevels bins={h.bins} currentPrice={h.mark} />
+              </ChartCard>
+            ))}
+          </div>
+          <p style={{ margin: "10px 1px 0", color: "var(--muted-2)", fontSize: 11.5, lineHeight: 1.55 }}>
+            Each band shows the notional whose estimated liquidation price falls there. Longs (green) get liquidated as price falls below the mark; shorts (red) as it rises above. From indexed positions via the RISEx Analytics API.
+          </p>
+        </div>
+      )}
+
+      {/* dual fee heat maps: 24h + all-time */}
       <div>
-        <SectionLabel>Liquidations heat map · 24h vs all-time</SectionLabel>
+        <SectionLabel>Liquidation fee heat map · 24h vs all-time</SectionLabel>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px,1fr))", gap: 16, alignItems: "stretch" }}>
-          <ChartCard title={`24h liquidations · ${usd(fees24)}`} height={300} filename="risescreener-liq-heatmap-24h">
+          <ChartCard title={`Latest active-day liquidation fees · ${usd(fees24)}`} subtitle="Aligned market tiles · value and share · most recent complete UTC day with liquidations" height={120} modalHeight={220} filename="risescreener-liq-heatmap-24h">
             {heat24.length ? <LiqHeatmap data={heat24} height="100%" /> : <Empty>No liquidations in the last active day.</Empty>}
           </ChartCard>
-          <ChartCard title={`All-time liquidations · ${usd(liqTotal)}`} height={300} filename="risescreener-liq-heatmap-all">
+          <ChartCard title={`All-time liquidation fees · ${usd(liqTotal)}`} subtitle="Aligned market tiles · cumulative value and share by market group" height={120} modalHeight={220} filename="risescreener-liq-heatmap-all">
             {heatAll.length ? <LiqHeatmap data={heatAll} height="100%" /> : <Empty>No data.</Empty>}
           </ChartCard>
         </div>
@@ -102,8 +144,8 @@ export default async function LiquidationsPage() {
       )}
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px,1fr))", gap: 16, alignItems: "stretch" }}>
-        <SeriesChart title="Liq fees by market ($/day)" points={dune.liqFeesByMarket ?? []} mode="bars" extraKey="cum" extraLabel="Cumulative" />
-        <ChartCard title="Liquidations by market · all-time" height={300} legend={liqLegend} filename="risescreener-liquidations-by-market">
+        <SeriesChart title="Liq fees by market ($/day)" subtitle="Complete UTC-day Dune buckets · RWA split by asset class" points={dune.liqFeesByMarket ?? []} mode="bars" extraKey="cum" extraLabel="Cumulative" />
+        <ChartCard title="Liquidation fees by market · all-time" subtitle="Cumulative contribution by market group" height={300} legend={liqLegend} filename="risescreener-liquidations-by-market">
           {byMarket.length ? <Donut data={byMarket} height="100%" /> : <Empty>No liquidation data yet.</Empty>}
         </ChartCard>
       </div>

@@ -238,7 +238,7 @@ function render(kind: Kind) {
         <div style={{ display: "flex", flexDirection: "column", gap: 9, width: 260 }}>
           {[0, 1, 2, 3].map((l) => (
             <div key={l} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontSize: 9, color: "var(--muted-2)" }}>core {l}</span>
+              <span style={{ fontSize: 10.5, color: "var(--muted)" }}>core {l}</span>
               <div style={{ flex: 1, height: 12, borderRadius: 3, background: "rgba(255,255,255,0.05)", overflow: "hidden" }}>
                 <div className="lane" style={{ height: "100%", background: "var(--accent)", animationDelay: `${l * 0.16}s` }} />
               </div>

@@ -95,7 +95,7 @@ export async function getSnapshot(): Promise<LeaderboardSnapshot | null> {
   if (cache && Date.now() - cache.at < 15_000) return cache.data;
   const url = process.env.SNAPSHOT_URL || RAW_URL;
   try {
-    const res = await fetch(url, { next: { revalidate: 120 } });
+    const res = await fetch(url, { next: { revalidate: 120 }, signal: AbortSignal.timeout(8_000) });
     if (!res.ok) throw new Error(`snapshot ${res.status}`);
     const data = (await res.json()) as LeaderboardSnapshot;
     cache = { at: Date.now(), data };

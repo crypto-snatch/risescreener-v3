@@ -34,7 +34,7 @@ export async function getSummary(): Promise<Summary | null> {
   try {
     let raw: string;
     try {
-      const r = await fetch(url, { next: { revalidate: 300 } });
+      const r = await fetch(url, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8_000) });
       if (!r.ok) throw new Error(`summary ${r.status}`);
       raw = await r.text();
     } catch {

@@ -22,19 +22,19 @@ import {
 } from "recharts";
 import { usd } from "@/lib/format";
 
-/* ── shared chart theme (V3) ──────────────────────────────────
+/* ── shared chart theme (V4) ──────────────────────────────────
    Minimal chrome: no vertical grid, faint dashed horizontal only,
    thin strokes, muted tabular ticks, one clean rounded tooltip. */
-const ACC = "#2ee6b6";
-const ACC2 = "#6f8bff";
-const LONG = "#3fdd9a";
-const SHORT = "#ff6b7d";
-const WARN = "#f5c451";
+const ACC = "#2ee88e";
+const ACC2 = "#8a97b8";
+const LONG = "#35c98d";
+const SHORT = "#e46a7b";
+const WARN = "#e6bd5c";
 const GRID = "rgba(255,255,255,0.05)";
 const AXIS = "rgba(255,255,255,0.10)";
-const TICK = "#647588";
+const TICK = "#9aa6b2";
 
-const AXIS_TICK = { fill: TICK, fontSize: 10, fontFamily: "var(--font)" } as const;
+const AXIS_TICK = { fill: TICK, fontSize: 11, fontFamily: "var(--font)" } as const;
 
 const tip = {
   contentStyle: {
@@ -43,7 +43,6 @@ const tip = {
     borderRadius: 10,
     fontSize: 11.5,
     padding: "8px 11px",
-    boxShadow: "0 12px 30px -14px rgba(0,0,0,0.7)",
     fontFamily: "var(--font)",
   },
   labelStyle: { color: "#8b9bad", marginBottom: 4, fontSize: 10.5, letterSpacing: "0.04em" },
@@ -64,7 +63,7 @@ export function Spark({ data, color = ACC, height = 40 }: { data: number[]; colo
   );
 }
 
-export function AreaTrend({
+export function AreaTrend<T extends object>({
   data,
   xKey = "t",
   yKey = "v",
@@ -73,8 +72,10 @@ export function AreaTrend({
   xPreset = "date",
   yPreset = "raw",
   valueName = "value",
+  xTicks,
+  xDomain,
 }: {
-  data: Record<string, number>[];
+  data: T[];
   xKey?: string;
   yKey?: string;
   color?: string;
@@ -82,6 +83,8 @@ export function AreaTrend({
   xPreset?: "date" | "datetime";
   yPreset?: "raw" | "usd";
   valueName?: string;
+  xTicks?: number[];
+  xDomain?: [number, number];
 }) {
   // formatting stays client-side (functions can't cross the server→client boundary)
   const xFmt = (t: number) =>
@@ -99,7 +102,19 @@ export function AreaTrend({
           </linearGradient>
         </defs>
         {grid}
-        <XAxis dataKey={xKey} tick={AXIS_TICK} tickFormatter={xFmt} stroke={AXIS} tickLine={false} minTickGap={40} />
+        <XAxis
+          dataKey={xKey}
+          type={xDomain ? "number" : "category"}
+          scale={xDomain ? "time" : undefined}
+          domain={xDomain}
+          ticks={xTicks}
+          allowDataOverflow={Boolean(xDomain)}
+          tick={AXIS_TICK}
+          tickFormatter={xFmt}
+          stroke={AXIS}
+          tickLine={false}
+          minTickGap={40}
+        />
         <YAxis tick={AXIS_TICK} stroke={AXIS} tickLine={false} axisLine={false} width={yPreset === "usd" ? 56 : 46} tickFormatter={yFmt} />
         <Tooltip {...tip} labelFormatter={(t) => xFmt(Number(t))} formatter={(v: number) => [yFmt(Number(v)), valueName]} />
         <Area type="monotone" dataKey={yKey} stroke={color} strokeWidth={1.75} fill={`url(#g-${yKey})`} isAnimationActive={false} activeDot={{ r: 3, strokeWidth: 0 }} />
@@ -211,6 +226,65 @@ export function GroupBars({ data, height = 300 }: { data: { label: string; v: nu
           ))}
         </Bar>
       </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+// x-axis time formatter shared by the time-series charts below
+const dfmt = (t: number) => new Date(t).toLocaleDateString("en-GB", { day: "2-digit", month: "short", timeZone: "UTC" });
+const dtfmt = (t: number) => new Date(t).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", timeZone: "UTC" });
+
+// Volume-over-time: bars for volume + a thin line for a secondary metric (fills).
+export function VolumeChart({ data, height = 260, xPreset = "date", xTicks, xDomain }: { data: { t: number; volume: number | null; fills?: number }[]; height?: number; xPreset?: "date" | "datetime"; xTicks?: number[]; xDomain?: [number, number] }) {
+  const xf = xPreset === "datetime" ? dtfmt : dfmt;
+  return (
+    <ResponsiveContainer width="100%" height={height}>
+      <BarChart data={data} margin={{ top: 6, right: 10, left: 6, bottom: 0 }}>
+        <defs>
+          <linearGradient id="volbar" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={ACC} stopOpacity={0.9} />
+            <stop offset="100%" stopColor={ACC} stopOpacity={0.35} />
+          </linearGradient>
+        </defs>
+        {grid}
+        <XAxis
+          dataKey="t"
+          type={xDomain ? "number" : "category"}
+          scale={xDomain ? "time" : undefined}
+          domain={xDomain}
+          ticks={xTicks}
+          allowDataOverflow={Boolean(xDomain)}
+          tick={AXIS_TICK}
+          tickFormatter={xf}
+          stroke={AXIS}
+          tickLine={false}
+          minTickGap={40}
+        />
+        <YAxis tick={AXIS_TICK} stroke={AXIS} tickLine={false} axisLine={false} width={56} tickFormatter={(v) => usd(Number(v))} />
+        <Tooltip {...tip} cursor={{ fill: "rgba(255,255,255,0.05)" }} labelFormatter={(t) => xf(Number(t))} formatter={(v: number, n: string) => [n === "volume" ? usd(Number(v)) : Number(v).toLocaleString(), n === "volume" ? "Volume" : "Fills"]} />
+        <Bar dataKey="volume" fill="url(#volbar)" radius={[2, 2, 0, 0]} maxBarSize={26} isAnimationActive={false} />
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+// Open-interest over time: long vs short stacked area (green over red).
+export function OiStackChart({ data, height = 260, xPreset = "datetime" }: { data: { t: number; longUsd: number; shortUsd: number }[]; height?: number; xPreset?: "date" | "datetime" }) {
+  const xf = xPreset === "datetime" ? dtfmt : dfmt;
+  return (
+    <ResponsiveContainer width="100%" height={height}>
+      <AreaChart data={data} margin={{ top: 6, right: 10, left: 6, bottom: 0 }}>
+        <defs>
+          <linearGradient id="oiLong" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={LONG} stopOpacity={0.45} /><stop offset="100%" stopColor={LONG} stopOpacity={0.05} /></linearGradient>
+          <linearGradient id="oiShort" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={SHORT} stopOpacity={0.45} /><stop offset="100%" stopColor={SHORT} stopOpacity={0.05} /></linearGradient>
+        </defs>
+        {grid}
+        <XAxis dataKey="t" tick={AXIS_TICK} tickFormatter={xf} stroke={AXIS} tickLine={false} minTickGap={44} />
+        <YAxis tick={AXIS_TICK} stroke={AXIS} tickLine={false} axisLine={false} width={56} tickFormatter={(v) => usd(Number(v))} />
+        <Tooltip {...tip} labelFormatter={(t) => xf(Number(t))} formatter={(v: number, n: string) => [usd(Number(v)), n === "longUsd" ? "Long OI" : "Short OI"]} />
+        <Area type="monotone" dataKey="shortUsd" stackId="oi" stroke={SHORT} strokeWidth={1.4} fill="url(#oiShort)" isAnimationActive={false} />
+        <Area type="monotone" dataKey="longUsd" stackId="oi" stroke={LONG} strokeWidth={1.4} fill="url(#oiLong)" isAnimationActive={false} />
+      </AreaChart>
     </ResponsiveContainer>
   );
 }

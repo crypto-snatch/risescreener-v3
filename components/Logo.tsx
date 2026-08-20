@@ -17,12 +17,11 @@ export default function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
           overflow: "hidden",
           flexShrink: 0,
           border: "1px solid var(--accent-line)",
-          boxShadow: "0 0 0 3px var(--accent-soft), 0 8px 24px -10px rgba(0,0,0,.7)",
           background: "var(--brand-green)",
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/rise-avatar.png" alt="RiseScan" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+        <img src="/risex-logo.png" alt="RISEx" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block", padding: Math.max(3, Math.round(dim * 0.16)) }} />
       </span>
       <span className="wm" style={{ fontSize: txt }}>
         <span className="text-accent">RISE</span>

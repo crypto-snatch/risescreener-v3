@@ -36,7 +36,7 @@ export default async function NetworkPage() {
         <div className="stats-grid" style={{ gridTemplateColumns: "repeat(6, 1fr)", marginTop: 14 }}>
           {FACTS.map(([l, v, h]) => (
             <div key={l} title={h} className="glass glow-edge stat-card" style={{ padding: "11px 13px" }}>
-              <div style={{ fontSize: 9.5, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--muted)" }}>{l}</div>
+              <div style={{ fontSize: 10.5, letterSpacing: ".09em", textTransform: "uppercase", color: "var(--muted)" }}>{l}</div>
               <div style={{ fontSize: 15, fontWeight: 700, marginTop: 4, color: "var(--accent-ink)" }}>{v}</div>
               <div style={{ fontSize: 10.5, color: "var(--muted)", marginTop: 3, lineHeight: 1.35 }}>{h}</div>
             </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { ResponsiveContainer, ComposedChart, Bar, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import { ResponsiveContainer, ComposedChart, Bar, Cell, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { usd } from "@/lib/format";
 import ChartCard from "@/components/ChartCard";
 
@@ -12,13 +12,14 @@ const COLORS: Record<string, string> = {
   XAU: "#e6c069", XAG: "#c9d1d9", CL: "#d98a4a", BZ: "#b06b3a",
   SNDK: "#e0685f", SPCX: "#7ea6e0", MU: "#4fb3c9", DRAM: "#9d8ce0",
   INTC: "#6fb98f", QQQ: "#b8c95f", SPY: "#d98cb3",
-  Others: "#6a7c8e",
+  Others: "#7d8996",
 };
 
 type Pt = { t: number; est?: boolean } & Record<string, number | boolean | undefined>;
 
 export default function SeriesChart({
   title,
+  subtitle,
   points,
   mode,
   extraKey,
@@ -27,6 +28,7 @@ export default function SeriesChart({
   toolbar,
 }: {
   title: string;
+  subtitle?: string;
   points: Pt[];
   mode: "bars" | "lines";
   extraKey: "total" | "cum";
@@ -42,9 +44,8 @@ export default function SeriesChart({
     run += total;
     return { ...p, total, cum: run };
   });
-  // Days rebuilt from our own live snapshots because Dune dropped them
-  // (scripts/backfill-volume.mjs) — flagged so the chart never passes an
-  // estimate off as a measured day.
+  // Snapshot-rebuilt days stay visible as estimates instead of being presented
+  // as measured Dune buckets. Bars are dimmed and tooltips carry an `est.` tag.
   const estDays = new Set(points.filter((p) => p.est).map((p) => p.t));
 
   const allKeys = [...COINS, extraKey];
@@ -55,28 +56,29 @@ export default function SeriesChart({
 
   const xFmt = (t: number) => new Date(t).toLocaleDateString("en-GB", { day: "2-digit", month: "short", timeZone: "UTC" });
   const EXTRA_COLOR = "#6f8bff";
-  const TICK = "#647588";
-  const AXIS = "rgba(255,255,255,0.10)";
+  const TICK = "#96a3b2";
+  const AXIS = "rgba(255,255,255,0.15)";
+  const colorOf = (key: string) => COLORS[key] ?? "#8b98a8";
 
   const toggles = (
     <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 10 }}>
       {COINS.map((c) => (
-        <Chip key={c} label={c} color={COLORS[c]} on={visible(c)} onClick={() => toggle(c)} />
+        <Chip key={c} label={c} color={colorOf(c)} on={visible(c)} onClick={() => toggle(c)} />
       ))}
       <Chip label={extraLabel} color={EXTRA_COLOR} on={visible(extraKey)} onClick={() => toggle(extraKey)} />
-      <button className="chip" onClick={() => setHidden(allOff ? new Set() : new Set(allKeys))} style={{ cursor: "pointer" }}>
+      <button type="button" className="chip" onClick={() => setHidden(allOff ? new Set() : new Set(allKeys))} style={{ cursor: "pointer" }}>
         {allOff ? "Select all" : "Deselect all"}
       </button>
       {estDays.size > 0 && (
-        <span className="text-muted" style={{ fontSize: 10.5, alignSelf: "center" }}>
-          · {estDays.size} day{estDays.size > 1 ? "s" : ""} estimated from live snapshots
+        <span style={{ color: "var(--muted)", fontSize: 11, alignSelf: "center", lineHeight: 1.4 }}>
+          ◌ {estDays.size} estimated day{estDays.size === 1 ? "" : "s"} from live snapshots
         </span>
       )}
     </div>
   );
 
   return (
-    <ChartCard title={title} height={300} controls={toggles} toolbar={toolbar} filename={`risescreener-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>
+    <ChartCard title={title} subtitle={subtitle} height={300} modalHeight={460} controls={toggles} toolbar={toolbar} filename={`risescreener-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>
       {data.length < 2 ? (
         <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--muted)", fontSize: 12, textAlign: "center", lineHeight: 1.6 }}>
           Builds from periodic snapshots.<br />
@@ -86,12 +88,12 @@ export default function SeriesChart({
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={data} margin={{ top: 6, right: 10, left: 6, bottom: 0 }}>
             <CartesianGrid stroke="rgba(255,255,255,0.05)" strokeDasharray="2 5" vertical={false} />
-            <XAxis dataKey="t" tickFormatter={xFmt} tick={{ fill: TICK, fontSize: 10, fontFamily: "var(--font)" }} stroke={AXIS} tickLine={false} minTickGap={36} />
-            <YAxis yAxisId="l" tick={{ fill: TICK, fontSize: 10, fontFamily: "var(--font)" }} stroke={AXIS} tickLine={false} axisLine={false} width={52} tickFormatter={(v) => usd(Number(v))} />
-            <YAxis yAxisId="r" orientation="right" tick={{ fill: TICK, fontSize: 10, fontFamily: "var(--font)" }} stroke={AXIS} tickLine={false} axisLine={false} width={52} tickFormatter={(v) => usd(Number(v))} />
+            <XAxis dataKey="t" tickFormatter={xFmt} tick={{ fill: TICK, fontSize: 11, fontFamily: "var(--font)" }} stroke={AXIS} tickLine={false} minTickGap={44} />
+            <YAxis yAxisId="l" tick={{ fill: TICK, fontSize: 11, fontFamily: "var(--font)" }} stroke={AXIS} tickLine={false} axisLine={false} width={58} tickFormatter={(v) => usd(Number(v))} />
+            <YAxis yAxisId="r" orientation="right" tick={{ fill: TICK, fontSize: 11, fontFamily: "var(--font)" }} stroke={AXIS} tickLine={false} axisLine={false} width={58} tickFormatter={(v) => usd(Number(v))} />
             <Tooltip
-              contentStyle={{ background: "rgba(10,14,20,0.94)", border: "1px solid rgba(255,255,255,0.10)", borderRadius: 10, fontSize: 11.5, padding: "8px 11px", boxShadow: "0 12px 30px -14px rgba(0,0,0,0.7)", fontFamily: "var(--font)" }}
-              labelStyle={{ color: "#8b9bad", marginBottom: 4, fontSize: 10.5 }}
+              contentStyle={{ background: "rgba(10,14,20,0.98)", border: "1px solid rgba(255,255,255,0.10)", borderRadius: 8, fontSize: 11.5, padding: "8px 11px", fontFamily: "var(--font)" }}
+              labelStyle={{ color: "#aab5c2", marginBottom: 4, fontSize: 11 }}
               itemStyle={{ color: "#e7edf3" }}
               cursor={{ stroke: "rgba(255,255,255,0.14)", strokeWidth: 1 }}
               labelFormatter={(t) => `${xFmt(Number(t))}${estDays.has(Number(t)) ? " · est." : ""}`}
@@ -99,9 +101,11 @@ export default function SeriesChart({
             />
             {COINS.filter(visible).map((c) =>
               mode === "bars" ? (
-                <Bar key={c} yAxisId="l" dataKey={c} stackId="s" fill={COLORS[c]} isAnimationActive={false} />
+                <Bar key={c} yAxisId="l" dataKey={c} stackId="s" fill={colorOf(c)} isAnimationActive={false}>
+                  {data.map((point, index) => <Cell key={`${c}-${index}`} fill={colorOf(c)} fillOpacity={point.est ? 0.58 : 0.9} />)}
+                </Bar>
               ) : (
-                <Line key={c} yAxisId="l" type="monotone" dataKey={c} stroke={COLORS[c]} strokeWidth={1.5} dot={false} isAnimationActive={false} />
+                <Line key={c} yAxisId="l" type="monotone" dataKey={c} stroke={colorOf(c)} strokeWidth={1.8} dot={false} isAnimationActive={false} />
               ),
             )}
             {visible(extraKey) && (
@@ -117,6 +121,7 @@ export default function SeriesChart({
 function Chip({ label, color, on, onClick }: { label: string; color: string; on: boolean; onClick: () => void }) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className="chip"
       style={{ cursor: "pointer", opacity: on ? 1 : 0.4, borderColor: on ? color : "var(--hair)" }}

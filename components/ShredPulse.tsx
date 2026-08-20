@@ -146,7 +146,7 @@ export default function ShredPulse() {
               <div key={b.height} className={now - b.arrivalMs < FRESH ? "flashin" : ""} style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center", fontSize: 11.5, padding: "3px 4px" }}>
                 <a className="mono-link tnum" href={`${EXPLORER_UI}/block/${b.height}`} target="_blank" rel="noreferrer">#{b.height.toLocaleString()}</a>
                 <span className="tnum" style={{ color: "var(--ink)" }}>{compact(b.txCount)} tx</span>
-                <span className="tnum" style={{ fontSize: 9.5, color: "var(--muted)" }}>{msAgo(b.arrivalMs)}</span>
+                <span className="tnum" style={{ fontSize: 10.5, color: "var(--muted)" }}>{msAgo(b.arrivalMs)}</span>
               </div>
             ))}
           </div>
@@ -203,7 +203,7 @@ export default function ShredPulse() {
 function Col({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div style={{ borderRight: "1px solid var(--hair-soft)", paddingRight: 14 }}>
-      <div style={{ fontSize: 9.5, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 5 }}>{label}</div>
+      <div style={{ fontSize: 10.5, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 5 }}>{label}</div>
       {children}
     </div>
   );
@@ -214,7 +214,7 @@ function Waiting() {
 function Kpi({ label, value, tone }: { label: string; value: string; tone?: boolean }) {
   return (
     <div style={{ textAlign: "right" }}>
-      <div style={{ fontSize: 9.5, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--muted)" }}>{label}</div>
+      <div style={{ fontSize: 10.5, letterSpacing: ".09em", textTransform: "uppercase", color: "var(--muted)" }}>{label}</div>
       <div className="tnum" style={{ fontSize: 18, fontWeight: 700, color: tone ? "var(--accent-ink)" : "var(--ink)" }}>{value}</div>
     </div>
   );

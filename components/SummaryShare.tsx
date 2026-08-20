@@ -9,17 +9,31 @@ type Top = { title: string; rows: TopRow[] };
 
 // the card paints its own palette so the exported PNG looks identical
 // regardless of the site's theme.
-const ACC = "#34cfa2";
+const ACC = "#2ee88e";
 const POS = "#3fdd9a";
 const NEG = "#ff6b7d";
 const INK = "#e8ecf0";
 const MUT = "#8b95a3";
-const GOLD = "#e6c069"; // Commodities accent — matches CLASS_COLOR.Commodities
-const AZURE = "#5fa8ff"; // Stocks accent — matches CLASS_COLOR.Stocks
 const CARD_BG = "#0b0e13";
 const HAIR = "rgba(255,255,255,0.07)";
 
-export default function SummaryShare({ date, kpis24, kpisTotal, kpisRwa, kpisCmd, kpisStk, tops, text }: { date: string; kpis24: Kpi[]; kpisTotal: Kpi[]; kpisRwa?: Kpi[]; kpisCmd?: Kpi[]; kpisStk?: Kpi[]; tops: Top[]; text: string }) {
+export default function SummaryShare({
+  date,
+  kpis24,
+  kpisTotal,
+  kpisCmd,
+  kpisStk,
+  tops,
+  text,
+}: {
+  date: string;
+  kpis24: Kpi[];
+  kpisTotal: Kpi[];
+  kpisCmd?: Kpi[];
+  kpisStk?: Kpi[];
+  tops: Top[];
+  text: string;
+}) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -35,7 +49,7 @@ export default function SummaryShare({ date, kpis24, kpisTotal, kpisRwa, kpisCmd
       a.href = url;
       a.download = `risescreener-summary-${date.replace(/\s/g, "-")}.png`;
       a.click();
-    } catch (e) { console.error(e); } finally { setBusy(false); }
+    } catch {} finally { setBusy(false); }
   };
   const copyImage = async () => {
     if (!cardRef.current) return;
@@ -47,7 +61,7 @@ export default function SummaryShare({ date, kpis24, kpisTotal, kpisRwa, kpisCmd
         setImgCopied(true);
         setTimeout(() => setImgCopied(false), 1600);
       }
-    } catch (e) { console.error(e); } finally { setBusyImg(false); }
+    } catch {} finally { setBusyImg(false); }
   };
   const copy = async () => {
     try { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1600); } catch {}
@@ -63,23 +77,23 @@ export default function SummaryShare({ date, kpis24, kpisTotal, kpisRwa, kpisCmd
             position: "relative", overflow: "hidden", flex: 1,
             borderRadius: 12, padding: "22px 24px", color: INK,
             border: `1px solid ${HAIR}`,
-            background: `radial-gradient(90% 70% at 0% 0%, rgba(52,207,162,0.10), transparent 52%), linear-gradient(165deg, #0d1017, ${CARD_BG} 70%)`,
+            background: CARD_BG,
             fontFamily: "var(--font)",
           }}
         >
-          {/* faint mascot watermark */}
+          {/* faint RISEx mark watermark */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/mascot.png" alt="" style={{ position: "absolute", right: -30, bottom: -30, width: 168, height: 168, opacity: 0.06, pointerEvents: "none", objectFit: "cover" }} />
+          <img src="/risex-logo.png" alt="" style={{ position: "absolute", right: -18, bottom: -18, width: 132, height: 132, opacity: 0.06, pointerEvents: "none", objectFit: "contain" }} />
 
           {/* header */}
           <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 20 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/mascot.png" alt="" width={40} height={40} style={{ borderRadius: 8, border: `1px solid ${HAIR}`, flexShrink: 0, objectFit: "cover" }} />
+            <img src="/risex-logo.png" alt="" width={40} height={40} style={{ borderRadius: 8, border: `1px solid ${HAIR}`, flexShrink: 0, objectFit: "contain", padding: 5 }} />
             <div style={{ minWidth: 0 }}>
               <div style={{ fontSize: 17, fontWeight: 600, letterSpacing: "0.04em", lineHeight: 1.1 }}>
                 <span style={{ color: ACC }}>RISE</span><span>SCREENER</span>
               </div>
-              <div style={{ fontSize: 9.5, color: MUT, letterSpacing: ".16em", textTransform: "uppercase", marginTop: 4 }}>RISEx · Daily Recap</div>
+              <div style={{ fontSize: 10.5, color: MUT, letterSpacing: ".13em", textTransform: "uppercase", marginTop: 4 }}>RISEx · Daily Recap</div>
             </div>
             <div style={{ marginLeft: "auto", fontSize: 11, color: INK, border: `1px solid ${HAIR}`, borderRadius: 6, padding: "5px 11px", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }}>{date}</div>
           </div>
@@ -90,22 +104,18 @@ export default function SummaryShare({ date, kpis24, kpisTotal, kpisRwa, kpisCmd
             <KpiBlock heading="All-time" kpis={kpisTotal} />
           </div>
 
-          {/* RWA breakout by class — Commodities + Stocks; legacy snapshots fall
-              back to the combined RWA strip */}
-          {kpisCmd && kpisCmd.length > 0 ? (
-            <>
-              <ClassStrip label="Commodities" accent={GOLD} kpis={kpisCmd} />
-              {kpisStk && kpisStk.length > 0 && <ClassStrip label="Stocks" accent={AZURE} kpis={kpisStk} />}
-            </>
-          ) : (
-            kpisRwa && kpisRwa.length > 0 && <ClassStrip label="RWA" accent={GOLD} kpis={kpisRwa} />
-          )}
+          {(kpisCmd?.length || kpisStk?.length) ? (
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 11, marginBottom: 12, alignItems: "start" }}>
+              <KpiBlock heading="RWA · Commodities" kpis={kpisCmd ?? []} accent="#e6c069" />
+              <KpiBlock heading="RWA · Stocks & ETFs" kpis={kpisStk ?? []} accent="#5fa8ff" />
+            </div>
+          ) : null}
 
           {/* top traders */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 9 }}>
             {tops.map((t) => (
               <div key={t.title} style={{ background: "rgba(255,255,255,0.025)", border: `1px solid ${HAIR}`, borderRadius: 7, padding: "9px 10px" }}>
-                <div style={{ fontSize: 9, color: ACC, letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 7, fontWeight: 600 }}>{t.title}</div>
+                <div style={{ fontSize: 10.5, color: ACC, letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 7, fontWeight: 600 }}>{t.title}</div>
                 {t.rows.length ? t.rows.map((r, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 10.5, padding: "2px 0" }}>
                     <span style={{ fontSize: 12 }}>{r.m}</span>
@@ -150,32 +160,10 @@ export default function SummaryShare({ date, kpis24, kpisTotal, kpisRwa, kpisCmd
   );
 }
 
-// A slim accented strip that breaks out one RWA class (Commodities, Stocks) of
-// the protocol totals — OI / 24h vol / cumulative vol laid out inline.
-function ClassStrip({ label, accent, kpis }: { label: string; accent: string; kpis: Kpi[] }) {
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 12, padding: "9px 12px", borderRadius: 8, border: `1px solid color-mix(in oklab, ${accent} 30%, transparent)`, background: `color-mix(in oklab, ${accent} 8%, transparent)` }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
-        <span style={{ width: 7, height: 7, borderRadius: 2, background: accent }} />
-        <span style={{ fontSize: 9.5, color: accent, letterSpacing: ".14em", textTransform: "uppercase", fontWeight: 700 }}>{label}</span>
-      </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", marginLeft: "auto" }}>
-        {kpis.map((k) => (
-          <div key={k.label} style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-            <span style={{ fontSize: 10, color: MUT, whiteSpace: "nowrap" }}>{k.label}</span>
-            <span style={{ fontSize: 13, fontWeight: 700, color: accent, fontVariantNumeric: "tabular-nums" }}>{k.value}</span>
-            {k.delta && <span style={{ fontSize: 9.5, color: MUT }}>{k.delta}</span>}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function KpiBlock({ heading, kpis }: { heading: string; kpis: Kpi[] }) {
+function KpiBlock({ heading, kpis, accent = MUT }: { heading: string; kpis: Kpi[]; accent?: string }) {
   return (
     <div style={{ background: "rgba(255,255,255,0.025)", border: `1px solid ${HAIR}`, borderRadius: 8, padding: "12px 13px" }}>
-      <div style={{ fontSize: 9.5, color: MUT, letterSpacing: ".16em", textTransform: "uppercase", fontWeight: 600, marginBottom: 10 }}>{heading}</div>
+      <div style={{ fontSize: 10.5, color: accent, letterSpacing: ".11em", textTransform: "uppercase", fontWeight: 650, marginBottom: 10 }}>{heading}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
         {kpis.map((k) => (
           <div key={k.label} style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 6 }}>

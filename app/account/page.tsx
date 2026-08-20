@@ -9,9 +9,9 @@ export default function AccountPage() {
       data-page="account-tracker"
       style={{ minHeight: "62vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", gap: 22 }}
     >
-      <span style={{ width: 96, height: 96, borderRadius: "calc(var(--radius)*0.74)", overflow: "hidden", border: "1px solid var(--accent-line)", boxShadow: "0 0 0 5px var(--accent-soft), 0 20px 50px -18px rgba(0,0,0,.8)", background: "var(--brand-green)" }}>
+      <span style={{ width: 96, height: 96, borderRadius: "calc(var(--radius)*0.74)", overflow: "hidden", border: "1px solid var(--accent-line)", background: "var(--brand-green)" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/rise-avatar.png" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+        <img src="/risex-logo.png" alt="" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block", padding: 14 }} />
       </span>
       <div>
         <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, letterSpacing: "-.02em" }}>

@@ -74,9 +74,14 @@ export default async function CohortsPage() {
         <ChartCard title="Open notional by cohort" height={250} legend={notionalLegend} filename="risescreener-cohort-notional">
           {notionalDonut.length ? <Donut data={notionalDonut} height="100%" /> : <Empty>No data.</Empty>}
         </ChartCard>
-        <div className="glass glow-edge glass-raise" style={{ borderRadius: "var(--r-lg)", padding: "14px 16px", display: "flex", flexDirection: "column" }}>
-          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 14 }}>Wallets by cohort</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1, justifyContent: "center" }}>
+        <ChartCard
+          title="Wallets by cohort"
+          subtitle="Indexed account count · bar = relative cohort size"
+          height={250}
+          modalHeight={420}
+          filename="risescreener-wallets-by-cohort"
+        >
+          <div style={{ height: "100%", display: "flex", flexDirection: "column", gap: 12, flex: 1, justifyContent: "center" }}>
             {cohorts.map((c) => (
               <div key={c.tier} style={{ display: "grid", gridTemplateColumns: "78px 1fr 52px", alignItems: "center", gap: 10 }}>
                 <span style={{ fontSize: 12, color: "var(--muted)" }}>{c.label.split(" ")[0]}</span>
@@ -87,7 +92,7 @@ export default async function CohortsPage() {
               </div>
             ))}
           </div>
-        </div>
+        </ChartCard>
       </div>
 
       <div>

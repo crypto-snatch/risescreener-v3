@@ -14,12 +14,13 @@ export function num(v: string | number | undefined | null): number {
   return Number.isFinite(n) ? n : 0;
 }
 
-export function usd(n: number | null | undefined, opts: { sign?: boolean } = {}): string {
+export function usd(n: number, opts: { sign?: boolean } = {}): string {
   if (n == null || !Number.isFinite(n)) return "—";
   const sign = opts.sign && n > 0 ? "+" : n < 0 ? "−" : "";
   const a = Math.abs(n);
   let body: string;
-  if (a >= 1e9) body = (a / 1e9).toFixed(2) + "B";
+  if (a >= 1e12) body = (a / 1e12).toFixed(2) + "T";
+  else if (a >= 1e9) body = (a / 1e9).toFixed(2) + "B";
   else if (a >= 1e6) body = (a / 1e6).toFixed(2) + "M";
   else if (a >= 1e3) body = (a / 1e3).toFixed(1) + "K";
   else body = a.toFixed(2);

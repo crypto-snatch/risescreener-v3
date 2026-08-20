@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { MarketRow } from "@/lib/analytics";
 import { usd, price } from "@/lib/format";
 import { Panel } from "@/components/ui";
+import CoinLogo from "@/components/CoinLogo";
 
 import { SECTORS, CAT_COLOR, categoryOf } from "@/lib/sectors";
 const TABS = ["All", ...Object.keys(SECTORS)];
@@ -18,7 +19,22 @@ interface Col {
   color?: (r: MarketRow) => string;
 }
 const COLS: Col[] = [
-  { key: "symbol", label: "Market", val: (r) => r.symbol, render: (r) => <Link href={`/markets/${r.marketId}`} className="mono-link" style={{ fontWeight: 600 }}>{r.symbol}</Link> },
+  { key: "symbol", label: "Market", val: (r) => r.symbol, render: (r) => (
+    <Link
+      href={`/markets/${r.marketId}`}
+      className="market-row-link mono-link"
+      aria-label={`Open ${r.symbol} market details`}
+      onKeyDown={(event) => {
+        if (event.key !== " ") return;
+        event.preventDefault();
+        event.currentTarget.click();
+      }}
+      style={{ display: "inline-flex", alignItems: "center", gap: 9, fontWeight: 600 }}
+    >
+      <CoinLogo symbol={r.symbol} size={22} />
+      <span>{r.symbol}</span>
+    </Link>
+  ) },
   { key: "category", label: "Sector", val: (r) => categoryOf(r.symbol), render: (r) => { const c = categoryOf(r.symbol); const col = CAT_COLOR[c]; return !col ? <span style={{ color: "var(--muted-2)" }}>{c}</span> : <span className="chip" style={{ fontSize: 10, padding: "2px 8px", color: col, borderColor: `color-mix(in oklab, ${col} 34%, transparent)`, background: `color-mix(in oklab, ${col} 12%, transparent)` }}>{c}</span>; } },
   { key: "mark", label: "Mark Price", align: "right", val: (r) => r.mark, render: (r) => `$${price(r.mark)}` },
   { key: "changePct", label: "24h Change", align: "right", val: (r) => r.changePct, render: (r) => `${r.changePct >= 0 ? "+" : ""}${r.changePct.toFixed(2)}%`, color: (r) => (r.changePct >= 0 ? "var(--long)" : "var(--short)") },
@@ -93,7 +109,7 @@ export default function MarketsTable({ rows }: { rows: MarketRow[] }) {
           </thead>
           <tbody>
             {view.map((r) => (
-              <tr key={r.marketId} className="row-hover-link" style={{ borderBottom: "1px solid var(--hair-soft)" }}>
+              <tr key={r.marketId} className="market-row row-hover-link">
                 {COLS.map((c) => (
                   <td key={c.key} style={{ padding: "9px 12px", textAlign: c.align || "left", whiteSpace: "nowrap", color: c.color ? c.color(r) : "var(--ink)", fontVariantNumeric: c.key === "symbol" ? "normal" : "tabular-nums" }}>
                     {c.render(r)}
@@ -107,6 +123,31 @@ export default function MarketsTable({ rows }: { rows: MarketRow[] }) {
           </tbody>
         </table>
       </Panel>
+      <style jsx>{`
+        .market-row {
+          position: relative;
+          cursor: pointer;
+          transition: background-color 140ms ease, box-shadow 140ms ease;
+        }
+
+        .market-row:hover,
+        .market-row:focus-within {
+          background: color-mix(in oklab, var(--accent) 7%, transparent);
+          box-shadow: inset 3px 0 0 var(--accent);
+        }
+
+        .market-row:focus-within {
+          outline: 1px solid var(--accent-line);
+          outline-offset: -2px;
+        }
+
+        .market-row :global(.market-row-link)::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+        }
+      `}</style>
     </div>
   );
 }

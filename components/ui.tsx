@@ -49,7 +49,7 @@ export function Stat({
     color ?? (tone === "long" ? "var(--long)" : tone === "short" ? "var(--short)" : tone === "accent" ? "var(--accent-ink)" : "var(--ink)");
   return (
     <div className="glass glow-edge stat-card" title={hint} style={{ height: "100%", padding: big ? "15px 17px 15px 18px" : "12px 14px 12px 15px", ...(edge ? { borderLeft: `2px solid ${edge}` } : {}) }}>
-      <div style={{ fontSize: 9.5, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--muted-2)" }}>{label}</div>
+      <div style={{ fontSize: 10.5, letterSpacing: ".11em", textTransform: "uppercase", color: "var(--muted)" }}>{label}</div>
       <div className="tnum" style={{ fontSize: big ? 23 : 16, fontWeight: 700, marginTop: 7, color: valColor, letterSpacing: "-.015em", lineHeight: 1.05 }}>{value}</div>
       {hint && <div style={{ fontSize: 10, color: "var(--muted-2)", marginTop: 5, letterSpacing: ".01em" }}>{hint}</div>}
     </div>
@@ -58,7 +58,7 @@ export function Stat({
 
 export function SectionLabel({ children, right }: { children: ReactNode; right?: ReactNode }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
+    <div className="section-label" style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
       <h2 style={{ margin: 0, fontSize: 10.5, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--muted-2)", fontWeight: 500, whiteSpace: "nowrap" }}>{children}</h2>
       <span className="rule" />
       {right}

@@ -1,6 +1,5 @@
-import { getMarketRows, getProtocol, isUpcoming } from "@/lib/analytics";
+import { getMarketRows, isUpcoming } from "@/lib/analytics";
 import { getTimeseries } from "@/lib/timeseries";
-import { getDune } from "@/lib/dune";
 import { usd, price } from "@/lib/format";
 import { Stat, SectionLabel, Panel, Empty } from "@/components/ui";
 import SeriesChart from "@/components/SeriesChart";
@@ -14,11 +13,9 @@ export const metadata = { title: "Open Interest — RiseScreener" };
 const PALETTE = ["#f7931a", "#8aa0c8", "#34cfa2", "#14f195", "#c79bff", "#e8737f", "#e6c069", "#5fb0d6"];
 
 export default async function OpenInterestPage() {
-  const [rows, p, ts, dune] = await Promise.all([getMarketRows(), getProtocol(), getTimeseries(), getDune()]);
+  const [rows, ts] = await Promise.all([getMarketRows(), getTimeseries()]);
   const tradable = rows.filter((r) => !isUpcoming(r)).sort((a, b) => b.oiUsd - a.oiUsd);
-  // live per-market sum first — it matches the table/donut below and stays fresh
-  // when Dune's daily refresh stalls; Dune's total is the fallback.
-  const totalOi = tradable.reduce((s, r) => s + r.oiUsd, 0) || dune?.totals.oi || 0;
+  const totalOi = tradable.reduce((s, r) => s + r.oiUsd, 0);
   const top = tradable[0];
   const avgUtil = tradable.length ? tradable.reduce((s, r) => s + r.oiUtilPct, 0) / tradable.length : 0;
 
@@ -30,7 +27,9 @@ export default async function OpenInterestPage() {
   const shareLegend = share.map((x) => ({ name: x.name, color: x.color, value: usd(x.value), pct: (x.value / shareTot) * 100 }));
 
   // OI over time (from our timeseries snapshots)
-  const oiTs = ts.map((pt) => ({ t: pt.t, ...pt.oi }));
+  const oiTs = ts
+    .filter((pt) => Object.values(pt.oi).some((value) => value > 0))
+    .map((pt) => ({ t: pt.t, ...pt.oi }));
 
   return (
     <div className="screen" data-page="open-interest" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -47,8 +46,8 @@ export default async function OpenInterestPage() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px,1fr))", gap: 16, alignItems: "stretch" }}>
-        <SeriesChart title="Open interest over time" points={oiTs} mode="lines" extraKey="total" extraLabel="Total OI" />
-        <ChartCard title="OI market share" height={300} legend={shareLegend} filename="risescreener-oi-share">
+        <SeriesChart title="Open interest over time" subtitle="Periodic RISEx snapshots · total line sums displayed market groups" points={oiTs} mode="lines" extraKey="total" extraLabel="Total OI" />
+        <ChartCard title="OI market share" subtitle="Current live USD notional · top seven plus others" height={300} legend={shareLegend} filename="risescreener-oi-share">
           {share.length ? <Donut data={share} height="100%" /> : <Empty>No data.</Empty>}
         </ChartCard>
       </div>

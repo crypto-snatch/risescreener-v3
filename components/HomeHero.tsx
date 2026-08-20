@@ -43,8 +43,7 @@ export default function HomeHero({ marketsCount }: { marketsCount: number }) {
     const g = glowRef.current;
     if (g) {
       g.style.opacity = "0.7";
-      // large, low-opacity wash → gently diffuse spread that follows the cursor
-      g.style.background = `radial-gradient(240px circle at ${x}px ${y}px, color-mix(in oklab, var(--accent) 16%, transparent), transparent 75%)`;
+      g.style.background = "transparent";
     }
   };
   const onLeave = () => {
@@ -58,9 +57,9 @@ export default function HomeHero({ marketsCount }: { marketsCount: number }) {
         <Panel className="glass-2" style={{ borderRadius: "var(--r-lg)", padding: "30px 30px 26px" }}>
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 24, flexWrap: "wrap", marginBottom: 22 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
-              <span style={{ width: 132, height: 132, borderRadius: "calc(var(--radius)*0.9)", overflow: "hidden", flexShrink: 0, border: "1px solid var(--hair)", boxShadow: "0 0 0 4px var(--accent-soft), 0 22px 50px -20px rgba(0,0,0,.85)", background: "var(--brand-green)" }}>
+              <span style={{ width: 132, height: 132, borderRadius: "calc(var(--radius)*0.9)", overflow: "hidden", flexShrink: 0, border: "1px solid var(--hair)", background: "var(--brand-green)" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/rise-avatar.png" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                <img src="/risex-logo.png" alt="" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block", padding: 18 }} />
               </span>
               <div>
                 <div className="wm" style={{ fontSize: 32 }}>

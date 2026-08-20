@@ -49,7 +49,7 @@ export default function OiDonut({ data, height = 340 }: { data: D[]; height?: nu
         </ResponsiveContainer>
         {/* center readout */}
         <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", pointerEvents: "none", gap: 2 }}>
-          <div style={{ fontSize: 10, color: "var(--muted-2)", letterSpacing: ".12em", textTransform: "uppercase" }}>{cur ? cur.name : "Total OI"}</div>
+          <div style={{ fontSize: 11, color: "var(--muted)", letterSpacing: ".1em", textTransform: "uppercase" }}>{cur ? cur.name : "Total OI"}</div>
           <div className="tnum" style={{ fontSize: 21, fontWeight: 800, color: cur ? cur.color : "var(--ink)", transition: "color .2s" }}>{usd(cur ? cur.value : total)}</div>
           {cur && <div className="tnum" style={{ fontSize: 12.5, color: "var(--muted)" }}>{pct(cur.value).toFixed(1)}%</div>}
         </div>

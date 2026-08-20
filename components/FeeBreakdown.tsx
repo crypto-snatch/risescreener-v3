@@ -5,7 +5,7 @@ import type { CoinDay } from "@/lib/dune";
 import { usd } from "@/lib/format";
 
 type Period = "M" | "Q" | "Y" | "ALL";
-const COINS = ["BTC", "ETH", "SOL", "HYPE", "Others"] as const;
+const GROUPS = ["BTC", "ETH", "SOL", "HYPE", "Commodities", "Stocks", "Others"] as const;
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function bucketKey(t: number, p: Period): { key: string; label: string } {
@@ -17,7 +17,7 @@ function bucketKey(t: number, p: Period): { key: string; label: string } {
   return { key: `${y}-${d.getUTCMonth()}`, label: `${MONTHS[d.getUTCMonth()]} ${y}` };
 }
 
-type Bucket = { key: string; label: string; total: number; BTC: number; ETH: number; SOL: number; HYPE: number; Others: number };
+type Bucket = { key: string; label: string; total: number; BTC: number; ETH: number; SOL: number; HYPE: number; Commodities: number; Stocks: number; Others: number };
 
 // aggregate a daily CoinDay[] into period buckets → { key, label, total, per-coin }
 function aggregate(days: CoinDay[], p: Period): Bucket[] {
@@ -25,8 +25,8 @@ function aggregate(days: CoinDay[], p: Period): Bucket[] {
   for (const day of days) {
     const { key, label } = bucketKey(day.t, p);
     let b = map.get(key);
-    if (!b) { b = { key, label, total: 0, BTC: 0, ETH: 0, SOL: 0, HYPE: 0, Others: 0 }; map.set(key, b); }
-    for (const c of COINS) { const v = day[c] || 0; b[c] += v; b.total += v; }
+    if (!b) { b = { key, label, total: 0, BTC: 0, ETH: 0, SOL: 0, HYPE: 0, Commodities: 0, Stocks: 0, Others: 0 }; map.set(key, b); }
+    for (const c of GROUPS) { const v = Number(day[c] || 0); b[c] += v; b.total += v; }
   }
   return [...map.values()].sort((a, b) => (a.key < b.key ? 1 : -1)); // newest first
 }
@@ -62,9 +62,9 @@ export default function FeeBreakdown({ daily, liqDaily }: { daily: CoinDay[]; li
           </thead>
           <tbody>
             <Row label="Total fees" bold values={cols.map((c) => c.total)} cell={cell} />
-            {COINS.map((coin) => <Row key={coin} label={coin} indent={1} muted values={cols.map((c) => (c as any)[coin])} cell={cell} />)}
+            {GROUPS.map((coin) => <Row key={coin} label={coin} indent={1} muted values={cols.map((c) => c[coin])} cell={cell} />)}
             <Row label="Liquidation fees" bold values={liqCols.map((c) => c?.total ?? 0)} cell={cell} />
-            {COINS.map((coin) => <Row key={"l" + coin} label={coin} indent={1} muted values={liqCols.map((c) => (c ? (c as any)[coin] : 0))} cell={cell} />)}
+            {GROUPS.map((coin) => <Row key={"l" + coin} label={coin} indent={1} muted values={liqCols.map((c) => (c ? c[coin] : 0))} cell={cell} />)}
           </tbody>
         </table>
       </div>
