@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { marketInfo, marketSymbol } from "@/lib/market-catalog";
 
 // The active RISEx universe is deliberately explicit. This prevents symbols such
 // as CL, MU or LIT from resolving to an unrelated crypto asset on a ticker-based CDN.
@@ -72,8 +73,8 @@ function FallbackLogo({ symbol, size }: { symbol: string; size: number }) {
 }
 
 export default function CoinLogo({ symbol, size = 20 }: { symbol: string; size?: number }) {
-  const sym = (symbol || "?").toUpperCase();
-  const src = MARKET_LOGOS[sym];
+  const sym = marketSymbol(symbol || "?");
+  const src = marketInfo(sym)?.logo ?? MARKET_LOGOS[sym];
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
 
   if (!src || failedSrc === src) return <FallbackLogo symbol={sym} size={size} />;

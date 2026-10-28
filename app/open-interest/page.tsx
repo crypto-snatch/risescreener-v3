@@ -6,6 +6,8 @@ import SeriesChart from "@/components/SeriesChart";
 import ChartCard from "@/components/ChartCard";
 import { Donut } from "@/components/charts";
 import { categoryOf, CAT_COLOR } from "@/lib/sectors";
+import CoinLogo from "@/components/CoinLogo";
+import PageHeader from "@/components/PageHeader";
 
 export const revalidate = 30;
 export const metadata = { title: "Open Interest — RiseScreener" };
@@ -33,10 +35,7 @@ export default async function OpenInterestPage() {
 
   return (
     <div className="screen" data-page="open-interest" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <div>
-        <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Open Interest</h1>
-        <p style={{ margin: "4px 0 0", fontSize: 12, color: "var(--muted)" }}>Open interest across RISEx markets — live, by market &amp; over time</p>
-      </div>
+      <PageHeader eyebrow="Markets / Exposure" title="Open interest" description="Compare live market exposure, concentration and open interest over time." />
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px,1fr))", gap: 10 }}>
         <Stat big label="Total open interest" value={usd(totalOi)} tone="accent" />
@@ -66,7 +65,7 @@ export default async function OpenInterestPage() {
                 const cat = categoryOf(r.symbol); const col = CAT_COLOR[cat];
                 return (
                   <tr key={r.marketId} style={{ borderBottom: "1px solid var(--hair-soft)" }}>
-                    <Td><span style={{ fontWeight: 600 }}>{r.symbol}</span></Td>
+                    <Td><span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontWeight: 600 }}><CoinLogo symbol={r.symbol} />{r.symbol}</span></Td>
                     <Td>{col ? <span className="chip" style={{ fontSize: 10, padding: "2px 8px", color: col, borderColor: `color-mix(in oklab, ${col} 34%, transparent)`, background: `color-mix(in oklab, ${col} 12%, transparent)` }}>{cat}</span> : <span style={{ color: "var(--muted-2)" }}>{cat}</span>}</Td>
                     <Td right mono>${price(r.mark)}</Td>
                     <Td right mono>{usd(r.oiUsd)}</Td>

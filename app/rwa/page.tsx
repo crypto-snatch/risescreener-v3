@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PageHeader from "@/components/PageHeader";
 import { getMarketRows, isUpcoming, type MarketRow } from "@/lib/analytics";
 import { getDune, type CoinDay } from "@/lib/dune";
 import { getTimeseries } from "@/lib/timeseries";
@@ -106,19 +107,12 @@ export default async function RwaPage() {
 
   return (
     <div className="screen" data-page="rwa" style={{ display: "flex", flexDirection: "column", gap: 18, minWidth: 0 }}>
-      <div className="glass glow-edge grad-frame" style={{ borderRadius: "var(--r-lg)", padding: "18px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 14, overflow: "hidden" }}>
-        <div style={{ minWidth: 0 }}>
-          <div style={{ color: CLASS_COLOR.Commodities, fontSize: 10, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase" }}>Real-world assets</div>
-          <h1 style={{ margin: "4px 0 0", fontSize: 25, fontWeight: 800, letterSpacing: "-.025em" }}>Commodities + Stocks</h1>
-          <p style={{ margin: "5px 0 0", maxWidth: 720, color: "var(--muted)", fontSize: 12.5, lineHeight: 1.55 }}>
-            All active RISEx RWA perpetuals: 4 commodity markets and 7 stocks or ETFs. Live metrics refresh from RISEx; history combines Dune with repaired snapshot days.
-          </p>
-        </div>
+      <PageHeader eyebrow="Markets / Real-world assets" title="Real-world assets" description={`${commodityRows.length} commodity markets and ${stockRows.length} stocks or ETFs. Compare live exposure, trading activity and historical growth.`}>
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
           <span className="chip tag-accent"><span className="live-dot"><i className="ping" /><i /></span>{rwaRows.length} / {RWA_SYMBOLS.length} live</span>
           <Link href="/markets" className="chip">All markets →</Link>
         </div>
-      </div>
+      </PageHeader>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 148px), 1fr))", gap: 10, minWidth: 0 }}>
         <Stat big label="Live RWA markets" value={String(rwaRows.length)} color={CLASS_COLOR.Commodities} hint={`${commodityRows.length} commodities · ${stockRows.length} stocks/ETFs`} />

@@ -91,8 +91,7 @@ export default function ChartCard({
 
   const Camera = (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M4 8h3l1.5-2h7L17 8h3v11H4z" />
-      <circle cx="12" cy="13" r="3.2" />
+      <path d="M8 3H3v5M16 3h5v5M21 16v5h-5M8 21H3v-5" />
     </svg>
   );
 

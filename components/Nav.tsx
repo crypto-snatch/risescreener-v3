@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
+import CoinLogo from "@/components/CoinLogo";
 import TxSearch from "@/components/TxSearch";
 import { price } from "@/lib/format";
 
@@ -69,7 +70,7 @@ const ITEMS: NavItem[] = [
   { href: "/ecosystem", label: "RISE ecosystem", short: "Ecosystem", group: "World", icon: "ecosystem", keywords: "apps projects directory" },
 ];
 
-const RAIL = ["/overview", "/markets", "/rwa", "/traders", "/liquidations", "/network", "/global", "/ecosystem"];
+const RAIL = ["/overview", "/markets", "/rwa", "/funding", "/open-interest", "/traders", "/liquidations", "/fees", "/flows", "/network", "/global", "/ecosystem"];
 const MOBILE = ["/overview", "/markets", "/funding", "/liquidations"];
 
 function activeFor(path: string, href: string) {
@@ -216,6 +217,7 @@ export default function Nav({ ticker = [] }: { ticker?: TickerMarket[] }) {
               <div className="ribbon-track">
                 {tape.map((market, index) => (
                   <Link href={`/markets/${market.id}`} className="ribbon-quote" key={`${market.id}-${index}`}>
+                    <CoinLogo symbol={market.symbol} size={18} />
                     <b>{market.symbol}</b>
                     <span className="tnum">${price(market.mark)}</span>
                     <span className="tnum" data-tone={market.changePct >= 0 ? "up" : "down"}>

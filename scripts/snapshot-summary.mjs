@@ -6,6 +6,7 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { mergeRpcHistory } from "./lib/merge-rpc-history.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA = join(__dirname, "..", "data");
@@ -26,7 +27,8 @@ const usd = (n, opts = {}) => {
 const shortAddr = (a) => (!a || a.length < 12 ? a : `${a.slice(0, 6)}…${a.slice(-4)}`);
 // RWA classes — Commodities (metals + oil) and Stocks. Mirrors lib/sectors.ts.
 const CMD_SYMBOLS = ["XAU", "XAG", "CL", "BZ"];
-const STK_SYMBOLS = ["SNDK", "SPCX", "MU", "DRAM", "INTC", "QQQ", "SPY"];
+const catalog = JSON.parse(await readFile(join(DATA, "market-catalog.json"), "utf8"));
+const STK_SYMBOLS = Object.keys(catalog.markets).filter(s => catalog.markets[s].assetClass === "Stocks");
 // "RWA" is the per-day aggregate band Dune volume writes (see fetch-dune.mjs); it
 // is NOT folded into "Others", so include it here to keep the volume total whole.
 // Fee CoinDays never set RWA (their RWA slice stays 0), so this never double-counts.
@@ -59,7 +61,7 @@ async function liveMarkets() {
 }
 
 async function main() {
-  const dune = await readJson(join(DATA, "dune.json"));
+  const dune = mergeRpcHistory(await readJson(join(DATA, "dune.json")), await readJson(join(DATA, "rpc-history.json")), catalog);
   const lb = await readJson(join(DATA, "leaderboard.json"));
   const prev = await readJson(OUT);
   const live = await liveMarkets();
@@ -88,7 +90,7 @@ async function main() {
     if (est > 0 && reported < est * 0.7) cumVolAdd += est - reported;
   }
   const cumVol = Math.round((dune?.totals?.cumVolume ?? 0) + cumVolAdd);
-  const cumFee = (dune?.fees?.total ?? 0) + (dune?.liqTotals?.fees ?? 0); // trade + liquidation
+  const cumFee = dune?.schemaVersion >= 2 ? dune.totals.cumFees : (dune?.fees?.total ?? 0) + (dune?.liqTotals?.fees ?? 0);
 
   // 24h VOLUME — last complete UTC day from Dune + day-over-day delta.
   // When Dune's newest complete day is older than yesterday its ingestion has
@@ -108,8 +110,10 @@ async function main() {
   const ld = dune?.liqFeesByMarket || [];
   const dayFee = (i) => sumCoins(fd[i]) + sumCoins(ld[i]);
   const li = lastComplete(fd);
-  const fee24h = li >= 0 ? dayFee(li) : 0;
-  const feeChg = li > 0 ? dayFee(li) - dayFee(li - 1) : 0;
+  const protocolDays = (dune?.protocol || []).filter(d=>d.t<START_TODAY_UTC).sort((a,b)=>a.t-b.t);
+  const protocolFee = d => d ? d.taker+d.maker+d.liq : 0;
+  const fee24h = protocolDays.length ? protocolFee(protocolDays.at(-1)) : li >= 0 ? dayFee(li) : 0;
+  const feeChg = protocolDays.length > 1 ? protocolFee(protocolDays.at(-1))-protocolFee(protocolDays.at(-2)) : li > 0 ? dayFee(li)-dayFee(li-1) : 0;
 
   // TVL — current value + day-over-day change of the TVL series. If Dune's TVL
   // series has stalled, use the newest live on-chain reading our own timeseries

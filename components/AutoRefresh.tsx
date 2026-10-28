@@ -12,6 +12,7 @@ const LIVE_ROUTES = [
   "/traders",
   "/liquidations",
   "/heatmap",
+  "/network", "/explorer", "/account", "/address", "/tx", "/cohorts", "/flows", "/fees",
 ];
 
 /** Refreshes server-component data in place while the tab is visible. */

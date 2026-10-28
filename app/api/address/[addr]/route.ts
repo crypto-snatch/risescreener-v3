@@ -7,9 +7,9 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
   _req: Request,
-  { params }: { params: { addr: string } },
+  { params }: { params: Promise<{ addr: string }> },
 ) {
-  const addr = params.addr;
+  const { addr } = await params;
   if (!isAddress(addr)) {
     return NextResponse.json({ error: "invalid address" }, { status: 400 });
   }

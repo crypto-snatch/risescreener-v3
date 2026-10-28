@@ -31,7 +31,7 @@ export default async function CohortsPage() {
     return (
       <div className="screen" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <h1 style={{ fontSize: 22, fontWeight: 700 }}>Cohorts</h1>
-        <Empty>Cohort data not generated yet — run the indexer (`npm run index`).</Empty>
+        <Empty>Trader distribution is temporarily unavailable. Updated account data will appear here when available.</Empty>
       </div>
     );
 

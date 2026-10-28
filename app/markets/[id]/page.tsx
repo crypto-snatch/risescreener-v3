@@ -6,6 +6,7 @@ import { usd, price } from "@/lib/format";
 import { Stat, UtilBadge } from "@/components/ui";
 import { AreaTrend } from "@/components/charts";
 import ChartCard from "@/components/ChartCard";
+import CoinLogo from "@/components/CoinLogo";
 import {
   CandlestickFundingChart,
   BasisOiPriceChart,
@@ -19,7 +20,8 @@ const FUNDING_COLOR = "#35c98d";
 
 export const revalidate = 15;
 
-export default async function MarketDetail({ params }: { params: { id: string } }) {
+export default async function MarketDetail({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
+  const params = await paramsPromise;
   const rows = await getMarketRows();
   if (!rows.length) {
     return (
@@ -128,7 +130,7 @@ export default async function MarketDetail({ params }: { params: { id: string } 
     <div className="screen" data-page="market" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
         <Link href="/markets" className="text-muted" style={{ fontSize: 12 }}>← markets</Link>
-        <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800 }}>{m.symbol}<span className="text-muted" style={{ fontWeight: 400, fontSize: 16 }}>/USDC</span></h1>
+        <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, display:"flex",alignItems:"center",gap:8 }}><CoinLogo symbol={m.symbol} size={30} />{m.symbol}<span className="text-muted" style={{ fontWeight: 400, fontSize: 16 }}>/USDC</span></h1>
         <span className="tnum text-accent" style={{ fontSize: 18, fontWeight: 700 }}>${price(m.mark)}</span>
         <span className="tnum" style={{ color: m.changePct >= 0 ? "var(--long)" : "var(--short)" }}>{m.changePct >= 0 ? "+" : ""}{m.changePct.toFixed(2)}%</span>
       </div>

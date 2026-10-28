@@ -33,17 +33,17 @@ const STEPS: Step[] = [
   {
     k: "shred",
     title: "4 · Shred · instant preconfirmation",
-    desc: "The moment a batch is executed it's streamed out as a shred — a sub-block with no state root yet — in about 2ms. That shred is your instant preconfirmation: the trade feels final immediately, long before the block closes.",
+    desc: "Executed transactions stream to applications as shreds, before the full L2 block closes. These fast preconfirmations improve the trading experience; they are distinct from Ethereum settlement and finality.",
   },
   {
     k: "block",
     title: "5 · Block sealed (~1s)",
-    desc: "Roughly once a second, the stream of shreds is aggregated into a full block with a computed state root. This is finality on RISE — the canonical, verifiable record of everything that happened.",
+    desc: "Roughly once a second, executed transactions are sealed into a full L2 block with a state root. L2 inclusion, Ethereum settlement and Ethereum finality are separate stages.",
   },
   {
     k: "settle",
     title: "6 · Settle to Ethereum",
-    desc: "The sealed block is posted to Ethereum L1. RISE is an Ethereum L2, so it inherits Ethereum's security and decentralization underneath a web2-speed execution layer up top.",
+    desc: "RISE settles state commitments to Ethereum and uses EigenDA for data availability. This settlement process runs separately from one-second L2 block production and millisecond trading updates.",
   },
 ];
 
@@ -54,6 +54,7 @@ export default function RiseFlow() {
   const [tps, setTps] = useState(0);
   const [shredRate, setShredRate] = useState(0);
   const [block, setBlock] = useState(0);
+  const [status, setStatus] = useState<"connecting" | "live" | "reconnecting">("connecting");
   const sec = useRef(0);
   const shredSec = useRef(0);
   const elapsed = useRef(0);
@@ -88,16 +89,22 @@ export default function RiseFlow() {
   useEffect(() => {
     let ws: WebSocket | null = null;
     let closed = false;
+    let retry: ReturnType<typeof setTimeout> | undefined;
+    let lastMessage = 0;
     const t = setInterval(() => {
       setTps(sec.current);
       sec.current = 0;
       setShredRate(shredSec.current);
       shredSec.current = 0;
+      if (lastMessage && Date.now() - lastMessage > 10_000) setStatus("reconnecting");
     }, 1000);
     function connect() {
+      if (closed) return;
       try {
         ws = new WebSocket(RISE_WS);
       } catch {
+        setStatus("reconnecting");
+        retry = setTimeout(connect, 1500);
         return;
       }
       ws.onopen = () => ws?.send(JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_subscribe", params: ["shreds"] }));
@@ -111,18 +118,21 @@ export default function RiseFlow() {
         if (m.method !== "eth_subscription") return;
         const r = m.params?.result;
         if (!r) return;
+        lastMessage = Date.now();
+        setStatus("live");
         sec.current += r.transactions?.length ?? 0;
         shredSec.current += 1;
         if (r.blockNumber) setBlock(r.blockNumber);
       };
       ws.onclose = () => {
-        if (!closed) setTimeout(connect, 1500);
+        if (!closed) { setStatus("reconnecting"); retry = setTimeout(connect, 1500); }
       };
     }
     connect();
     return () => {
       closed = true;
       clearInterval(t);
+      clearTimeout(retry);
       try {
         ws?.close();
       } catch {}
@@ -147,6 +157,7 @@ export default function RiseFlow() {
           <button onClick={() => setPlaying((pl) => !pl)} className="chip tag-accent" style={{ cursor: "pointer", fontSize: 10.5 }}>{playing ? "⏸ pause" : "▶ play"}</button>
         </div>
         <span style={{ fontSize: 11, color: "var(--muted)" }}>
+          {status !== "live" && <span role="status">{status === "connecting" ? "Connecting… · " : "Reconnecting… · "}</span>}
           <b className="text-accent tnum">{compact(tps)}</b> tx/s · <b className="text-accent tnum">{shredRate}</b> shreds/s · block <b className="tnum">#{block ? block.toLocaleString() : "—"}</b>
         </span>
       </div>
@@ -155,14 +166,15 @@ export default function RiseFlow() {
         <div style={{ height: "100%", width: `${prog * 100}%`, background: "var(--accent)", transition: "width .1s linear" }} />
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1.25fr)", gap: 18, height: 340 }}>
+      <div className="rise-flow-grid">
         {/* vertical steps — titles only, evenly distributed */}
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%", overflow: "hidden" }}>
+        <div className="rise-flow-steps">
           {STEPS.map((s, i) => {
             const on = i === active;
             return (
               <button
                 key={s.k}
+                aria-pressed={on}
                 onClick={() => goTo(i)}
                 style={{
                   display: "flex",
@@ -184,11 +196,11 @@ export default function RiseFlow() {
         </div>
 
         {/* live illustration for the active step (fixed height → no layout jump) */}
-        <div className="glass" style={{ borderRadius: "var(--radius)", padding: "14px 16px", display: "flex", flexDirection: "column", height: "100%" }}>
+        <div className="glass rise-flow-detail" style={{ borderRadius: "var(--radius)", padding: "14px 16px", display: "flex", flexDirection: "column" }}>
           <div style={{ flex: 1, minHeight: 0, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
             <Illustration kind={step.k} />
           </div>
-          <div style={{ borderTop: "1px solid var(--hair-soft)", paddingTop: 12, height: 140, overflow: "hidden", flexShrink: 0 }}>
+          <div className="rise-flow-description" style={{ borderTop: "1px solid var(--hair-soft)", paddingTop: 12, flexShrink: 0 }}>
             <div style={{ fontSize: 15, fontWeight: 700, color: "var(--accent-ink)" }}>{step.title}</div>
             <div style={{ fontSize: 13.5, color: "var(--ink)", marginTop: 6, lineHeight: 1.6 }}>{step.desc}</div>
             {live[step.k] && <div className="tnum" style={{ fontSize: 11.5, color: "var(--accent-ink)", marginTop: 8 }}>● live · {live[step.k]}</div>}
@@ -254,7 +266,7 @@ function render(kind: Kind) {
             {[0, 1, 2, 3, 4].map((k) => (
               <span key={k} className="shred-tick" style={{ position: "absolute", left: k * 36, top: 28, width: 14, height: 5, borderRadius: 2, background: "var(--accent)", animationDelay: `${k * 0.18}s` }} />
             ))}
-            <div style={{ position: "absolute", right: 0, top: 4, fontSize: 10, color: "var(--accent-ink)" }}>~2ms each</div>
+            <div style={{ position: "absolute", right: 0, top: 4, fontSize: 10, color: "var(--accent-ink)" }}>streamed shreds</div>
           </div>
         </div>
       );

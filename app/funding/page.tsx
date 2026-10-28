@@ -6,6 +6,9 @@ import { Bars } from "@/components/charts";
 import { CarryOpportunityLadder, type CarryOpportunity } from "@/components/QuantViz";
 import { getFundingHistory } from "@/lib/market-data";
 import FundingHistoryChart, { type FundingHistorySeries } from "@/components/FundingHistoryChart";
+import PageHeader from "@/components/PageHeader";
+import { MarketMap } from "@/components/MarketAnalytics";
+import CoinLogo from "@/components/CoinLogo";
 
 export const revalidate = 15;
 export const metadata = { title: "Funding — RiseScreener" };
@@ -59,12 +62,7 @@ export default async function FundingPage() {
 
   return (
     <div className="screen" data-page="funding" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-      <div>
-        <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Funding</h1>
-        <p style={{ margin: "5px 0 0", fontSize: 12.5, color: "var(--muted)" }}>
-          Live funding across {rows.length} markets · positive = longs pay shorts
-        </p>
-      </div>
+      <PageHeader eyebrow="Markets / Funding" title="Funding" description={`Funding rates and positioning across ${rows.length} markets. Positive funding means longs pay shorts.`} />
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px,1fr))", gap: 10 }}>
         <Stat big label="Highest APR" value={top ? apr(top.fundingApr) : "—"} tone="long" hint={top ? `${top.symbol} · longs pay` : undefined} />
@@ -94,6 +92,7 @@ export default async function FundingPage() {
       </div>
 
       <div>
+        <div style={{ marginBottom: 22 }}><MarketMap markets={rows} mode="funding" /></div>
         <SectionLabel>Funding board · sorted by APR</SectionLabel>
         <Panel style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", fontSize: 12.5, borderCollapse: "collapse", minWidth: 720 }}>
@@ -111,7 +110,7 @@ export default async function FundingPage() {
             <tbody>
               {byApr.map((r: MarketRow) => (
                 <tr key={r.marketId} style={{ borderBottom: "1px solid var(--hair-soft)" }}>
-                  <Td><span style={{ fontWeight: 600 }}>{r.symbol}</span></Td>
+                  <Td><span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontWeight: 600 }}><CoinLogo symbol={r.symbol} />{r.symbol}</span></Td>
                   <Td right mono>{price(r.mark)}</Td>
                   <Td right mono color={tone(r.fundingCur)}>{pct(r.fundingCur)}</Td>
                   <Td right mono color={tone(r.funding8h)}>{pct(r.funding8h)}</Td>

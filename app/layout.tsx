@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "./polish.css";
 import Nav, { type TickerMarket } from "@/components/Nav";
 import { getMarketRows } from "@/lib/analytics";
 import AutoRefresh from "@/components/AutoRefresh";

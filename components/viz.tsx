@@ -35,7 +35,7 @@ export function CountUp({
   style?: React.CSSProperties;
 }) {
   const [display, setDisplay] = useState(0);
-  const raf = useRef<number>();
+  const raf = useRef<number | undefined>(undefined);
   const from = useRef(0);
   useEffect(() => {
     const start = performance.now();
@@ -58,9 +58,9 @@ export function CountUp({
 export function Kpi({ label, value, format = "usd", accent, hint }: { label: string; value: number; format?: Fmt; accent?: boolean; hint?: string }) {
   return (
     <div className="glass glow-edge stat-card" style={{ padding: "15px 17px", borderRadius: "var(--r-lg)" }}>
-      <div style={{ fontSize: 10.5, letterSpacing: ".13em", textTransform: "uppercase", color: "var(--muted-2)", fontWeight: 500 }}>{label}</div>
-      <CountUp value={value} format={format} className={"tnum" + (accent ? " grad-text" : "")} style={{ display: "block", fontSize: 30, fontWeight: 700, marginTop: 9, letterSpacing: "-.01em", color: accent ? undefined : "var(--ink)", lineHeight: 1.02, fontFamily: "var(--font-mono)" }} />
-      {hint && <div style={{ fontSize: 11, color: "var(--muted-2)", marginTop: 6 }}>{hint}</div>}
+      <div className="stat-label">{label}</div>
+      <CountUp value={value} format={format} className={"stat-value tnum" + (accent ? " grad-text" : "")} style={{ display: "block", marginTop: 9, color: accent ? undefined : "var(--ink)" }} />
+      {hint && <div className="stat-hint" style={{ marginTop: 6 }}>{hint}</div>}
     </div>
   );
 }

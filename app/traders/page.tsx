@@ -6,6 +6,7 @@ import TopWallets, { type TopRow } from "@/components/TopWallets";
 import WalletTrends from "@/components/WalletTrends";
 import { LeverageDistributionChart, type LeverageBucket } from "@/components/QuantViz";
 import ChartCard from "@/components/ChartCard";
+import PageHeader from "@/components/PageHeader";
 
 export const revalidate = 30;
 export const metadata = { title: "Traders — RiseScreener" };
@@ -43,6 +44,7 @@ export default async function TradersPage() {
   // index. Keep both, but never imply that their denominators are identical.
   const totalAccounts = dune?.totals.accounts ?? snap?.totalAccounts ?? 0;
   const accountDay = latestAccountDay(dune);
+  const rpcDay = dune?.protocol?.at(-1)?.source === "public-rpc" ? dune.protocol.at(-1) : null;
   const scoredAccounts = snap?.scoredAccounts ?? snap?.totalAccounts ?? 0;
 
   const sub = (r: SnapshotRow) =>
@@ -57,7 +59,7 @@ export default async function TradersPage() {
 
   return (
     <div className="screen" data-page="traders" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800 }}>Trader activity</h1>
+      <PageHeader eyebrow="People / Traders" title="Trader activity" description="Public wallet rankings, open positions and leverage concentration." cadence="Dated index snapshots" />
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px,1fr))", gap: 10 }}>
         <Stat
@@ -68,10 +70,10 @@ export default async function TradersPage() {
         />
         <Stat
           big
-          label="Daily active accounts"
-          value={accountDay ? compact(accountDay.activeTraders) : "—"}
+          label="Daily active traders"
+          value={rpcDay?.activeTraders != null ? compact(rpcDay.activeTraders) : accountDay ? compact(accountDay.activeTraders) : "—"}
           tone={accountDay ? "long" : undefined}
-          hint={accountDay ? `${utcStamp(accountDay.t)} · +${compact(accountDay.newAccounts)} newly indexed` : "daily index unavailable"}
+          hint={rpcDay ? `On-chain trader IDs · ${utcStamp(rpcDay.t)}` : accountDay ? `${utcStamp(accountDay.t)} · +${compact(accountDay.newAccounts)} newly indexed` : "daily index unavailable"}
         />
         {snap && (
           <Stat

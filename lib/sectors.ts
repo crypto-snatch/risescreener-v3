@@ -1,3 +1,5 @@
+import { MARKET_CATALOG, marketSymbol } from "./market-catalog";
+
 // Market sector classification for RISEx perps.
 export const SECTORS: Record<string, string[]> = {
   "Layer 1": ["BTC", "ETH", "SOL", "ZEC", "BNB", "NEAR", "XRP"],
@@ -15,10 +17,19 @@ export const CAT_COLOR: Record<string, string> = {
   Stocks: "#5fa8ff", // azure — matches CLASS_COLOR.Stocks
   AI: "#c79bff",
   MEME: "#e879a6", // moved off gold so it doesn't collide with Commodities
+  "Layer 2": "#789dff", Infrastructure: "#67c9dd", Other: "#8b98a9",
 };
 
+for (const [symbol, market] of Object.entries(MARKET_CATALOG)) {
+  for (const members of Object.values(SECTORS)) {
+    const index = members.indexOf(symbol);
+    if (index >= 0) members.splice(index, 1);
+  }
+  (SECTORS[market.sector] ??= []).push(symbol);
+}
 export const SECTOR_NAMES = Object.keys(SECTORS);
-export const categoryOf = (sym: string): string => SECTOR_NAMES.find((s) => SECTORS[s].includes(sym)) ?? "Other";
+export const categoryOf = (sym: string): string => MARKET_CATALOG[marketSymbol(sym)]?.sector ??
+  SECTOR_NAMES.find((s) => SECTORS[s].includes(marketSymbol(sym))) ?? "Other";
 
 // ── asset class: crypto vs real-world assets ──
 // RWA perps on RISEx split into two classes: Commodities — gold (XAU), silver
@@ -34,6 +45,9 @@ export const RWA_NAMES: Record<string, string> = {
   SNDK: "SanDisk", SPCX: "SpaceX", MU: "Micron", DRAM: "Memory ETF",
   INTC: "Intel", QQQ: "Nasdaq-100 ETF", SPY: "S&P 500 ETF",
 };
+for (const [symbol, market] of Object.entries(MARKET_CATALOG)) {
+  if (market.assetClass !== "Crypto") RWA_NAMES[symbol] = market.name;
+}
 export type AssetClass = "Crypto" | "Commodities" | "Stocks";
 export const isCommodity = (sym: string): boolean => CMD_SYMBOLS.includes(sym);
 export const isStock = (sym: string): boolean => STOCK_SYMBOLS.includes(sym);

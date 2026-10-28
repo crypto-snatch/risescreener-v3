@@ -6,6 +6,7 @@ import type { MarketRow } from "@/lib/analytics";
 import { usd, price } from "@/lib/format";
 import { Panel } from "@/components/ui";
 import CoinLogo from "@/components/CoinLogo";
+import {marketInfo} from "@/lib/market-catalog";
 
 import { SECTORS, CAT_COLOR, categoryOf } from "@/lib/sectors";
 const TABS = ["All", ...Object.keys(SECTORS)];
@@ -32,7 +33,7 @@ const COLS: Col[] = [
       style={{ display: "inline-flex", alignItems: "center", gap: 9, fontWeight: 600 }}
     >
       <CoinLogo symbol={r.symbol} size={22} />
-      <span>{r.symbol}</span>
+      <span className="market-name"><b>{r.symbol}</b><small>{marketInfo(r.symbol)?.name ?? "Perpetual"}</small></span>
     </Link>
   ) },
   { key: "category", label: "Sector", val: (r) => categoryOf(r.symbol), render: (r) => { const c = categoryOf(r.symbol); const col = CAT_COLOR[c]; return !col ? <span style={{ color: "var(--muted-2)" }}>{c}</span> : <span className="chip" style={{ fontSize: 10, padding: "2px 8px", color: col, borderColor: `color-mix(in oklab, ${col} 34%, transparent)`, background: `color-mix(in oklab, ${col} 12%, transparent)` }}>{c}</span>; } },
@@ -53,7 +54,7 @@ export default function MarketsTable({ rows }: { rows: MarketRow[] }) {
 
   let view = rows;
   if (sector !== "All") view = view.filter((r) => SECTORS[sector].includes(r.symbol));
-  if (q.trim()) view = view.filter((r) => r.symbol.toLowerCase().includes(q.trim().toLowerCase()));
+  if (q.trim()) view = view.filter((r) => `${r.symbol} ${marketInfo(r.symbol)?.name ?? ""}`.toLowerCase().includes(q.trim().toLowerCase()));
   const col = COLS.find((c) => c.key === sortKey)!;
   view = [...view].sort((a, b) => {
     const av = col.val(a), bv = col.val(b);
@@ -69,11 +70,11 @@ export default function MarketsTable({ rows }: { rows: MarketRow[] }) {
   return (
     <div data-component="markets-table">
       {/* sector tabs */}
-      <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 12 }}>
+      <div className="market-table-tools"><div className="market-tabs">
         {TABS.map((t) => {
           const n = t === "All" ? rows.length : rows.filter((r) => SECTORS[t].includes(r.symbol)).length;
           return (
-            <button key={t} onClick={() => setSector(t)} className="pill" data-active={sector === t}>
+            <button key={t} onClick={() => setSector(t)} className="pill" data-active={sector === t} aria-pressed={sector===t}>
               {t}{t !== "All" ? ` · ${n}` : ""}
             </button>
           );
@@ -89,6 +90,7 @@ export default function MarketsTable({ rows }: { rows: MarketRow[] }) {
         style={{ marginBottom: 12, padding: "10px 14px", fontSize: 13, border: "1px solid var(--accent-line)" }}
         spellCheck={false}
       />
+      </div>
 
       {/* sortable table */}
       <Panel style={{ overflowX: "auto" }}>
@@ -98,6 +100,9 @@ export default function MarketsTable({ rows }: { rows: MarketRow[] }) {
               {COLS.map((c) => (
                 <th
                   key={c.key}
+                  tabIndex={0}
+                  aria-sort={sortKey===c.key ? dir==="asc" ? "ascending" : "descending" : "none"}
+                  onKeyDown={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();sortBy(c.key);}}}
                   onClick={() => sortBy(c.key)}
                   style={{ cursor: "pointer", userSelect: "none", fontWeight: 400, padding: "11px 12px", textAlign: c.align || "left", whiteSpace: "nowrap", color: sortKey === c.key ? "var(--accent-ink)" : "var(--muted)", fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", borderBottom: "1px solid var(--hair)" }}
                 >

@@ -7,6 +7,7 @@ import { EXPLORER_UI } from "@/lib/constants";
 import { usd, usdFull, price, compact, num, nsToMs, timeAgo, shortAddr } from "@/lib/format";
 import { Panel, Stat, SectionLabel, Empty } from "@/components/ui";
 import ChartCard from "@/components/ChartCard";
+import CoinLogo from "@/components/CoinLogo";
 import { Donut, AreaTrend } from "@/components/charts";
 
 type Snap = AccountSnapshot & { symbols: Record<string, string> };
@@ -138,7 +139,7 @@ export default function AddressView({ addr, initial }: { addr: string; initial: 
               <tbody>
                 {snap.positions.map((p) => (
                   <tr key={p.marketId} style={{ borderBottom: "1px solid var(--hair-soft)" }}>
-                    <Td><span style={{ fontWeight: 700 }}>{p.symbol}</span></Td>
+                    <Td><span style={{ fontWeight: 700,display:"flex",alignItems:"center",gap:7 }}><CoinLogo symbol={p.symbol} />{p.symbol}</span></Td>
                     <Td><span style={{ color: p.side === "long" ? "var(--long)" : "var(--short)", fontWeight: 600 }}>{p.side.toUpperCase()}</span> <span className="text-muted">{p.leverage.toFixed(0)}×</span></Td>
                     <Td right mono>{compact(p.size)}</Td>
                     <Td right mono>${price(p.entry)}</Td>

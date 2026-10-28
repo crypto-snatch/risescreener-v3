@@ -17,8 +17,8 @@ function Row({ label, children, mono }: { label: string; children: React.ReactNo
   );
 }
 
-export default async function TxPage({ params }: { params: { hash: string } }) {
-  const hash = params.hash;
+export default async function TxPage({ params }: { params: Promise<{ hash: string }> }) {
+  const { hash } = await params;
   if (!/^0x[0-9a-fA-F]{64}$/.test(hash)) notFound();
   const tx = await getTx(hash);
 

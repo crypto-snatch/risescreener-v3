@@ -5,9 +5,9 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
   _req: Request,
-  { params }: { params: { hash: string } },
+  { params }: { params: Promise<{ hash: string }> },
 ) {
-  const hash = params.hash;
+  const { hash } = await params;
   if (!/^0x[0-9a-fA-F]{64}$/.test(hash)) {
     return NextResponse.json({ error: "invalid tx hash" }, { status: 400 });
   }

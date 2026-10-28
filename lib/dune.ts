@@ -1,9 +1,14 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import catalog from "@/data/market-catalog.json";
+import { mergeRpcHistory } from "@/scripts/lib/merge-rpc-history.mjs";
 
 // Historical RISEx data pulled from Dune (scripts/fetch-dune.mjs → data/dune.json).
 // In production a cron refreshes it and the app reads it via DUNE_URL (raw URL).
 export interface DuneData {
+  schemaVersion?: number;
+  protocol?: { t: number; volume: number; trades: number; taker: number; maker: number; liq: number; activeTraders?: number; source?: string }[];
+  feeMarketCoverage?: string;
   generatedAt: string;
   // cumVolume{Crypto,Rwa,Cmd,Stk} are optional: older snapshots (pre-split) omit them.
   // cumVolumeDune/Est: the untouched Dune figure and what scripts/backfill-volume.mjs
@@ -37,9 +42,13 @@ export async function getDune(): Promise<DuneData | null> {
   try {
     let raw: string;
     try {
+      if (process.env.NODE_ENV !== "production") {
+        raw = await readFile(join(process.cwd(), "data", "dune.json"), "utf8");
+      } else {
       const r = await fetch(url, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8_000) });
       if (!r.ok) throw new Error(`dune ${r.status}`);
       raw = await r.text();
+      }
     } catch {
       raw = await readFile(join(process.cwd(), "data", "dune.json"), "utf8");
     }
@@ -49,10 +58,23 @@ export async function getDune(): Promise<DuneData | null> {
     const startTodayUTC = Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate());
     const dropToday = (a?: CoinDay[]) => (a ? a.filter((x) => x.t < startTodayUTC) : a);
     if (data.volume) data.volume = dropToday(data.volume)!;
+    if (data.accounts) data.accounts = data.accounts.filter(x => x.t < startTodayUTC);
+    if (data.tvl) data.tvl = data.tvl.filter(x => x.t < startTodayUTC);
+    if (data.protocol) data.protocol = data.protocol.filter(x => x.t < startTodayUTC);
     if (data.feesByMarket) data.feesByMarket = dropToday(data.feesByMarket)!;
     if (data.liqFeesByMarket) data.liqFeesByMarket = dropToday(data.liqFeesByMarket)!;
-    cache = { at: Date.now(), data };
-    return data;
+    let history = null;
+    try {
+      if (process.env.NODE_ENV !== "production") {
+        history = JSON.parse(await readFile(join(process.cwd(), "data", "rpc-history.json"), "utf8"));
+      } else {
+        const response = await fetch("https://raw.githubusercontent.com/crypto-snatch/risescreener-v3/main/data/rpc-history.json", {next:{revalidate:300},signal:AbortSignal.timeout(8_000)});
+        if (response.ok) history = await response.json();
+      }
+    } catch { /* Keep the seed when incremental history is temporarily unavailable. */ }
+    const merged = mergeRpcHistory(data, history, catalog) as DuneData;
+    cache = { at: Date.now(), data: merged };
+    return merged;
   } catch {
     cache = { at: Date.now(), data: null };
     return null;

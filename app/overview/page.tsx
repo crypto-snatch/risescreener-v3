@@ -13,6 +13,8 @@ import { CorrelationMatrixChart, RealizedVolRankingChart } from "@/components/Qu
 import { getAggOiHistory, getPositionsStat } from "@/lib/risescan";
 import { isRwa, RWA_COLORS } from "@/lib/sectors";
 import type { Candle } from "@/lib/market-data";
+import PageHeader from "@/components/PageHeader";
+import { MarketBreadth } from "@/components/MarketAnalytics";
 import ChartCard from "@/components/ChartCard";
 import { getTimeseries } from "@/lib/timeseries";
 import { dayTotal, patchVolume } from "@/lib/volume";
@@ -39,7 +41,7 @@ export default async function Overview() {
   ]);
   const patchedVolume = patchVolume(dune, timeseries);
   const liqFeesByTime = new Map((dune?.liqFeesByMarket ?? []).map((day) => [day.t, dayTotal(day)]));
-  const feesPoints = (dune?.feesByMarket ?? []).slice(-60).map((day) => ({
+  const feesPoints = dune?.protocol?.length ? dune.protocol.slice(-60).map(day => ({t:day.t,fees:day.taker+day.maker+day.liq})) : (dune?.feesByMarket ?? []).slice(-60).map((day) => ({
     t: day.t,
     fees: dayTotal(day) + (liqFeesByTime.get(day.t) ?? 0),
   }));
@@ -156,40 +158,28 @@ export default async function Overview() {
   const sellFlow = feed.filter((t) => t.side === "SELL").reduce((s, t) => s + t.notional, 0);
 
   const tvlPoints = (dune?.tvl ?? []).map((x) => ({ t: x.t, tvl: x.tvl }));
+  const asOf = (t?: number) => t ? `Through ${new Date(t).toISOString().slice(0, 10)} UTC` : "Latest available snapshot";
 
   return (
     <div className="screen" data-page="overview" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
       {/* ── hero band ── */}
-      <div className="glass glow-edge grad-frame" style={{ borderRadius: "var(--r-lg)", padding: "18px 20px", display: "flex", flexDirection: "column", gap: 14, overflow: "hidden" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
-          <div>
-            <h1 style={{ margin: 0, fontSize: 25, fontWeight: 800, letterSpacing: "-.02em" }}>
-              <span className="grad-text">RISE</span> Overview
-            </h1>
-            <div style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 4 }}>The trading chain — live markets, open interest, funding & flow.</div>
-          </div>
-          <div style={{ display: "flex", gap: 10 }}>
-            <span className="chip tag-accent" style={{ fontSize: 11 }}><span className="live-dot"><i className="ping" /><i /></span> {p.listedMarkets} live markets</span>
-            <Link href="/markets" className="chip" style={{ fontSize: 11 }}>All markets →</Link>
-          </div>
-        </div>
-      </div>
+      <PageHeader eyebrow="RISE / Market intelligence" title="Market overview" description="A clear view of liquidity, market activity and the RISE trading network."><Link href="/markets" className="chip">Explore {p.listedMarkets} markets ↗</Link></PageHeader>
 
       {/* ── animated KPI grid ── */}
       <div className="reveal" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: 10 }}>
-        <Kpi label="TVL" value={dune?.totals.tvl ?? p.tvl} accent />
+        <Kpi label="TVL" value={dune?.totals.tvl ?? p.tvl} accent hint={asOf(dune?.tvl.at(-1)?.t)} />
         <Kpi label="Open interest" value={p.totalOiUsd} hint="live RISEx books" />
         <Kpi label="24h volume" value={p.totalVolume24h} />
         <Kpi label="Cumulative volume" value={patchedVolume.cumVolume} accent hint={patchedVolume.estDays ? `${patchedVolume.estDays} missing Dune day${patchedVolume.estDays === 1 ? "" : "s"} rebuilt from snapshots` : "Dune historical total"} />
-        <Kpi label="Total fees" value={dune?.totals.cumFees ?? 0} />
-        <Kpi label="Accounts" value={dune?.totals.accounts ?? p.wallets.total} format="int" />
+        <Kpi label="Total fees" value={dune?.totals.cumFees ?? 0} hint={asOf(dune?.protocol?.at(-1)?.t)} />
+        <Kpi label="Accounts" value={dune?.totals.accounts ?? p.wallets.total} format="int" hint={asOf(dune?.accounts.at(-1)?.t)} />
       </div>
 
       {/* ── flagship: synchronized full-history volume + total open interest ── */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px,1fr))", gap: 16 }}>
         <ChartCard
           title="Exchange volume history"
-          subtitle={`Daily Dune history · longest period shared with OI · ${historyRange}`}
+          subtitle={`Complete daily volume · aligned with OI · ${historyRange}`}
           height={264}
           modalHeight={460}
           toolbar={latestVolume > 0 ? <span className="tnum text-accent" style={{ fontSize: 11.5, fontWeight: 700 }}>{usd(latestVolume)} <span className="text-muted">latest · {visibleVolSeries.length}d</span></span> : undefined}
@@ -270,7 +260,7 @@ export default async function Overview() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px,1fr))", gap: 16 }}>
         <ChartCard
           title="Protocol fees"
-          subtitle="Complete UTC-day trading + liquidation fees · Dune refreshes daily"
+          subtitle="Complete UTC-day net trading and liquidation fees · public chain records"
           height={244}
           modalHeight={440}
           toolbar={feesTotal > 0 ? <span className="tnum text-accent" style={{ fontSize: 11.5, fontWeight: 700 }}>{usd(feesTotal)} <span className="text-muted">{feesPoints.length}d</span></span> : undefined}
@@ -278,7 +268,7 @@ export default async function Overview() {
         >
           {feesPoints.length > 1 ? <AreaTrend data={feesPoints} xKey="t" yKey="fees" xPreset="date" yPreset="usd" valueName="Fees" height={244} /> : <div style={{ height: 244 }}><Empty /></div>}
         </ChartCard>
-        <ChartCard
+        {posStat ? <ChartCard
           title="Trader profitability"
           subtitle="Current account profitability and long/short open interest"
           height={244}
@@ -298,14 +288,14 @@ export default async function Overview() {
               <div style={{ fontSize: 11, color: "var(--muted-2)", lineHeight: 1.55 }}>{posStat.accountsInProfit.toLocaleString()} of {posStat.accountsTotal.toLocaleString()} accounts in profit · total equity {usd(posStat.totalEquity)}.</div>
             </div>
           ) : <div style={{ height: 244 }}><Empty /></div>}
-        </ChartCard>
+        </ChartCard> : <MarketBreadth markets={tradable} />}
       </div>
 
       {/* ── TVL trend + taker flow ── */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px,1fr))", gap: 16 }}>
         <ChartCard
           title="TVL"
-          subtitle="Historical collateral snapshots · Dune refreshes daily"
+          subtitle={`Historical collateral snapshots · ${asOf(dune?.tvl.at(-1)?.t)}`}
           height={250}
           modalHeight={440}
           filename="risescreener-tvl"

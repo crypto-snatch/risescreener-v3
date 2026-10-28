@@ -5,6 +5,7 @@ async function bs<T>(path: string, revalidate = 2): Promise<T> {
   const res = await fetch(`${EXPLORER_API}${path}`, {
     headers: { accept: "application/json" },
     next: { revalidate },
+    signal: AbortSignal.timeout(8_000),
   });
   if (!res.ok) throw new Error(`explorer ${path} -> ${res.status}`);
   return (await res.json()) as T;

@@ -21,6 +21,7 @@ export interface MarketCfg {
   step_size: string;
   step_price: string;
   maintenance_margin_factor: string;
+  unlocked?: boolean;
 }
 export interface Market {
   market_id: string;
@@ -29,6 +30,9 @@ export interface Market {
   active?: boolean; // current tradable flag (renamed from "available")
   base_asset_symbol: string;
   display_name?: string;
+  display_at?: string;
+  category?: string;
+  search_tags?: string[];
   mark_price?: string;
   last_price?: string;
   index_price?: string;
@@ -73,7 +77,7 @@ export async function getMarketMap(): Promise<Map<string, Market>> {
 
 export function symbolOf(m?: Market): string {
   if (!m) return "?";
-  return (m.config?.name || m.base_asset_symbol || "?").replace("/USDC", "");
+  return (m.config?.name || m.base_asset_symbol || "?").split("/")[0];
 }
 
 // ── mark price via orderbook mid ──────────────────────────────

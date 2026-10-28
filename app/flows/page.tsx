@@ -6,6 +6,7 @@ import { EXPLORER_UI } from "@/lib/constants";
 import { Panel, Stat, SectionLabel, Empty } from "@/components/ui";
 import ChartCard from "@/components/ChartCard";
 import { AreaTrend, Bars } from "@/components/charts";
+import PageHeader from "@/components/PageHeader";
 
 export const revalidate = 30;
 export const metadata = { title: "Flows — RiseScreener" };
@@ -19,14 +20,14 @@ export default async function FlowsPage() {
 
   return (
     <div className="screen" data-page="flows" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Flows</h1>
+      <PageHeader eyebrow="Protocol / Collateral" title="Protocol flows" description="Track collateral movements, net deposits and historical liquidity." />
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: 10 }}>
         <Stat big label="TVL (collateral)" value={usd(tvl)} tone="accent" />
-        <Stat big label="24h deposits" value={usd(f.deposit24h)} tone="long" />
-        <Stat big label="24h withdrawals" value={usd(f.withdraw24h)} tone="short" />
-        <Stat big label="24h net flow" value={usd(f.net24h, { sign: true })} tone={f.net24h >= 0 ? "long" : "short"} />
-        <Stat big label="Cumulative net" value={usd(cumDep - cumWit, { sign: true })} tone={cumDep - cumWit >= 0 ? "long" : "short"} hint="all-time deposits − withdrawals" />
+        <Stat big label={f.complete24h ? "24h deposits" : "Observed deposits"} value={f.scannedSince ? usd(f.deposit24h) : "—"} tone="long" hint={f.scannedSince ? "USDC.e collateral" : "Recent flow feed unavailable"} />
+        <Stat big label={f.complete24h ? "24h withdrawals" : "Observed withdrawals"} value={f.scannedSince ? usd(f.withdraw24h) : "—"} tone="short" hint={f.scannedSince ? "USDC.e collateral" : "Recent flow feed unavailable"} />
+        <Stat big label={f.complete24h ? "24h net flow" : "Observed net flow"} value={f.scannedSince ? usd(f.net24h, { sign: true }) : "—"} tone={f.net24h >= 0 ? "long" : "short"} hint={f.complete24h ? "Complete rolling 24h window" : "Partial recent-log coverage"} />
+        <Stat big label="Cumulative net" value={usd(cumDep - cumWit, { sign: true })} tone={cumDep - cumWit >= 0 ? "long" : "short"} hint={`Deposits − withdrawals through ${dune?.tvl.at(-1) ? new Date(dune.tvl.at(-1)!.t).toISOString().slice(0,10) : "last index"}`} />
       </div>
 
       {(tvlSeries.length > 1 || netSeries.length > 1) && (
@@ -62,7 +63,7 @@ export default async function FlowsPage() {
           </tbody>
         </table>
       </Panel>
-      <p style={{ fontSize: 11, color: "var(--muted-2)" }}>Deposits/withdrawals decoded from CollateralManager events. TVL trend chart builds from periodic snapshots (timeseries cron).</p>
+      <p style={{ fontSize: 11, color: "var(--muted-2)" }}>Recent movements cover USDC.e collateral. Historical charts use the dated collateral dataset; partial recent coverage is labelled above.</p>
     </div>
   );
 }

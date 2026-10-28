@@ -15,7 +15,7 @@ export default async function HeatMapPage() {
     return (
       <div className="screen" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <h1 style={{ fontSize: 22, fontWeight: 700 }}>Position Heat Map</h1>
-        <Empty>Skew data not generated yet — run the indexer (`npm run index`).</Empty>
+        <Empty>Position balance data is temporarily unavailable. Market prices and funding remain available in Markets.</Empty>
       </div>
     );
 

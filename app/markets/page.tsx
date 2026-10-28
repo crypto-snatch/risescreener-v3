@@ -8,6 +8,8 @@ import { Donut, GroupBars } from "@/components/charts";
 import { categoryOf, CAT_COLOR } from "@/lib/sectors";
 import { getTimeseries } from "@/lib/timeseries";
 import { patchVolume } from "@/lib/volume";
+import PageHeader from "@/components/PageHeader";
+import { MarketMap } from "@/components/MarketAnalytics";
 
 export const revalidate = 15;
 export const metadata = { title: "Markets — RiseScreener" };
@@ -29,10 +31,7 @@ export default async function MarketsPage() {
 
   return (
     <div className="screen" data-page="markets" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <div>
-        <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Perp Markets</h1>
-        <p style={{ margin: "4px 0 0", fontSize: 12, color: "var(--muted)" }}>Real-time data from RISEx · {rows.length} markets</p>
-      </div>
+      <PageHeader eyebrow="Markets / Perpetuals" title="Markets" description={`Prices, liquidity and positioning across ${rows.length} active RISEx markets.`} />
 
       {/* summary */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px,1fr))", gap: 10 }}>
@@ -54,6 +53,7 @@ export default async function MarketsPage() {
 
       <SectionLabel>All markets</SectionLabel>
       <MarketsTable rows={rows} />
+      <MarketMap markets={tradable} />
     </div>
   );
 }

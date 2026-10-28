@@ -2,6 +2,7 @@ import { getDune, type CoinDay } from "@/lib/dune";
 import { getSnapshot } from "@/lib/snapshot";
 import { usd, compact, price, shortAddr } from "@/lib/format";
 import { Panel, Stat, SectionLabel, Empty } from "@/components/ui";
+import CoinLogo from "@/components/CoinLogo";
 import SeriesChart from "@/components/SeriesChart";
 import ChartCard from "@/components/ChartCard";
 import LiqHeatmap from "@/components/LiqHeatmap";
@@ -166,7 +167,7 @@ export default async function LiquidationsPage() {
                 {atRisk.map((p, i) => (
                   <tr key={i} style={{ borderBottom: "1px solid var(--hair-soft)" }}>
                     <Td><a className="mono-link" href={`/address/${p.account}`}>{shortAddr(p.account)}</a></Td>
-                    <Td><span style={{ fontWeight: 600 }}>{p.symbol}</span></Td>
+                    <Td><span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontWeight: 600 }}><CoinLogo symbol={p.symbol} />{p.symbol}</span></Td>
                     <Td><span style={{ color: p.side === "long" ? "var(--long)" : "var(--short)", fontWeight: 600 }}>{p.side.toUpperCase()}</span></Td>
                     <Td right mono>{p.lev.toFixed(0)}×</Td>
                     <Td right mono>{price(p.mark)}</Td>
@@ -181,7 +182,7 @@ export default async function LiquidationsPage() {
             </table>
           </Panel>
         ) : (
-          <Panel pad="22px 20px"><div style={{ fontSize: 13, color: "var(--muted)" }}>No at-risk positions in the current index — run the indexer to populate.</div></Panel>
+          <Panel pad="22px 20px"><div style={{ fontSize: 13, color: "var(--muted)" }}>No at-risk positions are available in the latest account snapshot.</div></Panel>
         )}
         <p style={{ fontSize: 11, color: "var(--muted-2)", marginTop: 10 }}>
           Liquidation price is an isolated-margin estimate (entry, leverage, maintenance margin) — cross-margin accounts

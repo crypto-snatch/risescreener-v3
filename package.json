@@ -2,29 +2,34 @@
   "name": "risescan-v2",
   "version": "0.2.0",
   "private": true,
+  "engines": { "node": "22.x" },
   "description": "RiseScan v2 — an analytics/risk dashboard for RISE Chain & the RISEx perps DEX (markets risk, funding, OI, protocol stats, trader risk).",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
-    "lint": "next lint",
+    "typecheck": "tsc --noEmit --incremental false",
+    "test": "node --test tests/*.test.mjs",
+    "catalog:sync": "node scripts/sync-market-catalog.mjs",
+    "refresh:dune": "node scripts/fetch-dune.mjs",
+    "refresh:history": "node scripts/snapshot-rpc-history.mjs",
     "index": "node scripts/index-leaderboard.mjs",
     "index:watch": "node scripts/index-watch.mjs"
   },
   "dependencies": {
     "html-to-image": "^1.11.13",
-    "next": "14.2.15",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "recharts": "2.12.7"
+    "next": "16.4.3",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "recharts": "2.15.4"
   },
   "devDependencies": {
     "@types/node": "20.14.10",
-    "@types/react": "18.3.3",
-    "@types/react-dom": "18.3.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "autoprefixer": "10.4.19",
-    "postcss": "8.4.39",
+    "postcss": "8.5.32",
     "tailwindcss": "3.4.6",
-    "typescript": "5.5.3"
+    "typescript": "5.9.3"
   }
 }

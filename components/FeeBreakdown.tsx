@@ -14,7 +14,7 @@ function bucketKey(t: number, p: Period): { key: string; label: string } {
   if (p === "ALL") return { key: "all", label: "All time" };
   if (p === "Y") return { key: `${y}`, label: `${y}` };
   if (p === "Q") { const q = Math.floor(d.getUTCMonth() / 3) + 1; return { key: `${y}-Q${q}`, label: `Q${q} ${y}` }; }
-  return { key: `${y}-${d.getUTCMonth()}`, label: `${MONTHS[d.getUTCMonth()]} ${y}` };
+  return { key: `${y}-${String(d.getUTCMonth()+1).padStart(2,"0")}`, label: `${MONTHS[d.getUTCMonth()]} ${y}` };
 }
 
 type Bucket = { key: string; label: string; total: number; BTC: number; ETH: number; SOL: number; HYPE: number; Commodities: number; Stocks: number; Others: number };
@@ -44,7 +44,7 @@ export default function FeeBreakdown({ daily, liqDaily }: { daily: CoinDay[]; li
   return (
     <div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 12, flexWrap: "wrap" }}>
-        <h2 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>Revenues &amp; Fees</h2>
+        <h2 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>Taker &amp; Liquidation Fees</h2>
         <div style={{ display: "inline-flex", gap: 2, padding: 3, background: "var(--glass-2)", borderRadius: "var(--r-pill)", border: "1px solid var(--hair)" }}>
           {(["M", "Q", "Y", "ALL"] as Period[]).map((p) => (
             <button key={p} onClick={() => setPeriod(p)} className="seg-btn" data-active={period === p}>{p}</button>
@@ -61,7 +61,7 @@ export default function FeeBreakdown({ daily, liqDaily }: { daily: CoinDay[]; li
             </tr>
           </thead>
           <tbody>
-            <Row label="Total fees" bold values={cols.map((c) => c.total)} cell={cell} />
+            <Row label="Taker fees" bold values={cols.map((c) => c.total)} cell={cell} />
             {GROUPS.map((coin) => <Row key={coin} label={coin} indent={1} muted values={cols.map((c) => c[coin])} cell={cell} />)}
             <Row label="Liquidation fees" bold values={liqCols.map((c) => c?.total ?? 0)} cell={cell} />
             {GROUPS.map((coin) => <Row key={"l" + coin} label={coin} indent={1} muted values={liqCols.map((c) => (c ? c[coin] : 0))} cell={cell} />)}
@@ -69,7 +69,7 @@ export default function FeeBreakdown({ daily, liqDaily }: { daily: CoinDay[]; li
         </table>
       </div>
       <p style={{ fontSize: 11, color: "var(--muted-2)", marginTop: 10 }}>
-        Trading &amp; liquidation fees by market, aggregated by {period === "ALL" ? "all time" : period === "M" ? "month" : period === "Q" ? "quarter" : "year"}. Source: Dune (daily).
+        Taker &amp; liquidation fees by market, aggregated by {period === "ALL" ? "all time" : period === "M" ? "month" : period === "Q" ? "quarter" : "year"}. Source: Dune (daily).
       </p>
     </div>
   );

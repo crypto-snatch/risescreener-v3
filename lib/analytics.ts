@@ -35,6 +35,8 @@ function marketUniverse(ms: Market[]): Market[] {
   return ms.filter(
     (m) =>
       !/deprecated/i.test(m.config?.name ?? "") &&
+      m.config?.unlocked !== false &&
+      Number(m.display_at ?? 0) * 1000 <= Date.now() &&
       (m.active ?? m.available ?? false) === true,
   );
 }

@@ -1,7 +1,6 @@
 import { ImageResponse } from "next/og";
 
 // Static OG/Twitter card image for RiseScreener — 1200×630
-export const runtime = "edge";
 export const alt = "RiseScreener — RISE Chain & RISEx analytics";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";

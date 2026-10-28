@@ -1,0 +1,437 @@
+{
+  "updatedAt": "2026-10-28T14:25:21.973Z",
+  "source": "https://api.rise.trade/v1/markets",
+  "activeSymbols": [
+    "BTC",
+    "ETH",
+    "BNB",
+    "SOL",
+    "HYPE",
+    "XRP",
+    "TAO",
+    "ZEC",
+    "ONDO",
+    "NEAR",
+    "VVV",
+    "LIT",
+    "DOGE",
+    "AERO",
+    "AAVE",
+    "XAU",
+    "XAG",
+    "CL",
+    "BZ",
+    "SNDK",
+    "SPCX",
+    "PUMP",
+    "DRAM",
+    "MU",
+    "QQQ",
+    "SPY",
+    "INTC",
+    "MSTR",
+    "KORU",
+    "CRCL",
+    "TSLA",
+    "ARB",
+    "HOOD",
+    "SKHYNIX",
+    "NVDA",
+    "META",
+    "ENA",
+    "SOXL",
+    "MON",
+    "WLD",
+    "GOOGL",
+    "STRK",
+    "ZRO",
+    "CRWV",
+    "XMR"
+  ],
+  "markets": {
+    "BTC": {
+      "id": "1",
+      "name": "Bitcoin",
+      "assetClass": "Crypto",
+      "sector": "Layer 1",
+      "logo": "/market-icons/btc-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/btc.svg"
+    },
+    "ETH": {
+      "id": "2",
+      "name": "Ethereum",
+      "assetClass": "Crypto",
+      "sector": "Layer 1",
+      "logo": "/market-icons/eth-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/eth.svg"
+    },
+    "BNB": {
+      "id": "3",
+      "name": "BNB",
+      "assetClass": "Crypto",
+      "sector": "Layer 1",
+      "logo": "/market-icons/bnb-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/bnb.svg"
+    },
+    "SOL": {
+      "id": "4",
+      "name": "Solana",
+      "assetClass": "Crypto",
+      "sector": "Layer 1",
+      "logo": "/market-icons/sol-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/sol.svg"
+    },
+    "HYPE": {
+      "id": "5",
+      "name": "Hyperliquid",
+      "assetClass": "Crypto",
+      "sector": "DeFi",
+      "logo": "/market-icons/hype-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/hype.svg"
+    },
+    "XRP": {
+      "id": "6",
+      "name": "XRP",
+      "assetClass": "Crypto",
+      "sector": "Layer 1",
+      "logo": "/market-icons/xrp-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/xrp.svg"
+    },
+    "TAO": {
+      "id": "7",
+      "name": "Bittensor",
+      "assetClass": "Crypto",
+      "sector": "AI",
+      "logo": "/market-icons/tao-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/tao.svg"
+    },
+    "ZEC": {
+      "id": "8",
+      "name": "Zcash",
+      "assetClass": "Crypto",
+      "sector": "Layer 1",
+      "logo": "/market-icons/zec-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/zec.svg"
+    },
+    "ONDO": {
+      "id": "9",
+      "name": "Ondo",
+      "assetClass": "Crypto",
+      "sector": "DeFi",
+      "logo": "/market-icons/ondo-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/ondo.svg"
+    },
+    "NEAR": {
+      "id": "10",
+      "name": "NEAR Protocol",
+      "assetClass": "Crypto",
+      "sector": "Layer 1",
+      "logo": "/market-icons/near-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/near.svg"
+    },
+    "VVV": {
+      "id": "11",
+      "name": "Venice AI",
+      "assetClass": "Crypto",
+      "sector": "AI",
+      "logo": "/market-icons/vvv-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/vvv.svg"
+    },
+    "LIT": {
+      "id": "12",
+      "name": "Lighter",
+      "assetClass": "Crypto",
+      "sector": "DeFi",
+      "logo": "/market-icons/lit-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/lit.svg"
+    },
+    "DOGE": {
+      "id": "14",
+      "name": "Dogecoin",
+      "assetClass": "Crypto",
+      "sector": "MEME",
+      "logo": "/market-icons/doge-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/doge.svg"
+    },
+    "AERO": {
+      "id": "15",
+      "name": "Aerodrome",
+      "assetClass": "Crypto",
+      "sector": "DeFi",
+      "logo": "/market-icons/aero-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/aero.svg"
+    },
+    "AAVE": {
+      "id": "16",
+      "name": "Aave",
+      "assetClass": "Crypto",
+      "sector": "DeFi",
+      "logo": "/market-icons/aave-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/aave.svg"
+    },
+    "XAU": {
+      "id": "17",
+      "name": "Gold",
+      "assetClass": "Commodities",
+      "sector": "Commodities",
+      "logo": "/market-icons/xau-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/xau.svg"
+    },
+    "XAG": {
+      "id": "18",
+      "name": "Silver",
+      "assetClass": "Commodities",
+      "sector": "Commodities",
+      "logo": "/market-icons/xag-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/xag.svg"
+    },
+    "CL": {
+      "id": "19",
+      "name": "WTI Crude Oil",
+      "assetClass": "Commodities",
+      "sector": "Commodities",
+      "logo": "/market-icons/cl-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/cl.svg"
+    },
+    "BZ": {
+      "id": "20",
+      "name": "Brent Crude Oil",
+      "assetClass": "Commodities",
+      "sector": "Commodities",
+      "logo": "/market-icons/bz-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/bz.svg"
+    },
+    "SNDK": {
+      "id": "21",
+      "name": "SanDisk",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/sndk-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/sndk.svg"
+    },
+    "SPCX": {
+      "id": "22",
+      "name": "SpaceX",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/spcx-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/spcx.svg"
+    },
+    "PUMP": {
+      "id": "23",
+      "name": "Pump.fun",
+      "assetClass": "Crypto",
+      "sector": "DeFi",
+      "logo": "/market-icons/pump-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/pump.svg"
+    },
+    "DRAM": {
+      "id": "24",
+      "name": "Memory ETF",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/dram-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/dram.svg"
+    },
+    "MU": {
+      "id": "25",
+      "name": "Micron",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/mu-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/mu.svg"
+    },
+    "QQQ": {
+      "id": "26",
+      "name": "Nasdaq-100 ETF",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/qqq-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/qqq.svg"
+    },
+    "SPY": {
+      "id": "27",
+      "name": "S&P 500 ETF",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/spy-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/spy.svg"
+    },
+    "INTC": {
+      "id": "28",
+      "name": "Intel",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/intc-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/intc.svg"
+    },
+    "MSTR": {
+      "id": "29",
+      "name": "Strategy",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/mstr-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/mstr.svg"
+    },
+    "KORU": {
+      "id": "30",
+      "name": "South Korea 3x ETF",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/koru-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/koru.svg"
+    },
+    "CRCL": {
+      "id": "31",
+      "name": "Circle",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/crcl-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/crcl.svg"
+    },
+    "TSLA": {
+      "id": "32",
+      "name": "Tesla",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/tsla-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/tsla.svg"
+    },
+    "ARB": {
+      "id": "33",
+      "name": "Arbitrum",
+      "assetClass": "Crypto",
+      "sector": "Layer 2",
+      "logo": "/market-icons/arb-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/arb.svg"
+    },
+    "HOOD": {
+      "id": "34",
+      "name": "Robinhood",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/hood-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/hood.svg"
+    },
+    "SKHYNIX": {
+      "id": "35",
+      "name": "SK hynix",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/skhynix-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/skhynix.svg"
+    },
+    "NVDA": {
+      "id": "36",
+      "name": "NVIDIA",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/nvda-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/nvda.svg"
+    },
+    "META": {
+      "id": "37",
+      "name": "Meta",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/meta-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/meta.svg"
+    },
+    "ENA": {
+      "id": "38",
+      "name": "Ethena",
+      "assetClass": "Crypto",
+      "sector": "DeFi",
+      "logo": "/market-icons/ena-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/ena.svg"
+    },
+    "SOXL": {
+      "id": "39",
+      "name": "Semiconductor Bull 3x ETF",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/soxl-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/soxl.svg"
+    },
+    "MON": {
+      "id": "40",
+      "name": "Monad",
+      "assetClass": "Crypto",
+      "sector": "Layer 1",
+      "logo": "/market-icons/mon-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/mon.svg"
+    },
+    "WLD": {
+      "id": "41",
+      "name": "Worldcoin",
+      "assetClass": "Crypto",
+      "sector": "AI",
+      "logo": "/market-icons/wld-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/wld.svg"
+    },
+    "GOOGL": {
+      "id": "42",
+      "name": "Alphabet",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/googl-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/googl.svg"
+    },
+    "STRK": {
+      "id": "43",
+      "name": "Starknet",
+      "assetClass": "Crypto",
+      "sector": "Layer 2",
+      "logo": "/market-icons/strk-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/strk.svg"
+    },
+    "ZRO": {
+      "id": "44",
+      "name": "LayerZero",
+      "assetClass": "Crypto",
+      "sector": "Infrastructure",
+      "logo": "/market-icons/zro-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/zro.svg"
+    },
+    "CRWV": {
+      "id": "45",
+      "name": "CoreWeave",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/crwv-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/crwv.svg"
+    },
+    "XMR": {
+      "id": "46",
+      "name": "Monero",
+      "assetClass": "Crypto",
+      "sector": "Layer 1",
+      "logo": "/market-icons/xmr-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/xmr.svg"
+    },
+    "EWZ": {
+      "id": "47",
+      "name": "MSCI Brazil ETF",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/ewz-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/ewz.svg"
+    },
+    "LLY": {
+      "id": "48",
+      "name": "Eli Lilly",
+      "assetClass": "Stocks",
+      "sector": "Stocks",
+      "logo": "/market-icons/lly-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/lly.svg"
+    },
+    "CHIP": {
+      "id": "49",
+      "name": "USD.AI",
+      "assetClass": "Crypto",
+      "sector": "DeFi",
+      "logo": "/market-icons/chip-risex.svg",
+      "iconSource": "https://www.rise.trade/crypto-icons/chip.svg"
+    }
+  }
+}

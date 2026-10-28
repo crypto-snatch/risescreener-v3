@@ -1,222 +1,72 @@
-// Pulls RISEx historical data from the public Dune dashboard
-// (dune.com/rise_foundation/risex) and writes a compact data/dune.json the app
-// reads. RISEx's own API has no history; Dune does. Run on a cron.
-//   DUNE_API_KEY=xxx node scripts/fetch-dune.mjs
-import { writeFile, mkdir } from "node:fs/promises";
+// Refresh cached Dune query results, or import a connector export with --from-dir.
+// Query execution is opt-in: DUNE_EXECUTE_FRESH=1. Cached reads still need API credits.
+import { readFile, writeFile, rename } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { buildDuneData } from "./lib/dune-data.mjs";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUT = join(__dirname, "..", "data", "dune.json");
-const KEY = process.env.DUNE_API_KEY;
-if (!KEY) {
-  console.error("Missing DUNE_API_KEY env");
-  process.exit(1);
-}
+const ROOT=join(dirname(fileURLToPath(import.meta.url)),"..");
+const OUT=join(ROOT,"data","dune.json");
+const Q={volumeByMarket:6944583,tvlDaily:6940251,protocolDaily:6944629,accountsDaily:6947001,oiNow:6949630,liqTotals:6949906};
+const KEY=process.env.DUNE_API_KEY;
+const fromIndex=process.argv.indexOf("--from-dir");
+const fromDir=fromIndex>=0 ? process.argv[fromIndex+1] : null;
+if (fromIndex>=0 && !fromDir) throw new Error("--from-dir requires a directory");
 
-const Q = {
-  volumeByMarket: 6944583,
-  tvlDaily: 6940251,
-  protocolDaily: 6944629,
-  accountsDaily: 6947001,
-  oiNow: 6949630,
-  liqTotals: 6949906,
-};
-const GROUPS = ["BTC", "ETH", "SOL", "HYPE"];
-// RWA perps split into two classes (mirrors lib/sectors.ts):
-const CMD = ["XAU", "XAG", "CL", "BZ"]; // Commodities — metals (gold, silver) + crude oil (WTI, Brent)
-const STK = ["SNDK", "SPCX", "MU", "DRAM", "INTC", "QQQ", "SPY"]; // Stocks — equities/ETFs (SanDisk, SpaceX, Micron, Roundhill Memory ETF, Intel, Nasdaq-100, S&P 500)
-const RWA = [...CMD, ...STK]; // umbrella
-const sym = (name) => (name || "").replace("/USDC", "");
-
-const startTodayUTC = () => {
-  const n = new Date();
-  return Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate());
-};
-
-async function api(path, opts = {}) {
-  const r = await fetch(`https://api.dune.com/api/v1${path}`, {
-    ...opts,
-    headers: { "X-Dune-Api-Key": KEY, ...(opts.headers || {}) },
-  });
-  if (!r.ok) throw new Error(`dune ${path} -> ${r.status}`);
-  return r.json();
-}
-
-// Paginated results fetch — per-market-per-day queries outgrow a single page.
-// Also returns execution_ended_at: results come from whatever execution Dune has
-// cached, which may have run mid-day, so trailing day buckets can be partial.
-async function resultsPages(base, pageSize = 1000) {
-  const all = [];
-  let offset = 0;
-  let execEndedAt = null;
-  for (;;) {
-    const j = await api(`${base}?limit=${pageSize}&offset=${offset}`);
-    execEndedAt ??= j.execution_ended_at ?? null;
-    const page = j.result?.rows ?? [];
-    all.push(...page);
-    const total = j.result?.metadata?.total_row_count;
-    offset += page.length;
-    if (page.length < pageSize || (total != null && offset >= total)) break;
-  }
-  return { rows: all, execEndedAt };
-}
-
-// fresh: if the cached execution predates today 00:00 UTC (so it can't cover all
-// of yesterday), trigger a new execution and wait for it — otherwise the chart's
-// last day gets dropped as partial and the series lags an extra day. Costs Dune
-// credits, so only the queries that feed the volume chart ask for it; any
-// failure (credits exhausted, timeout) falls back to the cached results.
-async function query(id, { fresh = false } = {}) {
-  const cached = await resultsPages(`/query/${id}/results`);
-  const stale = !cached.execEndedAt || new Date(cached.execEndedAt).getTime() < startTodayUTC();
-  if (!fresh || !stale) return cached;
-  try {
-    const { execution_id } = await api(`/query/${id}/execute`, { method: "POST" });
-    const t0 = Date.now();
-    for (;;) {
-      await new Promise((r) => setTimeout(r, 5000));
-      const s = await api(`/execution/${execution_id}/status`);
-      if (s.state === "QUERY_STATE_COMPLETED") break;
-      if (["QUERY_STATE_FAILED", "QUERY_STATE_CANCELLED", "QUERY_STATE_EXPIRED"].includes(s.state)) throw new Error(s.state);
-      if (Date.now() - t0 > 240_000) throw new Error("execution timeout");
+async function api(path,options={}) {
+  if (!KEY) throw new Error("Missing DUNE_API_KEY. Configure the GitHub Actions secret or local environment.");
+  for(let attempt=0;attempt<3;attempt++) {
+    const response=await fetch(`https://api.dune.com/api/v1${path}`,{...options,
+      headers:{"X-Dune-Api-Key":KEY,...options.headers},signal:AbortSignal.timeout(30_000)});
+    if(response.ok) return response.json();
+    if((response.status===429 || response.status>=500) && attempt<2) {
+      await new Promise(resolve=>setTimeout(resolve,1000*(attempt+1)));continue;
     }
-    console.log(`q${id}: ran fresh execution (cached was ${cached.execEndedAt})`);
-    return await resultsPages(`/execution/${execution_id}/results`);
-  } catch (e) {
-    console.warn(`q${id}: fresh execution failed (${e.message}) — using cached results`);
-    return cached;
+    const hint=response.status===402 ? "Dune credits exhausted. Fund the account or replace DUNE_API_KEY with a funded key." :
+      [401,403].includes(response.status) ? "DUNE_API_KEY is invalid or lacks access." : "Check Dune availability.";
+    throw new Error(`Dune ${response.status}: ${hint}`);
   }
 }
-const rows = async (id, opts) => (await query(id, opts)).rows;
-const dayMs = (s) => new Date(String(s).replace(" ", "T") + "Z").getTime();
-
-async function main() {
-  const [vbmQ, tvl, proto, accts, oi, liq] = await Promise.all([
-    query(Q.volumeByMarket, { fresh: true }),
-    rows(Q.tvlDaily),
-    rows(Q.protocolDaily, { fresh: true }), // keeps the Cumulative-volume card in step with the chart
-    rows(Q.accountsDaily),
-    rows(Q.oiNow),
-    rows(Q.liqTotals),
-  ]);
-  const vbm = vbmQ.rows;
-
-  // Day buckets on/after the query's execution day are partial (the cached run
-  // happened mid-day) — keep complete days only.
-  const execMs = vbmQ.execEndedAt ? new Date(vbmQ.execEndedAt).getTime() : Date.now();
-  const d = new Date(execMs);
-  const cutoff = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
-
-  // volume / fees / liq-fees by market → per-day buckets. Volume buckets carry
-  // crypto groups + one field per RWA market + class aggregates ("Commodities",
-  // "Stocks" — chart bands read these by name) + the "RWA" umbrella + Others.
-  // Fees/liq keep the prior grouping (RWA folded into "Others") so those charts
-  // don't shift.
-  const blank = (t) => ({ t, BTC: 0, ETH: 0, SOL: 0, HYPE: 0, ...Object.fromEntries(RWA.map((s) => [s, 0])), Commodities: 0, Stocks: 0, RWA: 0, Others: 0 });
-  const byDay = new Map();
-  const feeDay = new Map();
-  const liqFeeDay = new Map();
-  let cumVolCmd = 0; // all-time (complete days) per-class volume, for the cumulative split
-  let cumVolStk = 0;
-  for (const r of vbm) {
-    const t = dayMs(r.period);
-    if (t >= cutoff) continue;
-    const s = sym(r.market_name);
-    const feeGroup = GROUPS.includes(s) ? s : "Others"; // RWA stays in Others for fees/liq
-    if (!byDay.has(t)) byDay.set(t, blank(t));
-    if (!feeDay.has(t)) feeDay.set(t, blank(t));
-    if (!liqFeeDay.has(t)) liqFeeDay.set(t, blank(t));
-    const vol = Math.round(r.daily_volume_usd || 0);
-    const day = byDay.get(t);
-    if (CMD.includes(s)) { day[s] += vol; day.Commodities += vol; day.RWA += vol; cumVolCmd += vol; }
-    else if (STK.includes(s)) { day[s] += vol; day.Stocks += vol; day.RWA += vol; cumVolStk += vol; }
-    else if (GROUPS.includes(s)) day[s] += vol;
-    else day.Others += vol;
-    feeDay.get(t)[feeGroup] += Math.round(r.daily_total_fees_usd || 0);
-    liqFeeDay.get(t)[feeGroup] += Math.round(r.daily_liquidation_fees_usd || 0);
+async function pages(base) {
+  let rows=[],offset=0,execEndedAt=null,executionId=null;
+  for(;;) {
+    const result=await api(`${base}?limit=1000&offset=${offset}`);
+    if(result.is_execution_finished===false) throw new Error("Dune result is still executing");
+    execEndedAt ??= result.execution_ended_at ?? null;executionId ??= result.execution_id ?? null;
+    const page=result.result?.rows;
+    if(!Array.isArray(page)) throw new Error("Dune response is missing result rows");
+    rows.push(...page);offset+=page.length;
+    if(page.length<1000 || offset>=Number(result.result.metadata?.total_row_count ?? Infinity)) break;
+    if(offset>1_000_000) throw new Error("Dune pagination exceeded expected size");
   }
-  let volume = [...byDay.values()].sort((a, b) => a.t - b.t);
-  let feesByMarket = [...feeDay.values()].sort((a, b) => a.t - b.t);
-  let liqFeesByMarket = [...liqFeeDay.values()].sort((a, b) => a.t - b.t);
-
-  // Dune's RISE ingestion stalls from time to time (it did on 2026-08-04): the
-  // query keeps returning rows for the newest days, but with zero volume/fees.
-  // Those are missing days, not zero-volume days — kept, they draw a cliff to
-  // zero on every chart and make the daily recap treat a stale day as complete.
-  // Drop the all-zero tail (the three series share day keys).
-  const dayTotal = (d) => Object.keys(d).reduce((s, k) => (k === "t" ? s : s + d[k]), 0);
-  let end = volume.length;
-  while (end > 0 && dayTotal(volume[end - 1]) === 0) end--;
-  if (end > 0 && end < volume.length) {
-    const lastT = volume[end - 1].t;
-    const trim = (a) => a.filter((d) => d.t <= lastT);
-    console.warn(`⚠️ dropping ${volume.length - end} trailing all-zero day(s) — Dune data looks stalled after ${new Date(lastT).toISOString().slice(0, 10)}`);
-    volume = trim(volume);
-    feesByMarket = trim(feesByMarket);
-    liqFeesByMarket = trim(liqFeesByMarket);
-  }
-
-  const tvlSeries = tvl
-    .map((r) => ({ t: dayMs(r.day), tvl: Math.round(r.cumulative_tvl || 0), deposits: Math.round(r.deposits || 0), withdrawals: Math.round(r.withdrawals || 0), net: Math.round(r.net_flow || 0) }))
-    .sort((a, b) => a.t - b.t);
-
-  const accountsSeries = accts
-    .map((r) => ({ t: dayMs(r.period), newAccounts: r.new_accounts || 0, activeTraders: r.active_traders || 0, cumAccounts: r.cumulative_accounts || 0 }))
-    .sort((a, b) => a.t - b.t);
-
-  const protoSorted = [...proto].sort((a, b) => dayMs(a.day) - dayMs(b.day));
-  const latest = protoSorted[protoSorted.length - 1] || {};
-  const latestTvl = tvlSeries[tvlSeries.length - 1]?.tvl ?? 0;
-  const latestAccts = accountsSeries[accountsSeries.length - 1]?.cumAccounts ?? 0;
-  const totalOi = Math.round(oi[0]?.total_oi_usd || 0);
-  const cumVolume = Math.round(latest.cumulative_volume_usd || 0);
-  cumVolCmd = Math.round(cumVolCmd);
-  cumVolStk = Math.round(cumVolStk);
-  const cumVolRwa = cumVolCmd + cumVolStk;
-
-  const data = {
-    generatedAt: new Date().toISOString(),
-    totals: {
-      cumVolume,
-      cumVolumeRwa: cumVolRwa,
-      cumVolumeCmd: cumVolCmd,
-      cumVolumeStk: cumVolStk,
-      cumVolumeCrypto: Math.max(0, cumVolume - cumVolRwa),
-      cumFees: Math.round(latest.cumulative_total_fees_usd || 0),
-      cumTrades: latest.cumulative_trades || 0,
-      accounts: latestAccts,
-      tvl: latestTvl,
-      oi: totalOi,
-    },
-    volume,
-    feesByMarket,
-    liqFeesByMarket,
-    fees: {
-      total: Math.round(latest.cumulative_total_fees_usd || 0),
-      taker: Math.round((latest.cumulative_taker_fees_usd ?? latest.cumulative_trading_fees_usd) || 0),
-      maker: Math.round(latest.cumulative_maker_fees_usd || 0),
-      liq: Math.round((latest.cumulative_liquidation_fees_usd || 0)),
-    },
-    liqTotals: {
-      count: liq[0]?.alltime_liquidation_count || 0,
-      volume: Math.round(liq[0]?.alltime_liquidation_volume_usd || 0),
-      fees: Math.round(liq[0]?.alltime_liquidation_fees_usd || 0),
-      dailyCount: liq[0]?.daily_liquidation_count || 0,
-      dailyVolume: Math.round(liq[0]?.daily_liquidation_volume_usd || 0),
-      dailyFees: Math.round(liq[0]?.daily_liquidation_fees_usd || 0),
-    },
-    tvl: tvlSeries,
-    accounts: accountsSeries,
-    oiByMarket: oi.map((r) => ({ symbol: sym(r.market_name), oiUsd: Math.round(r.oi_usd || 0) })).sort((a, b) => b.oiUsd - a.oiUsd),
-  };
-
-  await mkdir(dirname(OUT), { recursive: true });
-  await writeFile(OUT, JSON.stringify(data));
-  console.log(`✅ dune.json · ${volume.length} vol days · cumVol $${(data.totals.cumVolume / 1e9).toFixed(2)}B · fees $${(data.totals.cumFees / 1e3).toFixed(0)}K · ${data.totals.accounts} accounts · TVL $${(data.totals.tvl / 1e6).toFixed(1)}M`);
+  return {rows,execEndedAt,executionId,retrievedAt:new Date().toISOString()};
 }
-
-main().catch((e) => {
-  console.error("fetch-dune failed:", e);
-  process.exit(1);
-});
+async function query(queryId) {
+  const cached=await pages(`/query/${queryId}/results`);
+  const today=Math.floor(Date.now()/86_400_000)*86_400_000;
+  if(process.env.DUNE_EXECUTE_FRESH!=="1" || Date.parse(cached.execEndedAt ?? "")>=today) return {...cached,queryId};
+  const {execution_id}=await api(`/query/${queryId}/execute`,{method:"POST"});
+  const deadline=Date.now()+240_000;
+  while(Date.now()<deadline) {
+    await new Promise(resolve=>setTimeout(resolve,5000));
+    const state=await api(`/execution/${execution_id}/status`);
+    if(state.state==="QUERY_STATE_COMPLETED") return {...await pages(`/execution/${execution_id}/results`),queryId};
+    if(["QUERY_STATE_FAILED","QUERY_STATE_CANCELLED","QUERY_STATE_EXPIRED"].includes(state.state)) throw new Error(state.state);
+  }
+  throw new Error("Dune query execution timed out");
+}
+try {
+  const results={};
+  for(const [name,id] of Object.entries(Q)) {
+    results[name]=fromDir ? {...JSON.parse(await readFile(join(fromDir,`dune-${id}.json`),"utf8")),queryId:id} : await query(id);
+  }
+  const catalog=JSON.parse(await readFile(join(ROOT,"data","market-catalog.json"),"utf8"));
+  const data=buildDuneData(results,catalog);
+  const lastDay=data.volume.at(-1).t;
+  if(Date.now()-lastDay>3*86_400_000) throw new Error(`Dune history is stale through ${new Date(lastDay).toISOString()}; previous snapshot preserved`);
+  await writeFile(`${OUT}.tmp`,JSON.stringify(data));await rename(`${OUT}.tmp`,OUT);
+  console.log(`Dune refreshed: ${data.volume.length} complete UTC days, ${data.totals.accounts} accounts, fees $${Math.round(data.totals.cumFees)}`);
+} catch(error) {
+  console.error(`Dune refresh failed; previous snapshot preserved. ${error.message}`);
+  process.exitCode=1;
+}

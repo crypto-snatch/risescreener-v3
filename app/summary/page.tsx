@@ -48,7 +48,7 @@ export default async function SummaryPage() {
   const oiNow = p.totalOiUsd || dune?.totals.oi || 0;
   const tvl = p.tvl || dune?.totals.tvl || 0;
   const cumVol = patchedVolume.cumVolume;
-  const cumFee = (dune?.fees.total ?? 0) + (dune?.liqTotals.fees ?? 0);
+  const cumFee = (dune?.schemaVersion ?? 0)>=2 ? dune!.totals.cumFees : (dune?.fees.total ?? 0) + (dune?.liqTotals.fees ?? 0);
   // last COMPLETE UTC day: skip the in-progress current day (its bucket is partial)
   const now = new Date();
   const startTodayUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
@@ -65,8 +65,10 @@ export default async function SummaryPage() {
   const liqDays = dune?.liqFeesByMarket ?? [];
   const dayFee = (i: number) => dayTotal(feeDays[i]) + dayTotal(liqDays[i]);
   const li = lastComplete(feeDays);
-  const fee24h = li >= 0 ? dayFee(li) : 0;
-  const feeChg = li > 0 ? dayFee(li) - dayFee(li - 1) : 0;
+  const protocol = dune?.protocol ?? [];
+  const totalFee=(d: typeof protocol[number] | undefined)=>d ? d.taker+d.maker+d.liq : 0;
+  const fee24h = protocol.length ? totalFee(protocol.at(-1)) : li >= 0 ? dayFee(li) : 0;
+  const feeChg = protocol.length>1 ? totalFee(protocol.at(-1))-totalFee(protocol.at(-2)) : li>0 ? dayFee(li)-dayFee(li-1) : 0;
 
   // TVL — current + day-over-day change of the TVL series
   const tvlSeries = dune?.tvl ?? [];

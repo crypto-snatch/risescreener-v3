@@ -7,6 +7,8 @@ import FeeBreakdown from "@/components/FeeBreakdown";
 import { Donut, Spark } from "@/components/charts";
 import { dayTotal, patchVolume } from "@/lib/volume";
 import { getTimeseries } from "@/lib/timeseries";
+import PageHeader from "@/components/PageHeader";
+import { FeeEfficiency } from "@/components/MarketAnalytics";
 
 export const revalidate = 60;
 export const metadata = { title: "Fees & Revenue — RiseScreener" };
@@ -53,11 +55,12 @@ export default async function FeesPage() {
   const feeDaily = dune.feesByMarket ?? [];
   const liqDaily = dune.liqFeesByMarket ?? [];
   // daily fee series (last 60d) — fluctuating snapshots, not a monotonic cumulative line
-  const dailyTot = feeDaily.map(dayTotal).slice(-60);
-  const dailyLiq = liqDaily.map(dayTotal).slice(-60);
+  const protocolDays = dune.protocol?.slice(-60);
+  const dailyTot = protocolDays?.length ? protocolDays.map(d => d.taker+d.maker+d.liq) : feeDaily.map(dayTotal).slice(-60);
+  const dailyLiq = protocolDays?.length ? protocolDays.map(d => d.liq) : liqDaily.map(dayTotal).slice(-60);
   const feeTot = fees.taker + fees.maker + fees.liq || 1;
-  const takerSpark = dailyTot.map((v) => v * (fees.taker / feeTot));
-  const makerSpark = dailyTot.map((v) => v * (fees.maker / feeTot));
+  const takerSpark = protocolDays?.map(d=>d.taker);
+  const makerSpark = protocolDays?.map(d=>d.maker);
   const cumulativeVolume = patchVolume(dune, timeseries).cumVolume;
   const feeBps = cumulativeVolume > 0 ? (totals.cumFees / cumulativeVolume) * 10_000 : 0;
 
@@ -74,13 +77,10 @@ export default async function FeesPage() {
 
   return (
     <div className="screen" data-page="fees" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-      <div>
-        <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Fees &amp; Revenue</h1>
-        <p style={{ margin: "5px 0 0", fontSize: 12.5, color: "var(--muted)" }}>Protocol revenue &amp; fee breakdown — trading, liquidation &amp; by market</p>
-      </div>
+      <PageHeader eyebrow="Protocol / Revenue" title="Fees & revenue" description="Trading activity, net protocol fees and revenue by market." cadence="Complete UTC days" />
 
       {/* KPI cards with sparklines */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px,1fr))", gap: 10 }}>
+      <div className="fee-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px,1fr))", gap: 10 }}>
         <FeeKpi label="Total fees" value={usd(totals.cumFees)} sub="all-time protocol revenue" spark={dailyTot} color="var(--accent)" />
         <FeeKpi label="Taker fees" value={usd(fees.taker)} sub={`${((fees.taker / feeTot) * 100).toFixed(0)}% of fees`} spark={takerSpark} color="var(--accent-ink)" />
         <FeeKpi label="Maker fees" value={usd(fees.maker)} sub={`${((fees.maker / feeTot) * 100).toFixed(0)}% of fees`} spark={makerSpark} color="var(--accent-2)" />
@@ -106,12 +106,13 @@ export default async function FeesPage() {
       </Panel>
 
       {/* breakdown table (ASXN-style) */}
+      <FeeEfficiency days={dune.protocol ?? []} />
       <FeeBreakdown daily={feeDaily} liqDaily={liqDaily} />
 
       {/* charts */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px,1fr))", gap: 16, alignItems: "stretch" }}>
-        <SeriesChart title="Fees by market ($/day)" subtitle="Complete UTC-day Dune buckets · RWA split by asset class" points={feeDaily} mode="bars" extraKey="cum" extraLabel="Cumulative" />
-        <ChartCard title="Fees by market · all-time" subtitle="Trading fee contribution by market group" height={300} legend={feeLegend} filename="risescreener-fees-by-market">
+        <SeriesChart title="Taker fees by market ($/day)" subtitle="Complete UTC days · maker rebates and liquidation fees excluded" points={feeDaily} mode="bars" extraKey="cum" extraLabel="Cumulative" />
+        <ChartCard title="Taker fees by market · all-time" subtitle="Per-market taker fees · maker fees are included in protocol totals above" height={300} legend={feeLegend} filename="risescreener-fees-by-market">
           {byMarket.length ? <Donut data={byMarket} height="100%" /> : <Empty>No fee data.</Empty>}
         </ChartCard>
       </div>

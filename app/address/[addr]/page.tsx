@@ -8,8 +8,8 @@ import AddressView from "@/components/AddressView";
 
 export const dynamic = "force-dynamic";
 
-export default async function AddressPage({ params }: { params: { addr: string } }) {
-  const addr = params.addr;
+export default async function AddressPage({ params }: { params: Promise<{ addr: string }> }) {
+  const { addr } = await params;
   if (!isAddress(addr)) notFound();
 
   const [snap, marketMap] = await Promise.all([
