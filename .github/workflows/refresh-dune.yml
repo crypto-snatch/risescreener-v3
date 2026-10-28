@@ -1,14 +1,17 @@
-name: Refresh Dune data
+name: Refresh historical data
 
-# Pulls RISEx historical metrics from the Dune dashboard and commits data/dune.json.
-# Needs a repo secret DUNE_API_KEY (Settings → Secrets and variables → Actions).
-# The deployed app reads the committed file via the DUNE_URL env (raw GitHub URL).
-# Dune refreshes its queries daily, so we pull once a day at UTC 00:00.
+# Public RPC updates completed UTC days without an API key.
+# Dune is optional and requires a funded DUNE_API_KEY repository secret.
 
 on:
   schedule:
-    - cron: "0 0 * * *" # daily at 00:00 UTC
-  workflow_dispatch: {}
+    - cron: "15 0 * * *" # 00:15 UTC leaves a full-block confirmation buffer after midnight
+  workflow_dispatch:
+    inputs:
+      use_dune:
+        description: Also refresh Dune using a funded API key (optional)
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -20,24 +23,33 @@ concurrency:
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - name: Fetch Dune data
+        if: inputs.use_dune == true || vars.ENABLE_DUNE_REFRESH == 'true'
+        continue-on-error: true
         env:
           DUNE_API_KEY: ${{ secrets.DUNE_API_KEY }}
         run: node scripts/fetch-dune.mjs
+      - name: Collect complete UTC days from free public RPC
+        run: node scripts/snapshot-rpc-history.mjs
+      - name: Refresh daily recap
+        run: node scripts/snapshot-summary.mjs
       - name: Commit & push (race-safe)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/dune.json
+          git add data/dune.json data/rpc-history.json data/summary.json
           git diff --cached --quiet && { echo "no change"; exit 0; }
-          git commit -m "chore: refresh Dune data [skip ci]"
+          git commit -m "chore: refresh historical data from public RPC [skip ci]"
           for i in 1 2 3; do
-            git pull --rebase --autostash origin main || true
-            git push && break || sleep 5
+            git pull --rebase --autostash origin main || exit 1
+            if git push; then exit 0; fi
+            sleep 5
           done
+          echo "Push failed after 3 attempts"
+          exit 1

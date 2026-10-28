@@ -1,0 +1,29 @@
+name: Refresh market directory and icons
+on:
+  schedule:
+    - cron: "20 2 * * *"
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: refresh-market-catalog
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/sync-market-catalog.mjs
+      - name: Commit directory and official icons
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/market-catalog.json public/market-icons
+          git diff --cached --quiet && { echo "no change"; exit 0; }
+          git commit -m "chore: refresh market directory and icons [skip ci]"
+          git pull --rebase origin main
+          git push
