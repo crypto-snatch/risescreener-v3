@@ -1,15 +1,31 @@
 {
-  "generatedAt": "2026-10-29T06:37:08.109Z",
-  "totalAccounts": 8248,
-  "scoredAccounts": 8248,
+  "generatedAt": "2026-10-29T23:49:27.984Z",
+  "totalAccounts": 8159,
+  "scoredAccounts": 8159,
   "sampled": false,
-  "accountsWithPositions": 1267,
+  "accountsWithPositions": 1326,
   "byOI": [
     {
+      "account": "0x36dc0d99dcaee443cebaa5fb8c11877d157c26df",
+      "equity": 1069292.0995312317,
+      "oi": 3717096.288831941,
+      "uPnl": -70871.73348532742,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 48,
+      "top": {
+        "symbol": "HYPE",
+        "side": "long",
+        "lev": 20,
+        "notional": 299374.6112555641
+      }
+    },
+    {
       "account": "0x0fb13b24482226bb9f4ab3bd6fff68c4b6eb9aeb",
-      "equity": 407015.74135593185,
-      "oi": 2990664.14060328,
-      "uPnl": 119106.74531086301,
+      "equity": 409723.8273183882,
+      "oi": 2933513.580495802,
+      "uPnl": 120326.22990282683,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
@@ -18,30 +34,14 @@
         "symbol": "BTC",
         "side": "long",
         "lev": 25,
-        "notional": 1601604.4429570716
-      }
-    },
-    {
-      "account": "0x7079b5814032c0b02425135f06f32a0084cdf2d2",
-      "equity": 295066.82511938893,
-      "oi": 2819099.191426854,
-      "uPnl": 73121.8883107285,
-      "volume": 1745053.7127057002,
-      "vol30d": 1745053.7127057002,
-      "pnl30d": 420.3128626716977,
-      "positionCount": 38,
-      "top": {
-        "symbol": "BTC",
-        "side": "short",
-        "lev": 25,
-        "notional": 600601.6661089018
+        "notional": 1573638.9051993145
       }
     },
     {
       "account": "0x6d7ff3fb44cffd46915859b06518ce147bf160c9",
-      "equity": 577188.8916669951,
-      "oi": 2756648.7400811594,
-      "uPnl": 67836.660123698,
+      "equity": 576697.238635358,
+      "oi": 2704012.0102772214,
+      "uPnl": 68506.86005856485,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
@@ -50,400 +50,94 @@
         "symbol": "BTC",
         "side": "long",
         "lev": 6,
-        "notional": 1488078.3957082785
+        "notional": 1462095.1307737431
       }
     },
     {
-      "account": "0x355b5f013a1ede94607f7a4ce45c0132f053507c",
-      "equity": 314534.3833207586,
-      "oi": 2539464.148986522,
-      "uPnl": -70872.54178182178,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 2,
-      "top": {
-        "symbol": "BTC",
-        "side": "short",
-        "lev": 6,
-        "notional": 1378694.097548972
-      }
-    },
-    {
-      "account": "0x0077f2a592dd51ef5fcc3a3678c277248264cccd",
-      "equity": 5460.479040373786,
-      "oi": 1597326.3233649682,
-      "uPnl": -93163.37698855695,
-      "volume": 0,
-      "vol30d": 1841817.7815896997,
-      "pnl30d": 64322.58944428042,
-      "positionCount": 12,
-      "top": {
-        "symbol": "BTC",
-        "side": "short",
-        "lev": 25,
-        "notional": 330420.6062087016
-      }
-    },
-    {
-      "account": "0x05e6ffff89d05b7ed820dfedb665e430252c8132",
-      "equity": 149705.63692135454,
-      "oi": 1382778.630728578,
-      "uPnl": 12511.303374647458,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 39,
-      "top": {
-        "symbol": "META",
-        "side": "short",
-        "lev": 20,
-        "notional": 132356.55726063903
-      }
-    },
-    {
-      "account": "0xb11bce73e65f1a833b8b2b18db07da61d18386e7",
-      "equity": 55818.26293780195,
-      "oi": 1095827.4867779731,
-      "uPnl": 2311.5794237270184,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 4,
-      "top": {
-        "symbol": "SPY",
-        "side": "long",
-        "lev": 25,
-        "notional": 463304.22281786375
-      }
-    },
-    {
-      "account": "0xb57066e5f90dace64ada2ddb235ab72b946a6bc3",
-      "equity": 47870.73462118361,
-      "oi": 1000061.7486806284,
-      "uPnl": -3456.649167529018,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 4,
-      "top": {
-        "symbol": "SPY",
-        "side": "short",
-        "lev": 25,
-        "notional": 424695.53758304176
-      }
-    },
-    {
-      "account": "0x123f1c8d9f49bba27083e3b1510bdb0a2cad4919",
-      "equity": 152681.04605295317,
-      "oi": 926062.3830150146,
-      "uPnl": 16951.290662705404,
-      "volume": 1468324.1277117003,
-      "vol30d": 3595942.554236999,
-      "pnl30d": -19547.038975955304,
-      "positionCount": 2,
-      "top": {
-        "symbol": "SPY",
-        "side": "short",
-        "lev": 20,
-        "notional": 494191.1710057213
-      }
-    },
-    {
-      "account": "0x9950e5c61fe8255163864cf32872dc1e85e76cdc",
-      "equity": 65132.52870518198,
-      "oi": 906527.7595194577,
-      "uPnl": -1501.811772066682,
+      "account": "0xabbc45d1726e3231e6fbad61eb72aef71b035787",
+      "equity": 1224335.0522034531,
+      "oi": 2616270.3892546436,
+      "uPnl": 65495.95627507872,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
       "positionCount": 7,
       "top": {
         "symbol": "ETH",
-        "side": "long",
-        "lev": 25,
-        "notional": 457137.2313958712
-      }
-    },
-    {
-      "account": "0x189455125ddcc58d388b3f1fee5e20895e1d4595",
-      "equity": 8975.62521353805,
-      "oi": 684267.1235617729,
-      "uPnl": -27935.101634493927,
-      "volume": 350086.2069805999,
-      "vol30d": 2859419.859047298,
-      "pnl30d": -3222.550338133483,
-      "positionCount": 11,
-      "top": {
-        "symbol": "BTC",
-        "side": "long",
-        "lev": 25,
-        "notional": 160160.44429570716
-      }
-    },
-    {
-      "account": "0x29c792a175627a15c60f5288e55d1cf7d95f2157",
-      "equity": 130180.89484886793,
-      "oi": 682381.8473545288,
-      "uPnl": -199.22523122349145,
-      "volume": 3671110.945180401,
-      "vol30d": 4682286.632523403,
-      "pnl30d": -7680.882338031694,
-      "positionCount": 6,
-      "top": {
-        "symbol": "BTC",
-        "side": "long",
-        "lev": 25,
-        "notional": 245266.26094489358
-      }
-    },
-    {
-      "account": "0xa7a4d86b692e5b4e0711a48184065f64a3ace278",
-      "equity": 333008.37439856806,
-      "oi": 612755.4414242816,
-      "uPnl": 41508.963530471956,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 1,
-      "top": {
-        "symbol": "BTC",
         "side": "short",
-        "lev": 3,
-        "notional": 612755.4414242816
-      }
-    },
-    {
-      "account": "0x5b236d19f680ff47e7bf2a9eb88fc5cc03d443a8",
-      "equity": 68773.630119779,
-      "oi": 596881.1389879126,
-      "uPnl": -15424.88976471712,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 1,
-      "top": {
-        "symbol": "BTC",
-        "side": "long",
         "lev": 25,
-        "notional": 596881.1389879126
+        "notional": 1036596.201653838
       }
     },
     {
-      "account": "0x7adc2aa2a3be3323a78a3f5df078688b719199de",
-      "equity": 29023.04249203959,
-      "oi": 576865.1985584857,
-      "uPnl": 852.0096465209697,
+      "account": "0x355b5f013a1ede94607f7a4ce45c0132f053507c",
+      "equity": 315479.4834783782,
+      "oi": 2491002.325426319,
+      "uPnl": -71187.74335811485,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
       "positionCount": 2,
       "top": {
-        "symbol": "SPY",
-        "side": "long",
-        "lev": 25,
-        "notional": 291110.41327900335
+        "symbol": "BTC",
+        "side": "short",
+        "lev": 6,
+        "notional": 1354620.786557017
       }
     },
     {
-      "account": "0xbaf520b48d725084579168b5b2eac9fad34c9fdc",
-      "equity": 24337.854150303076,
-      "oi": 570019.4853104674,
-      "uPnl": -883.5407088978985,
+      "account": "0x0077f2a592dd51ef5fcc3a3678c277248264cccd",
+      "equity": -13962.544197427007,
+      "oi": 1584950.9675579828,
+      "uPnl": -102925.34819664387,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
-      "positionCount": 2,
+      "positionCount": 12,
       "top": {
-        "symbol": "SPY",
+        "symbol": "BTC",
         "side": "short",
         "lev": 25,
-        "notional": 285704.27073768264
+        "notional": 324651.1479760498
       }
     },
     {
-      "account": "0x0bd27fac898a59680b9dc92bb7378df610825e8d",
-      "equity": 54039.04461049031,
-      "oi": 475736.05205651146,
-      "uPnl": 3982.6983720147473,
+      "account": "0x7d1eb7c855bf2692b0d4cc1e49193a3845bc9199",
+      "equity": 49739.97112729981,
+      "oi": 1573355.0165629447,
+      "uPnl": -19535.125974864422,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
       "positionCount": 5,
       "top": {
-        "symbol": "BTC",
-        "side": "short",
-        "lev": 25,
-        "notional": 200218.2530987286
-      }
-    },
-    {
-      "account": "0xdc2f79d48495b9bb973ace8abf3bf25832fe7f55",
-      "equity": 26428.690383653546,
-      "oi": 442526.9827034217,
-      "uPnl": -4688.905993702566,
-      "volume": 113587.3494,
-      "vol30d": 697943.0216080004,
-      "pnl30d": -10016.815627781212,
-      "positionCount": 8,
-      "top": {
         "symbol": "SPY",
-        "side": "long",
-        "lev": 20,
-        "notional": 116598.22940916238
-      }
-    },
-    {
-      "account": "0xd1929bbd380a78dc0dfac88a0a4b8c3317b3404b",
-      "equity": 55279.749568440806,
-      "oi": 424513.2656279866,
-      "uPnl": 317.565255886643,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 1,
-      "top": {
-        "symbol": "BTC",
-        "side": "long",
-        "lev": 25,
-        "notional": 424513.2656279866
-      }
-    },
-    {
-      "account": "0x938a104179a2d23dec249a968ecd5b4f8b857cac",
-      "equity": 3591945.97377714,
-      "oi": 423332.1020433865,
-      "uPnl": -1745.0503554354354,
-      "volume": 70317.41356129997,
-      "vol30d": 70317.41356129997,
-      "pnl30d": 29.70883711780822,
-      "positionCount": 24,
-      "top": {
-        "symbol": "BTC",
         "side": "short",
         "lev": 25,
-        "notional": 160632.9176063795
-      }
-    }
-  ],
-  "byUpnl": [
-    {
-      "account": "0x0fb13b24482226bb9f4ab3bd6fff68c4b6eb9aeb",
-      "equity": 407015.74135593185,
-      "oi": 2990664.14060328,
-      "uPnl": 119106.74531086301,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 2,
-      "top": {
-        "symbol": "BTC",
-        "side": "long",
-        "lev": 25,
-        "notional": 1601604.4429570716
-      }
-    },
-    {
-      "account": "0x7079b5814032c0b02425135f06f32a0084cdf2d2",
-      "equity": 295066.82511938893,
-      "oi": 2819099.191426854,
-      "uPnl": 73121.8883107285,
-      "volume": 1745053.7127057002,
-      "vol30d": 1745053.7127057002,
-      "pnl30d": 420.3128626716977,
-      "positionCount": 38,
-      "top": {
-        "symbol": "BTC",
-        "side": "short",
-        "lev": 25,
-        "notional": 600601.6661089018
-      }
-    },
-    {
-      "account": "0x6d7ff3fb44cffd46915859b06518ce147bf160c9",
-      "equity": 577188.8916669951,
-      "oi": 2756648.7400811594,
-      "uPnl": 67836.660123698,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 2,
-      "top": {
-        "symbol": "BTC",
-        "side": "long",
-        "lev": 6,
-        "notional": 1488078.3957082785
-      }
-    },
-    {
-      "account": "0xa7a4d86b692e5b4e0711a48184065f64a3ace278",
-      "equity": 333008.37439856806,
-      "oi": 612755.4414242816,
-      "uPnl": 41508.963530471956,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 1,
-      "top": {
-        "symbol": "BTC",
-        "side": "short",
-        "lev": 3,
-        "notional": 612755.4414242816
-      }
-    },
-    {
-      "account": "0x27a2f36bd901097fba08ceb91d7c7ca9c57bd19a",
-      "equity": 81556.70282982381,
-      "oi": 201647.58369479116,
-      "uPnl": 20190.146906279173,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 6,
-      "top": {
-        "symbol": "VVV",
-        "side": "short",
-        "lev": 5,
-        "notional": 64573.464270000004
+        "notional": 766434.1141519046
       }
     },
     {
       "account": "0x123f1c8d9f49bba27083e3b1510bdb0a2cad4919",
-      "equity": 152681.04605295317,
-      "oi": 926062.3830150146,
-      "uPnl": 16951.290662705404,
-      "volume": 1468324.1277117003,
-      "vol30d": 3595942.554236999,
-      "pnl30d": -19547.038975955304,
-      "positionCount": 2,
+      "equity": 164830.51230605302,
+      "oi": 1469346.5545760267,
+      "uPnl": 12298.505501804415,
+      "volume": 1035605.9950104,
+      "vol30d": 2746140.714616897,
+      "pnl30d": -11455.381400782935,
+      "positionCount": 5,
       "top": {
         "symbol": "SPY",
         "side": "short",
         "lev": 20,
-        "notional": 494191.1710057213
-      }
-    },
-    {
-      "account": "0xacb420d26244bd1e6b2c1e785636f60aa80f10d6",
-      "equity": 138767.71908463858,
-      "oi": 241660.723117114,
-      "uPnl": 16559.900261971412,
-      "volume": 536519.7730500001,
-      "vol30d": 746559.228643,
-      "pnl30d": 324.05490219505623,
-      "positionCount": 3,
-      "top": {
-        "symbol": "GOOGL",
-        "side": "short",
-        "lev": 10,
-        "notional": 126969.77626004456
+        "notional": 490517.83305721893
       }
     },
     {
       "account": "0x05e6ffff89d05b7ed820dfedb665e430252c8132",
-      "equity": 149705.63692135454,
-      "oi": 1382778.630728578,
-      "uPnl": 12511.303374647458,
+      "equity": 278067.1391633551,
+      "oi": 1315306.4933039674,
+      "uPnl": 76338.64141501366,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
@@ -452,142 +146,384 @@
         "symbol": "META",
         "side": "short",
         "lev": 20,
-        "notional": 132356.55726063903
+        "notional": 130084.205325
       }
     },
     {
-      "account": "0x269f6c970581372523a58a630dc462d6568b61a6",
-      "equity": 37322.10642693652,
-      "oi": 147249.39428558951,
-      "uPnl": 5089.103784130542,
-      "volume": 9999.761549,
-      "vol30d": 1091019.7950540013,
-      "pnl30d": 5589.169618130832,
-      "positionCount": 2,
+      "account": "0x668b3cb300b0890102fee88183adfe6ad3de5d8f",
+      "equity": 56366.3302023181,
+      "oi": 1246868.8040721917,
+      "uPnl": 3238.9915001954823,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 4,
+      "top": {
+        "symbol": "SPY",
+        "side": "long",
+        "lev": 25,
+        "notional": 396599.53321292443
+      }
+    },
+    {
+      "account": "0x17f0015b20f1f4a75971622a84fbbf1e7c43d8dd",
+      "equity": 28551.39253394682,
+      "oi": 1060211.1605149999,
+      "uPnl": -11656.715234999938,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 1,
+      "top": {
+        "symbol": "GOOGL",
+        "side": "long",
+        "lev": 20,
+        "notional": 1060211.1605149999
+      }
+    },
+    {
+      "account": "0x9950e5c61fe8255163864cf32872dc1e85e76cdc",
+      "equity": 50516.1891047915,
+      "oi": 782654.4724657377,
+      "uPnl": -14471.921004699443,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 7,
       "top": {
         "symbol": "BTC",
         "side": "long",
         "lev": 25,
-        "notional": 98650.82566394082
+        "notional": 393409.64761788334
       }
     },
     {
-      "account": "0xe1c08667421e480e63edda9b37b8405aa51ed19b",
-      "equity": 63058.267966544925,
-      "oi": 56551.029146313864,
-      "uPnl": 4982.3944330702225,
+      "account": "0x27d87140bbe4595f1bd580aca82890fd47ef44fc",
+      "equity": 73099.90846259093,
+      "oi": 766482.5599999998,
+      "uPnl": 15665.716094000203,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
-      "positionCount": 5,
+      "positionCount": 4,
       "top": {
-        "symbol": "DOGE",
+        "symbol": "XAU",
         "side": "short",
-        "lev": 7,
-        "notional": 18625.15074
+        "lev": 25,
+        "notional": 672038.0599999998
       }
     },
     {
-      "account": "0xb205eec514172a1e8744fb6d3bddd20997256abe",
-      "equity": 27424.022215738114,
-      "oi": 62547.03572108148,
-      "uPnl": 4855.103524391155,
+      "account": "0x07a686ba8256942aba0cb3c7408366e4eb5ecc6a",
+      "equity": 28293.221081239673,
+      "oi": 655100.5167375694,
+      "uPnl": -14456.876845682995,
+      "volume": 0,
+      "vol30d": 705057.2648416002,
+      "pnl30d": -197.28458694712654,
+      "positionCount": 8,
+      "top": {
+        "symbol": "BTC",
+        "side": "short",
+        "lev": 25,
+        "notional": 300427.96694442624
+      }
+    },
+    {
+      "account": "0x8ea6090506365c78ece2f39e0b1e59cbd3c89e3f",
+      "equity": 56698.94957707403,
+      "oi": 655099.4791130538,
+      "uPnl": 14387.886081149582,
+      "volume": 0,
+      "vol30d": 804719.5506866997,
+      "pnl30d": -236.02560703042437,
+      "positionCount": 8,
+      "top": {
+        "symbol": "BTC",
+        "side": "long",
+        "lev": 25,
+        "notional": 300425.0557124516
+      }
+    },
+    {
+      "account": "0x29c792a175627a15c60f5288e55d1cf7d95f2157",
+      "equity": 126947.90415259945,
+      "oi": 630509.4113245055,
+      "uPnl": -2182.9792121078012,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 7,
+      "top": {
+        "symbol": "XAU",
+        "side": "long",
+        "lev": 20,
+        "notional": 206331.78113999995
+      }
+    },
+    {
+      "account": "0xa7a4d86b692e5b4e0711a48184065f64a3ace278",
+      "equity": 357203.07972588995,
+      "oi": 602056.1482818479,
+      "uPnl": 52208.25667290561,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 1,
+      "top": {
+        "symbol": "BTC",
+        "side": "short",
+        "lev": 3,
+        "notional": 602056.1482818479
+      }
+    },
+    {
+      "account": "0xf2cc1f13c507be2722f6d748572f00f10d02eabb",
+      "equity": 32492.915077285164,
+      "oi": 596997.0306770739,
+      "uPnl": -2125.1881008403216,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
       "positionCount": 6,
       "top": {
-        "symbol": "LIT",
+        "symbol": "SPY",
         "side": "short",
-        "lev": 5,
-        "notional": 17034.600000000002
+        "lev": 20,
+        "notional": 183944.1873964571
       }
     },
     {
-      "account": "0x037d7dc68b9f46400ee33792aa258612ad5045f1",
-      "equity": 10385.399315842697,
-      "oi": 23863.25031042217,
-      "uPnl": 4337.433080577833,
+      "account": "0x5b236d19f680ff47e7bf2a9eb88fc5cc03d443a8",
+      "equity": 47681.26953416592,
+      "oi": 586459.0262729649,
+      "uPnl": -25847.00247966477,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 1,
+      "top": {
+        "symbol": "BTC",
+        "side": "long",
+        "lev": 25,
+        "notional": 586459.0262729649
+      }
+    },
+    {
+      "account": "0x7adc2aa2a3be3323a78a3f5df078688b719199de",
+      "equity": 35667.67733582664,
+      "oi": 569084.5302633881,
+      "uPnl": 4305.012896022048,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
       "positionCount": 2,
       "top": {
-        "symbol": "ARB",
-        "side": "short",
-        "lev": 10,
-        "notional": 19779.99337885269
+        "symbol": "SPY",
+        "side": "long",
+        "lev": 25,
+        "notional": 288946.580756205
       }
-    },
+    }
+  ],
+  "byUpnl": [
     {
-      "account": "0x0bd27fac898a59680b9dc92bb7378df610825e8d",
-      "equity": 54039.04461049031,
-      "oi": 475736.05205651146,
-      "uPnl": 3982.6983720147473,
+      "account": "0x0fb13b24482226bb9f4ab3bd6fff68c4b6eb9aeb",
+      "equity": 409723.8273183882,
+      "oi": 2933513.580495802,
+      "uPnl": 120326.22990282683,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
-      "positionCount": 5,
+      "positionCount": 2,
+      "top": {
+        "symbol": "BTC",
+        "side": "long",
+        "lev": 25,
+        "notional": 1573638.9051993145
+      }
+    },
+    {
+      "account": "0x05e6ffff89d05b7ed820dfedb665e430252c8132",
+      "equity": 278067.1391633551,
+      "oi": 1315306.4933039674,
+      "uPnl": 76338.64141501366,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 39,
+      "top": {
+        "symbol": "META",
+        "side": "short",
+        "lev": 20,
+        "notional": 130084.205325
+      }
+    },
+    {
+      "account": "0x6d7ff3fb44cffd46915859b06518ce147bf160c9",
+      "equity": 576697.238635358,
+      "oi": 2704012.0102772214,
+      "uPnl": 68506.86005856485,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 2,
+      "top": {
+        "symbol": "BTC",
+        "side": "long",
+        "lev": 6,
+        "notional": 1462095.1307737431
+      }
+    },
+    {
+      "account": "0xabbc45d1726e3231e6fbad61eb72aef71b035787",
+      "equity": 1224335.0522034531,
+      "oi": 2616270.3892546436,
+      "uPnl": 65495.95627507872,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 7,
+      "top": {
+        "symbol": "ETH",
+        "side": "short",
+        "lev": 25,
+        "notional": 1036596.201653838
+      }
+    },
+    {
+      "account": "0xa7a4d86b692e5b4e0711a48184065f64a3ace278",
+      "equity": 357203.07972588995,
+      "oi": 602056.1482818479,
+      "uPnl": 52208.25667290561,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 1,
       "top": {
         "symbol": "BTC",
         "side": "short",
-        "lev": 25,
-        "notional": 200218.2530987286
+        "lev": 3,
+        "notional": 602056.1482818479
       }
     },
     {
-      "account": "0xa1d6a0ddd1d3a7a8d5e44d7ad43401088845def9",
-      "equity": 53439.49055190822,
-      "oi": 138454.04111333768,
-      "uPnl": 3445.7417481305724,
-      "volume": 60639.52780899999,
-      "vol30d": 1457925.2378449985,
-      "pnl30d": -4517.261010281204,
-      "positionCount": 1,
+      "account": "0x6c538c89739e7d5e15846fafd338533a4dddca14",
+      "equity": 173266.23480710897,
+      "oi": 214907.49,
+      "uPnl": 31078.622185999982,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 3,
       "top": {
-        "symbol": "HYPE",
-        "side": "long",
+        "symbol": "SNDK",
+        "side": "short",
         "lev": 20,
-        "notional": 138454.04111333768
+        "notional": 111144.24
       }
     },
     {
-      "account": "0x2ff2944a3bbf6e79848facaeddb2d986773dfaed",
-      "equity": 63504.49503276509,
-      "oi": 78640.93223691553,
-      "uPnl": 3124.930549675584,
+      "account": "0x27a2f36bd901097fba08ceb91d7c7ca9c57bd19a",
+      "equity": 81131.50544763036,
+      "oi": 193407.8880679643,
+      "uPnl": 28429.842533106086,
       "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 17,
+      "vol30d": 24324.061640000018,
+      "pnl30d": -941.3435709009011,
+      "positionCount": 6,
       "top": {
-        "symbol": "XAG",
-        "side": "long",
+        "symbol": "VVV",
+        "side": "short",
         "lev": 5,
-        "notional": 12653.153426625022
+        "notional": 62618.37474715403
       }
     },
     {
-      "account": "0x100b03683f7a62f32fb6ab276eae06529505f506",
-      "equity": 21222.980730351435,
-      "oi": 64836.929126786614,
-      "uPnl": 3119.860241966056,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 15,
+      "account": "0x3e7ef24383826cdfc73256ae8c4b4eb884ead8d4",
+      "equity": 45642.304588729785,
+      "oi": 210754.09885930546,
+      "uPnl": 17601.236367852838,
+      "volume": 1488.93,
+      "vol30d": 1488.93,
+      "pnl30d": 734.7409345667835,
+      "positionCount": 6,
       "top": {
         "symbol": "BNB",
         "side": "short",
         "lev": 20,
-        "notional": 9301.31049
+        "notional": 63314.70035072192
       }
     },
     {
-      "account": "0xd749d4134b654258f79bb9c6d1a3d4c623cecf4a",
-      "equity": 7918.323682339867,
-      "oi": 19034.401590937894,
-      "uPnl": 2651.6598909378945,
+      "account": "0x27d87140bbe4595f1bd580aca82890fd47ef44fc",
+      "equity": 73099.90846259093,
+      "oi": 766482.5599999998,
+      "uPnl": 15665.716094000203,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 4,
+      "top": {
+        "symbol": "XAU",
+        "side": "short",
+        "lev": 25,
+        "notional": 672038.0599999998
+      }
+    },
+    {
+      "account": "0x8ea6090506365c78ece2f39e0b1e59cbd3c89e3f",
+      "equity": 56698.94957707403,
+      "oi": 655099.4791130538,
+      "uPnl": 14387.886081149582,
+      "volume": 0,
+      "vol30d": 804719.5506866997,
+      "pnl30d": -236.02560703042437,
+      "positionCount": 8,
+      "top": {
+        "symbol": "BTC",
+        "side": "long",
+        "lev": 25,
+        "notional": 300425.0557124516
+      }
+    },
+    {
+      "account": "0x123f1c8d9f49bba27083e3b1510bdb0a2cad4919",
+      "equity": 164830.51230605302,
+      "oi": 1469346.5545760267,
+      "uPnl": 12298.505501804415,
+      "volume": 1035605.9950104,
+      "vol30d": 2746140.714616897,
+      "pnl30d": -11455.381400782935,
+      "positionCount": 5,
+      "top": {
+        "symbol": "SPY",
+        "side": "short",
+        "lev": 20,
+        "notional": 490517.83305721893
+      }
+    },
+    {
+      "account": "0x0763a4565e7523b84ded387bfa2e956cc0f1a9fd",
+      "equity": 42249.52488624623,
+      "oi": 399320.0580849406,
+      "uPnl": 12243.220508650773,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 20,
+      "top": {
+        "symbol": "BTC",
+        "side": "short",
+        "lev": 25,
+        "notional": 96710.96883294375
+      }
+    },
+    {
+      "account": "0x0e06309e281864c2e1e15f1f90809c0584096c31",
+      "equity": 40120.914532163515,
+      "oi": 82214.87720365223,
+      "uPnl": 10814.471083330234,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
@@ -595,15 +531,31 @@
       "top": {
         "symbol": "HYPE",
         "side": "long",
-        "lev": 10,
-        "notional": 10548.615600937894
+        "lev": 20,
+        "notional": 81860.22397085043
       }
     },
     {
-      "account": "0xc84bfbb55ad04b3cf6ce7c07d9bc1c1f0247c077",
-      "equity": 15297.355585646048,
-      "oi": 130541.97039016322,
-      "uPnl": 2419.2096098367865,
+      "account": "0x08aa7fcb8705acb75a333320e3780f16bef8f5b1",
+      "equity": 67397.23854964966,
+      "oi": 312383.1430073519,
+      "uPnl": 8738.406102146924,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 9,
+      "top": {
+        "symbol": "GOOGL",
+        "side": "short",
+        "lev": 20,
+        "notional": 75922.65
+      }
+    },
+    {
+      "account": "0x22f3309a25290d7434042a9506b1f93223dcdc63",
+      "equity": 57898.47304817522,
+      "oi": 121913.86123613169,
+      "uPnl": 8637.503592128018,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
@@ -611,659 +563,47 @@
       "top": {
         "symbol": "BZ",
         "side": "long",
-        "lev": 20,
-        "notional": 110258
+        "lev": 10,
+        "notional": 111533.5
       }
     },
     {
-      "account": "0xb11bce73e65f1a833b8b2b18db07da61d18386e7",
-      "equity": 55818.26293780195,
-      "oi": 1095827.4867779731,
-      "uPnl": 2311.5794237270184,
+      "account": "0x3c86eeb6c1700a1d6cd0cf749ad673692a9e3b5c",
+      "equity": 33291.05738177747,
+      "oi": 102022.43007034958,
+      "uPnl": 8159.352310194205,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
-      "positionCount": 4,
+      "positionCount": 3,
       "top": {
-        "symbol": "SPY",
-        "side": "long",
-        "lev": 25,
-        "notional": 463304.22281786375
+        "symbol": "XAU",
+        "side": "short",
+        "lev": 20,
+        "notional": 74044.91199999997
       }
     },
     {
       "account": "0xd29d002b1126077670d716772fc49f3fd44ceecb",
-      "equity": 1302753.7433878374,
-      "oi": 377010.3977235191,
-      "uPnl": 2299.2340391469593,
+      "equity": 1317842.3746528185,
+      "oi": 530847.3714148803,
+      "uPnl": 6327.027530452101,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
       "positionCount": 24,
       "top": {
         "symbol": "XAU",
-        "side": "long",
-        "lev": 20,
-        "notional": 96265.43131770665
-      }
-    }
-  ],
-  "byVolume": [
-    {
-      "account": "0x29c792a175627a15c60f5288e55d1cf7d95f2157",
-      "equity": 130180.89484886793,
-      "oi": 682381.8473545288,
-      "uPnl": -199.22523122349145,
-      "volume": 3671110.945180401,
-      "vol30d": 4682286.632523403,
-      "pnl30d": -7680.882338031694,
-      "positionCount": 6,
-      "top": {
-        "symbol": "BTC",
-        "side": "long",
-        "lev": 25,
-        "notional": 245266.26094489358
-      }
-    },
-    {
-      "account": "0x7079b5814032c0b02425135f06f32a0084cdf2d2",
-      "equity": 295066.82511938893,
-      "oi": 2819099.191426854,
-      "uPnl": 73121.8883107285,
-      "volume": 1745053.7127057002,
-      "vol30d": 1745053.7127057002,
-      "pnl30d": 420.3128626716977,
-      "positionCount": 38,
-      "top": {
-        "symbol": "BTC",
-        "side": "short",
-        "lev": 25,
-        "notional": 600601.6661089018
-      }
-    },
-    {
-      "account": "0x123f1c8d9f49bba27083e3b1510bdb0a2cad4919",
-      "equity": 152681.04605295317,
-      "oi": 926062.3830150146,
-      "uPnl": 16951.290662705404,
-      "volume": 1468324.1277117003,
-      "vol30d": 3595942.554236999,
-      "pnl30d": -19547.038975955304,
-      "positionCount": 2,
-      "top": {
-        "symbol": "SPY",
         "side": "short",
         "lev": 20,
-        "notional": 494191.1710057213
-      }
-    },
-    {
-      "account": "0x874ccd286e0590100a1b16bb846ce05650702218",
-      "equity": 12787.129229522921,
-      "oi": 160464.58897942473,
-      "uPnl": -337.1091314247002,
-      "volume": 908427.5857276999,
-      "vol30d": 3208275.9229418025,
-      "pnl30d": 2912.798351100565,
-      "positionCount": 1,
-      "top": {
-        "symbol": "BTC",
-        "side": "short",
-        "lev": 25,
-        "notional": 160464.58897942473
-      }
-    },
-    {
-      "account": "0x77c37e030d8a636cdb5061ffbde3565ec2238fcb",
-      "equity": 5919.5724718350575,
-      "oi": 77833.35759980606,
-      "uPnl": 10.370108986939954,
-      "volume": 783045.9967748,
-      "vol30d": 2075355.003046899,
-      "pnl30d": -731.8375289894274,
-      "positionCount": 3,
-      "top": {
-        "symbol": "QQQ",
-        "side": "short",
-        "lev": 25,
-        "notional": 61181.75503464988
-      }
-    },
-    {
-      "account": "0x40bd1676acf10f536af1fd21df9b24915b771b63",
-      "equity": 3672.718584831171,
-      "oi": 50280.369481083566,
-      "uPnl": 105.53528468357263,
-      "volume": 750969.2224665,
-      "vol30d": 1103202.0679677,
-      "pnl30d": 313.51877303618215,
-      "positionCount": 1,
-      "top": {
-        "symbol": "BTC",
-        "side": "long",
-        "lev": 25,
-        "notional": 50280.369481083566
-      }
-    },
-    {
-      "account": "0xe0f5ba4abfdeee1a1d904ad20d0879cf5e4a32ad",
-      "equity": 27978.238515423556,
-      "oi": 251872.5608790287,
-      "uPnl": -416.19078158004385,
-      "volume": 660260.2467170001,
-      "vol30d": 3927245.051205,
-      "pnl30d": -4196.804844397907,
-      "positionCount": 4,
-      "top": {
-        "symbol": "HOOD",
-        "side": "short",
-        "lev": 10,
-        "notional": 89498.70001843407
-      }
-    },
-    {
-      "account": "0x777f066fef288208128dd99e9f06ae26c2a3312e",
-      "equity": 2342.491103430065,
-      "oi": 56380.634571988725,
-      "uPnl": -33.80467114100129,
-      "volume": 613126.4815774,
-      "vol30d": 2008980.0959878014,
-      "pnl30d": -2165.4899164850012,
-      "positionCount": 3,
-      "top": {
-        "symbol": "ETH",
-        "side": "short",
-        "lev": 25,
-        "notional": 29985.16867318949
-      }
-    },
-    {
-      "account": "0xe2e496771bae005245909ade8ade2a7af54606da",
-      "equity": 1397.7901495282415,
-      "oi": 17967.5258930754,
-      "uPnl": -37.45271692459995,
-      "volume": 542646.269253,
-      "vol30d": 542646.269253,
-      "pnl30d": -510.20236204273107,
-      "positionCount": 1,
-      "top": {
-        "symbol": "TSLA",
-        "side": "long",
-        "lev": 20,
-        "notional": 17967.5258930754
-      }
-    },
-    {
-      "account": "0xacb420d26244bd1e6b2c1e785636f60aa80f10d6",
-      "equity": 138767.71908463858,
-      "oi": 241660.723117114,
-      "uPnl": 16559.900261971412,
-      "volume": 536519.7730500001,
-      "vol30d": 746559.228643,
-      "pnl30d": 324.05490219505623,
-      "positionCount": 3,
-      "top": {
-        "symbol": "GOOGL",
-        "side": "short",
-        "lev": 10,
-        "notional": 126969.77626004456
-      }
-    },
-    {
-      "account": "0x189455125ddcc58d388b3f1fee5e20895e1d4595",
-      "equity": 8975.62521353805,
-      "oi": 684267.1235617729,
-      "uPnl": -27935.101634493927,
-      "volume": 350086.2069805999,
-      "vol30d": 2859419.859047298,
-      "pnl30d": -3222.550338133483,
-      "positionCount": 11,
-      "top": {
-        "symbol": "BTC",
-        "side": "long",
-        "lev": 25,
-        "notional": 160160.44429570716
-      }
-    },
-    {
-      "account": "0xd5984506a354e9286225e8b13ffd6a8e11fdad0f",
-      "equity": 21906.649266686567,
-      "oi": 152616.42963217126,
-      "uPnl": -30.736635581320428,
-      "volume": 338120.3263909999,
-      "vol30d": 2276196.5649424014,
-      "pnl30d": 9454.069202636985,
-      "positionCount": 4,
-      "top": {
-        "symbol": "QQQ",
-        "side": "short",
-        "lev": 8,
-        "notional": 40151.85834439268
-      }
-    },
-    {
-      "account": "0x5027457c50a3b45772bafe70e2e6f05d98514ad4",
-      "equity": 5357.014487901358,
-      "oi": 78478.6177048965,
-      "uPnl": 1036.1459301034847,
-      "volume": 321438.0908676,
-      "vol30d": 2383642.7883627987,
-      "pnl30d": -9706.466603637075,
-      "positionCount": 1,
-      "top": {
-        "symbol": "BTC",
-        "side": "short",
-        "lev": 25,
-        "notional": 78478.6177048965
-      }
-    },
-    {
-      "account": "0x124de59950edc575d47aa9d2b8a08ec72e93300f",
-      "equity": 2775.1478330127684,
-      "oi": 30562.70691186324,
-      "uPnl": -85.17578552332168,
-      "volume": 304603.5865981,
-      "vol30d": 1266951.4338051002,
-      "pnl30d": 730.886152725194,
-      "positionCount": 4,
-      "top": {
-        "symbol": "QQQ",
-        "side": "long",
-        "lev": 20,
-        "notional": 14958.86712743656
-      }
-    },
-    {
-      "account": "0x24292f0bd3b48aa41b52a663f58d817da4ba9ae9",
-      "equity": 3259.1509936471057,
-      "oi": 34960.689020607446,
-      "uPnl": -53.04371772458142,
-      "volume": 215670.39289299998,
-      "vol30d": 1590764.622711999,
-      "pnl30d": 41.88105736973935,
-      "positionCount": 3,
-      "top": {
-        "symbol": "XAG",
-        "side": "short",
-        "lev": 20,
-        "notional": 19009.869285166013
-      }
-    },
-    {
-      "account": "0x36bd3da5ecf14b381a9edd542ea930445d5f0606",
-      "equity": 1947.213977612178,
-      "oi": 19966.918842879622,
-      "uPnl": -12.894788879622684,
-      "volume": 212408.31169709994,
-      "vol30d": 2479733.120409102,
-      "pnl30d": -772.8034609476696,
-      "positionCount": 1,
-      "top": {
-        "symbol": "GOOGL",
-        "side": "short",
-        "lev": 20,
-        "notional": 19966.918842879622
-      }
-    },
-    {
-      "account": "0xf477b6a5ddd06ba4ce1785cc4172da34967f20e0",
-      "equity": 7390.576657559898,
-      "oi": 132116.95916402707,
-      "uPnl": -64.11755633203404,
-      "volume": 196733.108469,
-      "vol30d": 465147.4018650001,
-      "pnl30d": 1674.1994364639236,
-      "positionCount": 2,
-      "top": {
-        "symbol": "SPY",
-        "side": "short",
-        "lev": 20,
-        "notional": 69495.63342267956
-      }
-    },
-    {
-      "account": "0xf41387fe9f2a63bd25f063830230f608a5057e3c",
-      "equity": 2120.9348608860173,
-      "oi": 28021.80726463194,
-      "uPnl": -20.81942663193894,
-      "volume": 196704.40774299996,
-      "vol30d": 378483.8307662,
-      "pnl30d": -1914.9615605473234,
-      "positionCount": 1,
-      "top": {
-        "symbol": "GOOGL",
-        "side": "short",
-        "lev": 20,
-        "notional": 28021.80726463194
-      }
-    },
-    {
-      "account": "0x71bb3cb0550c5966af52f7dcdb731e8c8e8158e4",
-      "equity": 3312.031306049571,
-      "oi": 43038.489165358544,
-      "uPnl": -244.92497734032693,
-      "volume": 188731.910607,
-      "vol30d": 2434975.5097599984,
-      "pnl30d": -1417.1833620212951,
-      "positionCount": 3,
-      "top": {
-        "symbol": "QQQ",
-        "side": "short",
-        "lev": 20,
-        "notional": 19894.435295349434
-      }
-    },
-    {
-      "account": "0x3ddbe5f2eb02f3eab41ed9419e8fd96aa3e58001",
-      "equity": 3168.498926956001,
-      "oi": 44063.19139789281,
-      "uPnl": -139.9069560580167,
-      "volume": 180285.596465,
-      "vol30d": 1161969.382518599,
-      "pnl30d": -3638.7761098102333,
-      "positionCount": 8,
-      "top": {
-        "symbol": "CL",
-        "side": "long",
-        "lev": 20,
-        "notional": 10785.696995413437
-      }
-    }
-  ],
-  "byEquity": [
-    {
-      "account": "0x938a104179a2d23dec249a968ecd5b4f8b857cac",
-      "equity": 3591945.97377714,
-      "oi": 423332.1020433865,
-      "uPnl": -1745.0503554354354,
-      "volume": 70317.41356129997,
-      "vol30d": 70317.41356129997,
-      "pnl30d": 29.70883711780822,
-      "positionCount": 24,
-      "top": {
-        "symbol": "BTC",
-        "side": "short",
-        "lev": 25,
-        "notional": 160632.9176063795
-      }
-    },
-    {
-      "account": "0xd29d002b1126077670d716772fc49f3fd44ceecb",
-      "equity": 1302753.7433878374,
-      "oi": 377010.3977235191,
-      "uPnl": 2299.2340391469593,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 24,
-      "top": {
-        "symbol": "XAU",
-        "side": "long",
-        "lev": 20,
-        "notional": 96265.43131770665
-      }
-    },
-    {
-      "account": "0x6d7ff3fb44cffd46915859b06518ce147bf160c9",
-      "equity": 577188.8916669951,
-      "oi": 2756648.7400811594,
-      "uPnl": 67836.660123698,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 2,
-      "top": {
-        "symbol": "BTC",
-        "side": "long",
-        "lev": 6,
-        "notional": 1488078.3957082785
-      }
-    },
-    {
-      "account": "0x0fb13b24482226bb9f4ab3bd6fff68c4b6eb9aeb",
-      "equity": 407015.74135593185,
-      "oi": 2990664.14060328,
-      "uPnl": 119106.74531086301,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 2,
-      "top": {
-        "symbol": "BTC",
-        "side": "long",
-        "lev": 25,
-        "notional": 1601604.4429570716
-      }
-    },
-    {
-      "account": "0xa7a4d86b692e5b4e0711a48184065f64a3ace278",
-      "equity": 333008.37439856806,
-      "oi": 612755.4414242816,
-      "uPnl": 41508.963530471956,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 1,
-      "top": {
-        "symbol": "BTC",
-        "side": "short",
-        "lev": 3,
-        "notional": 612755.4414242816
-      }
-    },
-    {
-      "account": "0x355b5f013a1ede94607f7a4ce45c0132f053507c",
-      "equity": 314534.3833207586,
-      "oi": 2539464.148986522,
-      "uPnl": -70872.54178182178,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 2,
-      "top": {
-        "symbol": "BTC",
-        "side": "short",
-        "lev": 6,
-        "notional": 1378694.097548972
-      }
-    },
-    {
-      "account": "0x7079b5814032c0b02425135f06f32a0084cdf2d2",
-      "equity": 295066.82511938893,
-      "oi": 2819099.191426854,
-      "uPnl": 73121.8883107285,
-      "volume": 1745053.7127057002,
-      "vol30d": 1745053.7127057002,
-      "pnl30d": 420.3128626716977,
-      "positionCount": 38,
-      "top": {
-        "symbol": "BTC",
-        "side": "short",
-        "lev": 25,
-        "notional": 600601.6661089018
-      }
-    },
-    {
-      "account": "0x123f1c8d9f49bba27083e3b1510bdb0a2cad4919",
-      "equity": 152681.04605295317,
-      "oi": 926062.3830150146,
-      "uPnl": 16951.290662705404,
-      "volume": 1468324.1277117003,
-      "vol30d": 3595942.554236999,
-      "pnl30d": -19547.038975955304,
-      "positionCount": 2,
-      "top": {
-        "symbol": "SPY",
-        "side": "short",
-        "lev": 20,
-        "notional": 494191.1710057213
-      }
-    },
-    {
-      "account": "0x05e6ffff89d05b7ed820dfedb665e430252c8132",
-      "equity": 149705.63692135454,
-      "oi": 1382778.630728578,
-      "uPnl": 12511.303374647458,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 39,
-      "top": {
-        "symbol": "META",
-        "side": "short",
-        "lev": 20,
-        "notional": 132356.55726063903
-      }
-    },
-    {
-      "account": "0xacb420d26244bd1e6b2c1e785636f60aa80f10d6",
-      "equity": 138767.71908463858,
-      "oi": 241660.723117114,
-      "uPnl": 16559.900261971412,
-      "volume": 536519.7730500001,
-      "vol30d": 746559.228643,
-      "pnl30d": 324.05490219505623,
-      "positionCount": 3,
-      "top": {
-        "symbol": "GOOGL",
-        "side": "short",
-        "lev": 10,
-        "notional": 126969.77626004456
-      }
-    },
-    {
-      "account": "0x29c792a175627a15c60f5288e55d1cf7d95f2157",
-      "equity": 130180.89484886793,
-      "oi": 682381.8473545288,
-      "uPnl": -199.22523122349145,
-      "volume": 3671110.945180401,
-      "vol30d": 4682286.632523403,
-      "pnl30d": -7680.882338031694,
-      "positionCount": 6,
-      "top": {
-        "symbol": "BTC",
-        "side": "long",
-        "lev": 25,
-        "notional": 245266.26094489358
-      }
-    },
-    {
-      "account": "0xe50681d35ba91c5b13412ad2ea5f34b94141b122",
-      "equity": 99830.6864821693,
-      "oi": 33261.1546029741,
-      "uPnl": -2471.055748037749,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 13,
-      "top": {
-        "symbol": "HYPE",
-        "side": "long",
-        "lev": 20,
-        "notional": 11690.268065661014
-      }
-    },
-    {
-      "account": "0x14bb5440db38aa9f4eb3f11f9c12965ea6c342aa",
-      "equity": 91815.34986579148,
-      "oi": 24.206736080830773,
-      "uPnl": 0.19138208083077488,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 1,
-      "top": {
-        "symbol": "STRK",
-        "side": "long",
-        "lev": 5,
-        "notional": 24.206736080830773
-      }
-    },
-    {
-      "account": "0x27a2f36bd901097fba08ceb91d7c7ca9c57bd19a",
-      "equity": 81556.70282982381,
-      "oi": 201647.58369479116,
-      "uPnl": 20190.146906279173,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 6,
-      "top": {
-        "symbol": "VVV",
-        "side": "short",
-        "lev": 5,
-        "notional": 64573.464270000004
-      }
-    },
-    {
-      "account": "0x5b236d19f680ff47e7bf2a9eb88fc5cc03d443a8",
-      "equity": 68773.630119779,
-      "oi": 596881.1389879126,
-      "uPnl": -15424.88976471712,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 1,
-      "top": {
-        "symbol": "BTC",
-        "side": "long",
-        "lev": 25,
-        "notional": 596881.1389879126
-      }
-    },
-    {
-      "account": "0x852f63a41ae1431b849b457eca94936cfa5bff86",
-      "equity": 68188.72954002244,
-      "oi": 130978.31405916667,
-      "uPnl": -14378.906802966638,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 1,
-      "top": {
-        "symbol": "HYPE",
-        "side": "short",
-        "lev": 20,
-        "notional": 130978.31405916667
-      }
-    },
-    {
-      "account": "0x9950e5c61fe8255163864cf32872dc1e85e76cdc",
-      "equity": 65132.52870518198,
-      "oi": 906527.7595194577,
-      "uPnl": -1501.811772066682,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 7,
-      "top": {
-        "symbol": "ETH",
-        "side": "long",
-        "lev": 25,
-        "notional": 457137.2313958712
-      }
-    },
-    {
-      "account": "0x2ff2944a3bbf6e79848facaeddb2d986773dfaed",
-      "equity": 63504.49503276509,
-      "oi": 78640.93223691553,
-      "uPnl": 3124.930549675584,
-      "volume": 0,
-      "vol30d": 0,
-      "pnl30d": 0,
-      "positionCount": 17,
-      "top": {
-        "symbol": "XAG",
-        "side": "long",
-        "lev": 5,
-        "notional": 12653.153426625022
+        "notional": 134065.15428199997
       }
     },
     {
       "account": "0xe1c08667421e480e63edda9b37b8405aa51ed19b",
-      "equity": 63058.267966544925,
-      "oi": 56551.029146313864,
-      "uPnl": 4982.3944330702225,
+      "equity": 65898.96971173685,
+      "oi": 55334.80083919638,
+      "uPnl": 6198.622740187703,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
@@ -1272,23 +612,658 @@
         "symbol": "DOGE",
         "side": "short",
         "lev": 7,
-        "notional": 18625.15074
+        "notional": 18085.39468
       }
     },
     {
-      "account": "0xb11bce73e65f1a833b8b2b18db07da61d18386e7",
-      "equity": 55818.26293780195,
-      "oi": 1095827.4867779731,
-      "uPnl": 2311.5794237270184,
+      "account": "0x037d7dc68b9f46400ee33792aa258612ad5045f1",
+      "equity": 12387.069425071386,
+      "oi": 22342.676274522782,
+      "uPnl": 5858.007116477223,
+      "volume": 0,
+      "vol30d": 217831.55747750006,
+      "pnl30d": -361.76257549629184,
+      "positionCount": 2,
+      "top": {
+        "symbol": "ARB",
+        "side": "short",
+        "lev": 10,
+        "notional": 18459.922025321364
+      }
+    },
+    {
+      "account": "0x338df6890f7ec875ab6defb856519f26c4689044",
+      "equity": 56713.1347359413,
+      "oi": 493692.2400528562,
+      "uPnl": 5288.321451335951,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 11,
+      "top": {
+        "symbol": "SKHYNIX",
+        "side": "short",
+        "lev": 10,
+        "notional": 92795.417286
+      }
+    }
+  ],
+  "byVolume": [
+    {
+      "account": "0x123f1c8d9f49bba27083e3b1510bdb0a2cad4919",
+      "equity": 164830.51230605302,
+      "oi": 1469346.5545760267,
+      "uPnl": 12298.505501804415,
+      "volume": 1035605.9950104,
+      "vol30d": 2746140.714616897,
+      "pnl30d": -11455.381400782935,
+      "positionCount": 5,
+      "top": {
+        "symbol": "SPY",
+        "side": "short",
+        "lev": 20,
+        "notional": 490517.83305721893
+      }
+    },
+    {
+      "account": "0x0b83821bb8b9d19582af26122556be7408313140",
+      "equity": 3892.8584889630465,
+      "oi": 0,
+      "uPnl": 0,
+      "volume": 777826.8541765,
+      "vol30d": 1609507.1090216003,
+      "pnl30d": -1833.8078494356828,
+      "positionCount": 0,
+      "top": null
+    },
+    {
+      "account": "0xf98f0e7dd8e5189cb05664c0b220b7789c749ef0",
+      "equity": 7140.927610112242,
+      "oi": 128773.75999999997,
+      "uPnl": -126.63220300003013,
+      "volume": 733808.1408899998,
+      "vol30d": 2323305.306592001,
+      "pnl30d": 2861.51587268229,
+      "positionCount": 1,
+      "top": {
+        "symbol": "XAU",
+        "side": "long",
+        "lev": 25,
+        "notional": 128773.75999999997
+      }
+    },
+    {
+      "account": "0xafbe6fd4019d842d880e04027040ba8ab3e61e64",
+      "equity": 0.003843551618223221,
+      "oi": 0,
+      "uPnl": 0,
+      "volume": 711575.6957260008,
+      "vol30d": 711575.6957260008,
+      "pnl30d": 304.8851903955463,
+      "positionCount": 0,
+      "top": null
+    },
+    {
+      "account": "0x7ee7bf420abe848d3a732bd51be68b880d62c6ae",
+      "equity": 0.006503251134009393,
+      "oi": 0,
+      "uPnl": 0,
+      "volume": 694762.8911555003,
+      "vol30d": 894089.1358275001,
+      "pnl30d": -501.60809353457427,
+      "positionCount": 0,
+      "top": null
+    },
+    {
+      "account": "0xb791e6efcfbde977263b59f6228dfe72c7d66a67",
+      "equity": 597.4498285160286,
+      "oi": 11793.091012571047,
+      "uPnl": 12.962212571045676,
+      "volume": 564113.4682324999,
+      "vol30d": 651655.7718147996,
+      "pnl30d": 314.11463683535635,
+      "positionCount": 1,
+      "top": {
+        "symbol": "HYPE",
+        "side": "long",
+        "lev": 20,
+        "notional": 11793.091012571047
+      }
+    },
+    {
+      "account": "0xe2e496771bae005245909ade8ade2a7af54606da",
+      "equity": 875.0283266086795,
+      "oi": 3987.4237,
+      "uPnl": -13.033896000000059,
+      "volume": 530360.415506,
+      "vol30d": 530360.415506,
+      "pnl30d": -402.0257938765,
+      "positionCount": 1,
+      "top": {
+        "symbol": "XAG",
+        "side": "long",
+        "lev": 10,
+        "notional": 3987.4237
+      }
+    },
+    {
+      "account": "0x7154a908b0db84e7d4f9fec5ef13dbdc29e8200c",
+      "equity": 12300.807030783633,
+      "oi": 135039.32596341037,
+      "uPnl": 642.0852144103767,
+      "volume": 481940.5752779999,
+      "vol30d": 2738261.972912,
+      "pnl30d": -5732.764684091932,
+      "positionCount": 6,
+      "top": {
+        "symbol": "XAG",
+        "side": "long",
+        "lev": 20,
+        "notional": 50897.1255
+      }
+    },
+    {
+      "account": "0x7a2647678dfce56697dd0a06360f49c66a272be2",
+      "equity": 51.60552258139643,
+      "oi": 13835.530811974722,
+      "uPnl": -498.248187597302,
+      "volume": 367632.3953610002,
+      "vol30d": 379082.68816920026,
+      "pnl30d": 832.2034498757657,
+      "positionCount": 1,
+      "top": {
+        "symbol": "HYPE",
+        "side": "long",
+        "lev": 20,
+        "notional": 13835.530811974722
+      }
+    },
+    {
+      "account": "0x8493eca71bbe028ce959c760e209e3ad73ecc86c",
+      "equity": 0.9904718848732471,
+      "oi": 4.327506989298115,
+      "uPnl": 0.08948377701790844,
+      "volume": 354508.83543790004,
+      "vol30d": 354508.83543790004,
+      "pnl30d": -85.84612023699285,
+      "positionCount": 1,
+      "top": {
+        "symbol": "BTC",
+        "side": "short",
+        "lev": 5,
+        "notional": 4.327506989298115
+      }
+    },
+    {
+      "account": "0x36bd3da5ecf14b381a9edd542ea930445d5f0606",
+      "equity": 1614.7381646884473,
+      "oi": 25791.374117,
+      "uPnl": 5.627639000001666,
+      "volume": 352094.2334982999,
+      "vol30d": 2308218.7180902013,
+      "pnl30d": -83.56946409589207,
+      "positionCount": 1,
+      "top": {
+        "symbol": "GOOGL",
+        "side": "short",
+        "lev": 20,
+        "notional": 25791.374117
+      }
+    },
+    {
+      "account": "0x69be108a2aaa3e06df75f854df08d215acf0ca7a",
+      "equity": 9511.363468157144,
+      "oi": 149850.70893094785,
+      "uPnl": -292.6691005521581,
+      "volume": 297899.40471130004,
+      "vol30d": 2049600.5761661986,
+      "pnl30d": 3585.5055315334143,
+      "positionCount": 1,
+      "top": {
+        "symbol": "BTC",
+        "side": "long",
+        "lev": 25,
+        "notional": 149850.70893094785
+      }
+    },
+    {
+      "account": "0x14b08864bcecbaad577fcaf61646f7d858bd63b3",
+      "equity": 11734.610594182737,
+      "oi": 0,
+      "uPnl": 0,
+      "volume": 266853.3897239,
+      "vol30d": 1136769.1274777006,
+      "pnl30d": 670.7012648277537,
+      "positionCount": 0,
+      "top": null
+    },
+    {
+      "account": "0xf5c4ce97cde264f046a8f0ece6de0aa013f6cf3d",
+      "equity": 0.008806308019498206,
+      "oi": 0,
+      "uPnl": 0,
+      "volume": 265190.1853046,
+      "vol30d": 373693.4099431005,
+      "pnl30d": -326.7718067929014,
+      "positionCount": 0,
+      "top": null
+    },
+    {
+      "account": "0xaab1d2ac663809cc57836d3a5615cf59524980ca",
+      "equity": 28513.17751521346,
+      "oi": 257398.8179968404,
+      "uPnl": -1602.6670188404164,
+      "volume": 260043.05513799997,
+      "vol30d": 260043.05513799997,
+      "pnl30d": -78.0129165414,
+      "positionCount": 2,
+      "top": {
+        "symbol": "NVDA",
+        "side": "long",
+        "lev": 20,
+        "notional": 147899.45596
+      }
+    },
+    {
+      "account": "0xe7f32cfd7c94d833ce0e16737a5ada94ea582dfc",
+      "equity": 6020.78619779511,
+      "oi": 51030.90660114649,
+      "uPnl": -54.19762215350873,
+      "volume": 220172.00388819998,
+      "vol30d": 2434594.8571441993,
+      "pnl30d": -5925.646798518298,
+      "positionCount": 1,
+      "top": {
+        "symbol": "BTC",
+        "side": "long",
+        "lev": 20,
+        "notional": 51030.90660114649
+      }
+    },
+    {
+      "account": "0x189f6436b7ed98c84e5622eda94c8809042c1bcc",
+      "equity": 16808.723164089257,
+      "oi": 104770.254629,
+      "uPnl": -1701.13720747409,
+      "volume": 190475.93440100038,
+      "vol30d": 190475.93440100038,
+      "pnl30d": -2827.0704503847987,
+      "positionCount": 2,
+      "top": {
+        "symbol": "XRP",
+        "side": "long",
+        "lev": 5,
+        "notional": 68029.82208
+      }
+    },
+    {
+      "account": "0x3ddbe5f2eb02f3eab41ed9419e8fd96aa3e58001",
+      "equity": 4763.70619180364,
+      "oi": 31833.096847139157,
+      "uPnl": 693.8377125092366,
+      "volume": 177219.22183400003,
+      "vol30d": 1056357.9492886001,
+      "pnl30d": -3564.7688606281977,
+      "positionCount": 6,
+      "top": {
+        "symbol": "GOOGL",
+        "side": "short",
+        "lev": 20,
+        "notional": 9719.139621499999
+      }
+    },
+    {
+      "account": "0x731c0327d80d8926f5153a8adf816a7911bc24df",
+      "equity": 1416.140219449004,
+      "oi": 10296.266947999999,
+      "uPnl": -5.477656000003039,
+      "volume": 165221.76505499994,
+      "vol30d": 165221.76505499994,
+      "pnl30d": -545.9645002963294,
+      "positionCount": 1,
+      "top": {
+        "symbol": "XAU",
+        "side": "long",
+        "lev": 10,
+        "notional": 10296.266947999999
+      }
+    },
+    {
+      "account": "0x001694dc6f515d0f7bb191cddff6892077e435f7",
+      "equity": 1972.3059926962283,
+      "oi": 47756.532138620496,
+      "uPnl": 265.79578862048896,
+      "volume": 163592.56345100002,
+      "vol30d": 163592.56345100002,
+      "pnl30d": 352.5092919345095,
+      "positionCount": 1,
+      "top": {
+        "symbol": "ETH",
+        "side": "long",
+        "lev": 25,
+        "notional": 47756.532138620496
+      }
+    }
+  ],
+  "byEquity": [
+    {
+      "account": "0xd29d002b1126077670d716772fc49f3fd44ceecb",
+      "equity": 1317842.3746528185,
+      "oi": 530847.3714148803,
+      "uPnl": 6327.027530452101,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 24,
+      "top": {
+        "symbol": "XAU",
+        "side": "short",
+        "lev": 20,
+        "notional": 134065.15428199997
+      }
+    },
+    {
+      "account": "0xabbc45d1726e3231e6fbad61eb72aef71b035787",
+      "equity": 1224335.0522034531,
+      "oi": 2616270.3892546436,
+      "uPnl": 65495.95627507872,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 7,
+      "top": {
+        "symbol": "ETH",
+        "side": "short",
+        "lev": 25,
+        "notional": 1036596.201653838
+      }
+    },
+    {
+      "account": "0x36dc0d99dcaee443cebaa5fb8c11877d157c26df",
+      "equity": 1069292.0995312317,
+      "oi": 3717096.288831941,
+      "uPnl": -70871.73348532742,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 48,
+      "top": {
+        "symbol": "HYPE",
+        "side": "long",
+        "lev": 20,
+        "notional": 299374.6112555641
+      }
+    },
+    {
+      "account": "0x6d7ff3fb44cffd46915859b06518ce147bf160c9",
+      "equity": 576697.238635358,
+      "oi": 2704012.0102772214,
+      "uPnl": 68506.86005856485,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 2,
+      "top": {
+        "symbol": "BTC",
+        "side": "long",
+        "lev": 6,
+        "notional": 1462095.1307737431
+      }
+    },
+    {
+      "account": "0x0fb13b24482226bb9f4ab3bd6fff68c4b6eb9aeb",
+      "equity": 409723.8273183882,
+      "oi": 2933513.580495802,
+      "uPnl": 120326.22990282683,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 2,
+      "top": {
+        "symbol": "BTC",
+        "side": "long",
+        "lev": 25,
+        "notional": 1573638.9051993145
+      }
+    },
+    {
+      "account": "0xa7a4d86b692e5b4e0711a48184065f64a3ace278",
+      "equity": 357203.07972588995,
+      "oi": 602056.1482818479,
+      "uPnl": 52208.25667290561,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 1,
+      "top": {
+        "symbol": "BTC",
+        "side": "short",
+        "lev": 3,
+        "notional": 602056.1482818479
+      }
+    },
+    {
+      "account": "0x355b5f013a1ede94607f7a4ce45c0132f053507c",
+      "equity": 315479.4834783782,
+      "oi": 2491002.325426319,
+      "uPnl": -71187.74335811485,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 2,
+      "top": {
+        "symbol": "BTC",
+        "side": "short",
+        "lev": 6,
+        "notional": 1354620.786557017
+      }
+    },
+    {
+      "account": "0x3da3b64e63b57ed4926d4d9836cd08e0ffc830a0",
+      "equity": 312907.941810123,
+      "oi": 493289.539250868,
+      "uPnl": 2678.525361531988,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 3,
+      "top": {
+        "symbol": "BTC",
+        "side": "short",
+        "lev": 25,
+        "notional": 302925.48925086804
+      }
+    },
+    {
+      "account": "0x05e6ffff89d05b7ed820dfedb665e430252c8132",
+      "equity": 278067.1391633551,
+      "oi": 1315306.4933039674,
+      "uPnl": 76338.64141501366,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 39,
+      "top": {
+        "symbol": "META",
+        "side": "short",
+        "lev": 20,
+        "notional": 130084.205325
+      }
+    },
+    {
+      "account": "0x6c538c89739e7d5e15846fafd338533a4dddca14",
+      "equity": 173266.23480710897,
+      "oi": 214907.49,
+      "uPnl": 31078.622185999982,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 3,
+      "top": {
+        "symbol": "SNDK",
+        "side": "short",
+        "lev": 20,
+        "notional": 111144.24
+      }
+    },
+    {
+      "account": "0x123f1c8d9f49bba27083e3b1510bdb0a2cad4919",
+      "equity": 164830.51230605302,
+      "oi": 1469346.5545760267,
+      "uPnl": 12298.505501804415,
+      "volume": 1035605.9950104,
+      "vol30d": 2746140.714616897,
+      "pnl30d": -11455.381400782935,
+      "positionCount": 5,
+      "top": {
+        "symbol": "SPY",
+        "side": "short",
+        "lev": 20,
+        "notional": 490517.83305721893
+      }
+    },
+    {
+      "account": "0x29c792a175627a15c60f5288e55d1cf7d95f2157",
+      "equity": 126947.90415259945,
+      "oi": 630509.4113245055,
+      "uPnl": -2182.9792121078012,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 7,
+      "top": {
+        "symbol": "XAU",
+        "side": "long",
+        "lev": 20,
+        "notional": 206331.78113999995
+      }
+    },
+    {
+      "account": "0xdf7782f0700c19cdddc22a76ad65ba196d935505",
+      "equity": 117204.67378117764,
+      "oi": 0.07868194525996572,
+      "uPnl": -0.00001508846187198651,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 1,
+      "top": {
+        "symbol": "BTC",
+        "side": "short",
+        "lev": 6,
+        "notional": 0.07868194525996572
+      }
+    },
+    {
+      "account": "0xec996def07d35e4519886d0d681952c13c8a5bcf",
+      "equity": 83463.46406705392,
+      "oi": 95877.53782199998,
+      "uPnl": 4112.820522000002,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 1,
+      "top": {
+        "symbol": "XRP",
+        "side": "short",
+        "lev": 10,
+        "notional": 95877.53782199998
+      }
+    },
+    {
+      "account": "0x27a2f36bd901097fba08ceb91d7c7ca9c57bd19a",
+      "equity": 81131.50544763036,
+      "oi": 193407.8880679643,
+      "uPnl": 28429.842533106086,
+      "volume": 0,
+      "vol30d": 24324.061640000018,
+      "pnl30d": -941.3435709009011,
+      "positionCount": 6,
+      "top": {
+        "symbol": "VVV",
+        "side": "short",
+        "lev": 5,
+        "notional": 62618.37474715403
+      }
+    },
+    {
+      "account": "0xa1d6a0ddd1d3a7a8d5e44d7ad43401088845def9",
+      "equity": 73136.29199981163,
+      "oi": 125642.36870349619,
+      "uPnl": -537.6877765037906,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 2,
+      "top": {
+        "symbol": "HYPE",
+        "side": "long",
+        "lev": 20,
+        "notional": 113569.8287034962
+      }
+    },
+    {
+      "account": "0x27d87140bbe4595f1bd580aca82890fd47ef44fc",
+      "equity": 73099.90846259093,
+      "oi": 766482.5599999998,
+      "uPnl": 15665.716094000203,
       "volume": 0,
       "vol30d": 0,
       "pnl30d": 0,
       "positionCount": 4,
       "top": {
-        "symbol": "SPY",
-        "side": "long",
+        "symbol": "XAU",
+        "side": "short",
         "lev": 25,
-        "notional": 463304.22281786375
+        "notional": 672038.0599999998
+      }
+    },
+    {
+      "account": "0x94a10582fac7dd7402b295e439ddb8d02189b2e0",
+      "equity": 72132.5827698473,
+      "oi": 61368.87763833834,
+      "uPnl": 4034.523141819656,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 1,
+      "top": {
+        "symbol": "ETH",
+        "side": "short",
+        "lev": 25,
+        "notional": 61368.87763833834
+      }
+    },
+    {
+      "account": "0x08aa7fcb8705acb75a333320e3780f16bef8f5b1",
+      "equity": 67397.23854964966,
+      "oi": 312383.1430073519,
+      "uPnl": 8738.406102146924,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 9,
+      "top": {
+        "symbol": "GOOGL",
+        "side": "short",
+        "lev": 20,
+        "notional": 75922.65
+      }
+    },
+    {
+      "account": "0xe1c08667421e480e63edda9b37b8405aa51ed19b",
+      "equity": 65898.96971173685,
+      "oi": 55334.80083919638,
+      "uPnl": 6198.622740187703,
+      "volume": 0,
+      "vol30d": 0,
+      "pnl30d": 0,
+      "positionCount": 5,
+      "top": {
+        "symbol": "DOGE",
+        "side": "short",
+        "lev": 7,
+        "notional": 18085.39468
       }
     }
   ],
@@ -1298,1987 +1273,1987 @@
       "label": "Shrimp (<$1k)",
       "min": 0,
       "max": 1000,
-      "count": 2319,
-      "equity": 326157.4060278463,
-      "uPnl": -73509.06788560719,
-      "longUsd": 1436798.9756403114,
-      "shortUsd": 808772.1504458957
+      "count": 2447,
+      "equity": 307580.90004914755,
+      "uPnl": -208284.62170877977,
+      "longUsd": 2392944.3102800804,
+      "shortUsd": 1887433.749963531
     },
     {
       "tier": "fish",
       "label": "Fish ($1k–$10k)",
       "min": 1000,
       "max": 10000,
-      "count": 491,
-      "equity": 1611590.8835108208,
-      "uPnl": -200567.04188967298,
-      "longUsd": 6769309.2695164615,
-      "shortUsd": 6145180.0015054615
+      "count": 480,
+      "equity": 1482599.5200136316,
+      "uPnl": -34499.98337594979,
+      "longUsd": 4892132.175922443,
+      "shortUsd": 4173783.850224923
     },
     {
       "tier": "dolphin",
       "label": "Dolphin ($10k–$100k)",
       "min": 10000,
       "max": 100000,
-      "count": 92,
-      "equity": 2605007.2504152386,
-      "uPnl": -99888.02521722167,
-      "longUsd": 8189288.821103559,
-      "shortUsd": 5865866.457224995
+      "count": 107,
+      "equity": 3094540.383329956,
+      "uPnl": 5465.874948339302,
+      "longUsd": 11671721.913491944,
+      "shortUsd": 9612281.697430717
     },
     {
       "tier": "shark",
       "label": "Shark ($100k–$1M)",
       "min": 100000,
       "max": 1000000,
-      "count": 9,
-      "equity": 2498149.512769457,
-      "uPnl": 276524.9845620404,
-      "longUsd": 5579777.969862232,
-      "shortUsd": 9371737.276875103
+      "count": 10,
+      "equity": 2832328.035178432,
+      "uPnl": 290064.9185133362,
+      "longUsd": 5151142.041364992,
+      "shortUsd": 7702801.590253511
     },
     {
       "tier": "whale",
       "label": "Whale (≥$1M)",
       "min": 1000000,
       "max": null,
-      "count": 2,
-      "equity": 4894699.717164977,
-      "uPnl": 554.1836837115238,
-      "longUsd": 397330.1894267223,
-      "shortUsd": 403012.3103401834
+      "count": 3,
+      "equity": 3611469.5263875034,
+      "uPnl": 951.2503202033986,
+      "longUsd": 3807695.374443777,
+      "shortUsd": 3056518.675057688
     }
   ],
   "marketSkew": [
     {
       "symbol": "BTC",
-      "longUsd": 6173275.4963561315,
-      "shortUsd": 5285922.410619756,
-      "netUsd": 887353.0857363753,
-      "totalUsd": 11459197.906975888,
-      "longPct": 53.87179405111849
+      "longUsd": 7052222.468494757,
+      "shortUsd": 5702878.958688268,
+      "netUsd": 1349343.5098064886,
+      "totalUsd": 12755101.427183025,
+      "longPct": 55.28942681290968
     },
     {
       "symbol": "ETH",
-      "longUsd": 3408423.753895352,
-      "shortUsd": 3213371.9911518726,
-      "netUsd": 195051.76274347957,
-      "totalUsd": 6621795.745047225,
-      "longPct": 51.47280111206517
+      "longUsd": 3473502.9520741054,
+      "shortUsd": 4602103.741342919,
+      "netUsd": -1128600.7892688136,
+      "totalUsd": 8075606.693417024,
+      "longPct": 43.012284821963824
     },
     {
       "symbol": "SPY",
-      "longUsd": 2987718.281161568,
-      "shortUsd": 3095557.667020987,
-      "netUsd": -107839.38585941866,
-      "totalUsd": 6083275.948182555,
-      "longPct": 49.11364052216276
+      "longUsd": 3487790.799619756,
+      "shortUsd": 3332473.616177575,
+      "netUsd": 155317.18344218098,
+      "totalUsd": 6820264.415797331,
+      "longPct": 51.13864488217224
     },
     {
       "symbol": "QQQ",
-      "longUsd": 1851570.58852143,
-      "shortUsd": 2227572.5652535358,
-      "netUsd": -376001.9767321057,
-      "totalUsd": 4079143.1537749656,
-      "longPct": 45.39116473046378
+      "longUsd": 2167497.7379248845,
+      "shortUsd": 2375139.514285372,
+      "netUsd": -207641.77636048757,
+      "totalUsd": 4542637.252210257,
+      "longPct": 47.71452391163902
     },
     {
       "symbol": "XAU",
-      "longUsd": 1124212.2479355999,
-      "shortUsd": 927900.3228175344,
-      "netUsd": 196311.92511806544,
-      "totalUsd": 2052112.5707531343,
-      "longPct": 54.78316657467816
-    },
-    {
-      "symbol": "BZ",
-      "longUsd": 899495.679542,
-      "shortUsd": 663697.7002259999,
-      "netUsd": 235797.97931600013,
-      "totalUsd": 1563193.379768,
-      "longPct": 57.54218839357533
-    },
-    {
-      "symbol": "CL",
-      "longUsd": 607990.1057571209,
-      "shortUsd": 697854.5854560689,
-      "netUsd": -89864.47969894798,
-      "totalUsd": 1305844.6912131896,
-      "longPct": 46.55914365989957
-    },
-    {
-      "symbol": "HYPE",
-      "longUsd": 799903.5859622483,
-      "shortUsd": 483890.54436352145,
-      "netUsd": 316013.0415987268,
-      "totalUsd": 1283794.1303257698,
-      "longPct": 62.30777716356035
+      "longUsd": 1205486.9825619992,
+      "shortUsd": 1711878.1236399992,
+      "netUsd": -506391.14107799996,
+      "totalUsd": 2917365.1062019984,
+      "longPct": 41.32108730577691
     },
     {
       "symbol": "GOOGL",
-      "longUsd": 519884.0275766699,
-      "shortUsd": 522031.9664267406,
-      "netUsd": -2147.938850070699,
-      "totalUsd": 1041915.9940034105,
-      "longPct": 49.896923606968656
+      "longUsd": 1475687.4865444994,
+      "shortUsd": 1312570.2037745009,
+      "netUsd": 163117.28276999854,
+      "totalUsd": 2788257.6903190003,
+      "longPct": 52.925075457271255
+    },
+    {
+      "symbol": "HYPE",
+      "longUsd": 1206670.3443883513,
+      "shortUsd": 829901.9833851873,
+      "netUsd": 376768.36100316397,
+      "totalUsd": 2036572.3277735387,
+      "longPct": 59.25006089557993
+    },
+    {
+      "symbol": "BZ",
+      "longUsd": 1025782.8567804999,
+      "shortUsd": 652100.6837800002,
+      "netUsd": 373682.1730004997,
+      "totalUsd": 1677883.5405605002,
+      "longPct": 61.135521744127445
+    },
+    {
+      "symbol": "CL",
+      "longUsd": 585839.3248074714,
+      "shortUsd": 680805.0359468333,
+      "netUsd": -94965.71113936196,
+      "totalUsd": 1266644.3607543046,
+      "longPct": 46.25128749308889
     },
     {
       "symbol": "XAG",
-      "longUsd": 399030.6501725861,
-      "shortUsd": 370538.05403605796,
-      "netUsd": 28492.596136528125,
-      "totalUsd": 769568.7042086441,
-      "longPct": 51.85120548566403
+      "longUsd": 468768.07769999985,
+      "shortUsd": 485273.4783,
+      "netUsd": -16505.40060000017,
+      "totalUsd": 954041.5559999999,
+      "longPct": 49.13497475575371
     },
     {
       "symbol": "NVDA",
-      "longUsd": 337630.03919819405,
-      "shortUsd": 417201.4564504573,
-      "netUsd": -79571.41725226323,
-      "totalUsd": 754831.4956486514,
-      "longPct": 44.72919335567172
-    },
-    {
-      "symbol": "SNDK",
-      "longUsd": 204978.4965940579,
-      "shortUsd": 410869.1908042424,
-      "netUsd": -205890.69421018448,
-      "totalUsd": 615847.6873983003,
-      "longPct": 33.28395978232972
+      "longUsd": 423434.54884,
+      "shortUsd": 501494.86464,
+      "netUsd": -78060.31579999998,
+      "totalUsd": 924929.41348,
+      "longPct": 45.78020145849281
     },
     {
       "symbol": "MU",
-      "longUsd": 253045.944207,
-      "shortUsd": 326962.73123100004,
-      "netUsd": -73916.78702400005,
-      "totalUsd": 580008.675438,
-      "longPct": 43.62795849836375
+      "longUsd": 468281.9378959999,
+      "shortUsd": 348919.52796399995,
+      "netUsd": 119362.40993199992,
+      "totalUsd": 817201.4658599999,
+      "longPct": 57.30312015571254
+    },
+    {
+      "symbol": "SNDK",
+      "longUsd": 335328.04867200006,
+      "shortUsd": 465745.4664000001,
+      "netUsd": -130417.41772800003,
+      "totalUsd": 801073.5150720002,
+      "longPct": 41.859834629766894
     },
     {
       "symbol": "XRP",
-      "longUsd": 306997.2858827701,
-      "shortUsd": 252430.99464541767,
-      "netUsd": 54566.291237352416,
-      "totalUsd": 559428.2805281878,
-      "longPct": 54.87696932177199
+      "longUsd": 368686.2906539999,
+      "shortUsd": 261024.09062399997,
+      "netUsd": 107662.20002999992,
+      "totalUsd": 629710.3812779998,
+      "longPct": 58.548548922720556
     },
     {
       "symbol": "BNB",
-      "longUsd": 210077.300325,
-      "shortUsd": 270675.05968500004,
-      "netUsd": -60597.759360000055,
-      "totalUsd": 480752.36001000006,
-      "longPct": 43.69761186832867
+      "longUsd": 291272.2439967906,
+      "shortUsd": 326910.6818308708,
+      "netUsd": -35638.43783408019,
+      "totalUsd": 618182.9258276614,
+      "longPct": 47.11748445766556
     },
     {
       "symbol": "SOL",
-      "longUsd": 266859.1748786772,
-      "shortUsd": 203535.28492010015,
-      "netUsd": 63323.88995857703,
-      "totalUsd": 470394.45979877736,
-      "longPct": 56.7309349248783
-    },
-    {
-      "symbol": "SPCX",
-      "longUsd": 185090.4956884223,
-      "shortUsd": 231407.09576982915,
-      "netUsd": -46316.600081406854,
-      "totalUsd": 416497.59145825147,
-      "longPct": 44.43975174991504
-    },
-    {
-      "symbol": "TSLA",
-      "longUsd": 217368.30470000507,
-      "shortUsd": 187919.39521065264,
-      "netUsd": 29448.90948935243,
-      "totalUsd": 405287.6999106577,
-      "longPct": 53.63308700163417
-    },
-    {
-      "symbol": "META",
-      "longUsd": 143557.866246254,
-      "shortUsd": 245051.28842785797,
-      "netUsd": -101493.42218160396,
-      "totalUsd": 388609.154674112,
-      "longPct": 36.94145249013543
+      "longUsd": 305461.28813571157,
+      "shortUsd": 300187.9682699148,
+      "netUsd": 5273.319865796773,
+      "totalUsd": 605649.2564056264,
+      "longPct": 50.435344368875526
     },
     {
       "symbol": "ZEC",
-      "longUsd": 247876.5571259692,
-      "shortUsd": 137766.50456512687,
-      "netUsd": 110110.05256084233,
-      "totalUsd": 385643.06169109605,
-      "longPct": 64.27616149477643
-    },
-    {
-      "symbol": "HOOD",
-      "longUsd": 82393.78215270373,
-      "shortUsd": 270973.9398243859,
-      "netUsd": -188580.1576716822,
-      "totalUsd": 353367.72197708965,
-      "longPct": 23.316725617074237
-    },
-    {
-      "symbol": "MSTR",
-      "longUsd": 128733.5614145831,
-      "shortUsd": 196769.48576701147,
-      "netUsd": -68035.92435242837,
-      "totalUsd": 325503.0471815946,
-      "longPct": 39.5491109927349
-    },
-    {
-      "symbol": "INTC",
-      "longUsd": 133084.7539349871,
-      "shortUsd": 163068.8000390223,
-      "netUsd": -29984.046104035195,
-      "totalUsd": 296153.55397400935,
-      "longPct": 44.93775345565048
-    },
-    {
-      "symbol": "DRAM",
-      "longUsd": 48797.356364394866,
-      "shortUsd": 195852.74278027812,
-      "netUsd": -147055.38641588326,
-      "totalUsd": 244650.09914467297,
-      "longPct": 19.94577420364695
-    },
-    {
-      "symbol": "NEAR",
-      "longUsd": 98661.187339,
-      "shortUsd": 114730.239598,
-      "netUsd": -16069.052259000004,
-      "totalUsd": 213391.426937,
-      "longPct": 46.234841181378826
-    },
-    {
-      "symbol": "LIT",
-      "longUsd": 61938.65733000001,
-      "shortUsd": 146876.29594000004,
-      "netUsd": -84937.63861000002,
-      "totalUsd": 208814.95327000006,
-      "longPct": 29.661983665467023
+      "longUsd": 481207.8003171205,
+      "shortUsd": 58615.93243181215,
+      "netUsd": 422591.86788530834,
+      "totalUsd": 539823.7327489327,
+      "longPct": 89.14165330721502
     },
     {
       "symbol": "XMR",
-      "longUsd": 40943.42774729314,
-      "shortUsd": 155705.34855869153,
-      "netUsd": -114761.92081139839,
-      "totalUsd": 196648.77630598468,
-      "longPct": 20.820586080630036
+      "longUsd": 411141.07596519165,
+      "shortUsd": 98718.10390817156,
+      "netUsd": 312422.97205702006,
+      "totalUsd": 509859.17987336323,
+      "longPct": 80.6381628878996
     },
     {
-      "symbol": "ONDO",
-      "longUsd": 85804.941168,
-      "shortUsd": 98924.66520000002,
-      "netUsd": -13119.724032000013,
-      "totalUsd": 184729.60636800004,
-      "longPct": 46.448938453897796
+      "symbol": "META",
+      "longUsd": 163881.70485,
+      "shortUsd": 271201.0032,
+      "netUsd": -107319.29834999997,
+      "totalUsd": 435082.70805,
+      "longPct": 37.666793420612485
     },
     {
-      "symbol": "VVV",
-      "longUsd": 43643.753271999994,
-      "shortUsd": 123532.49423200001,
-      "netUsd": -79888.74096000002,
-      "totalUsd": 167176.247504,
-      "longPct": 26.106431938517904
+      "symbol": "DRAM",
+      "longUsd": 214564.5400727433,
+      "shortUsd": 207686.3229834377,
+      "netUsd": 6878.217089305574,
+      "totalUsd": 422250.863056181,
+      "longPct": 50.81447045951809
     },
     {
-      "symbol": "DOGE",
-      "longUsd": 56304.08494619999,
-      "shortUsd": 100794.4526085,
-      "netUsd": -44490.36766230001,
-      "totalUsd": 157098.5375547,
-      "longPct": 35.83998032228373
+      "symbol": "SPCX",
+      "longUsd": 167862.927765,
+      "shortUsd": 216821.16969,
+      "netUsd": -48958.24192500001,
+      "totalUsd": 384684.09745500004,
+      "longPct": 43.63656539886899
     },
     {
-      "symbol": "AERO",
-      "longUsd": 51693.323715000006,
-      "shortUsd": 97226.46054000001,
-      "netUsd": -45533.13682500001,
-      "totalUsd": 148919.784255,
-      "longPct": 34.7121935299637
+      "symbol": "NEAR",
+      "longUsd": 161434.05201000004,
+      "shortUsd": 130076.532603,
+      "netUsd": 31357.519407000043,
+      "totalUsd": 291510.58461300004,
+      "longPct": 55.3784529725789
     },
     {
-      "symbol": "ARB",
-      "longUsd": 57370.1744917743,
-      "shortUsd": 63237.98399528618,
-      "netUsd": -5867.809503511882,
-      "totalUsd": 120608.15848706049,
-      "longPct": 47.567407720539315
-    },
-    {
-      "symbol": "ENA",
-      "longUsd": 58578.4572,
-      "shortUsd": 56017.02639999999,
-      "netUsd": 2561.430800000009,
-      "totalUsd": 114595.48359999998,
-      "longPct": 51.117596749685525
+      "symbol": "HOOD",
+      "longUsd": 184172.49678,
+      "shortUsd": 92057.15522999999,
+      "netUsd": 92115.34155,
+      "totalUsd": 276229.65200999996,
+      "longPct": 66.67368815761048
     },
     {
       "symbol": "CRCL",
-      "longUsd": 5755.838772219771,
-      "shortUsd": 107034.73822766193,
-      "netUsd": -101278.89945544217,
-      "totalUsd": 112790.5769998817,
-      "longPct": 5.103120247559163
+      "longUsd": 154072.994845,
+      "shortUsd": 117155.75063499997,
+      "netUsd": 36917.24421000003,
+      "totalUsd": 271228.74548,
+      "longPct": 56.80555524169585
     },
     {
-      "symbol": "CRWV",
-      "longUsd": 64966.73868,
-      "shortUsd": 46316.82168,
-      "netUsd": 18649.917,
-      "totalUsd": 111283.56036,
-      "longPct": 58.37945736983428
-    },
-    {
-      "symbol": "PUMP",
-      "longUsd": 28254.47402077309,
-      "shortUsd": 76273.25377776475,
-      "netUsd": -48018.77975699166,
-      "totalUsd": 104527.72779853785,
-      "longPct": 27.030601942509957
+      "symbol": "INTC",
+      "longUsd": 163688.0507568149,
+      "shortUsd": 103889.27560348058,
+      "netUsd": 59798.77515333431,
+      "totalUsd": 267577.32636029547,
+      "longPct": 61.17411104422478
     },
     {
       "symbol": "SKHYNIX",
-      "longUsd": 35452.25779423857,
-      "shortUsd": 52678.75162343256,
-      "netUsd": -17226.49382919399,
-      "totalUsd": 88131.00941767113,
-      "longPct": 40.22676924783985
+      "longUsd": 95388.62521100002,
+      "shortUsd": 151425.928577,
+      "netUsd": -56037.30336599999,
+      "totalUsd": 246814.55378800002,
+      "longPct": 38.647893224697576
     },
     {
-      "symbol": "ZRO",
-      "longUsd": 27782.153501844212,
-      "shortUsd": 58590.98037164498,
-      "netUsd": -30808.82686980077,
-      "totalUsd": 86373.13387348919,
-      "longPct": 32.16527206542808
+      "symbol": "MSTR",
+      "longUsd": 109174.56363,
+      "shortUsd": 135966.81688,
+      "netUsd": -26792.253249999994,
+      "totalUsd": 245141.38051,
+      "longPct": 44.53534666520591
     },
     {
-      "symbol": "AAVE",
-      "longUsd": 17199.647296000003,
-      "shortUsd": 68933.13440000001,
-      "netUsd": -51733.48710400001,
-      "totalUsd": 86132.78169600002,
-      "longPct": 19.968758650690077
+      "symbol": "TSLA",
+      "longUsd": 110823.011575577,
+      "shortUsd": 133729.59080889306,
+      "netUsd": -22906.579233316064,
+      "totalUsd": 244552.60238447005,
+      "longPct": 45.31663556020889
     },
     {
-      "symbol": "TAO",
-      "longUsd": 24073.977280000003,
-      "shortUsd": 53491.061095,
-      "netUsd": -29417.083814999995,
-      "totalUsd": 77565.038375,
-      "longPct": 31.037149963893125
+      "symbol": "PUMP",
+      "longUsd": 160299.12522,
+      "shortUsd": 73012.818576,
+      "netUsd": 87286.30664399998,
+      "totalUsd": 233311.94379599998,
+      "longPct": 68.7059233281945
     },
     {
-      "symbol": "WLD",
-      "longUsd": 32747.34165,
-      "shortUsd": 28375.035149999996,
-      "netUsd": 4372.306500000002,
-      "totalUsd": 61122.3768,
-      "longPct": 53.57668232888483
+      "symbol": "LIT",
+      "longUsd": 133761.77692441418,
+      "shortUsd": 99066.11898802298,
+      "netUsd": 34695.6579363912,
+      "totalUsd": 232827.89591243718,
+      "longPct": 57.450923739275574
+    },
+    {
+      "symbol": "VVV",
+      "longUsd": 110439.72625443271,
+      "shortUsd": 85790.9989125235,
+      "netUsd": 24648.72734190921,
+      "totalUsd": 196230.7251669562,
+      "longPct": 56.280547381389354
+    },
+    {
+      "symbol": "CRWV",
+      "longUsd": 71714.00736,
+      "shortUsd": 101179.52047999999,
+      "netUsd": -29465.51311999999,
+      "totalUsd": 172893.52784,
+      "longPct": 41.47871135255332
     },
     {
       "symbol": "SOXL",
-      "longUsd": 8411.077213943776,
-      "shortUsd": 49477.7144198716,
-      "netUsd": -41066.63720592782,
-      "totalUsd": 57888.791633815374,
-      "longPct": 14.529716334639293
+      "longUsd": 70917.96836000001,
+      "shortUsd": 71479.70061999999,
+      "netUsd": -561.7322599999752,
+      "totalUsd": 142397.66898000002,
+      "longPct": 49.80275932042157
     },
     {
-      "symbol": "MON",
-      "longUsd": 27178.12212726747,
-      "shortUsd": 22516.846843501455,
-      "netUsd": 4661.2752837660155,
-      "totalUsd": 49694.968970768925,
-      "longPct": 54.689886501899046
+      "symbol": "WLD",
+      "longUsd": 52961.62416,
+      "shortUsd": 61986.14352,
+      "netUsd": -9024.519359999998,
+      "totalUsd": 114947.76767999999,
+      "longPct": 46.0745129974498
     },
     {
-      "symbol": "STRK",
-      "longUsd": 2410.8574359561007,
-      "shortUsd": 30376.96961323674,
-      "netUsd": -27966.112177280636,
-      "totalUsd": 32787.82704919284,
-      "longPct": 7.352903967496835
+      "symbol": "AAVE",
+      "longUsd": 62237.049965000006,
+      "shortUsd": 34850.508154999996,
+      "netUsd": 27386.54181000001,
+      "totalUsd": 97087.55812,
+      "longPct": 64.10404295890845
     },
     {
-      "symbol": "KORU",
-      "longUsd": 5339.396974048199,
-      "shortUsd": 23412.9585169305,
-      "netUsd": -18073.5615428823,
-      "totalUsd": 28752.355490978698,
-      "longPct": 18.570294095464565
-    },
-    {
-      "symbol": "EWZ",
-      "longUsd": 0,
-      "shortUsd": 11097.67990219339,
-      "netUsd": -11097.67990219339,
-      "totalUsd": 11097.67990219339,
-      "longPct": 0
+      "symbol": "DOGE",
+      "longUsd": 41989.77791440001,
+      "shortUsd": 54642.3688022,
+      "netUsd": -12652.59088779999,
+      "totalUsd": 96632.14671660001,
+      "longPct": 43.45321856250015
     },
     {
       "symbol": "LLY",
-      "longUsd": 0,
-      "shortUsd": 8657.951011100171,
-      "netUsd": -8657.951011100171,
-      "totalUsd": 8657.951011100171,
-      "longPct": 0
+      "longUsd": 71456.49177,
+      "shortUsd": 22888.37502,
+      "netUsd": 48568.116749999994,
+      "totalUsd": 94344.86679,
+      "longPct": 75.73967106133426
+    },
+    {
+      "symbol": "ONDO",
+      "longUsd": 71337.67904550002,
+      "shortUsd": 21288.253672,
+      "netUsd": 50049.42537350002,
+      "totalUsd": 92625.93271750002,
+      "longPct": 77.0169616138419
+    },
+    {
+      "symbol": "ARB",
+      "longUsd": 58728.91320141473,
+      "shortUsd": 24242.900340901746,
+      "netUsd": 34486.01286051299,
+      "totalUsd": 82971.81354231648,
+      "longPct": 70.7817639438029
+    },
+    {
+      "symbol": "TAO",
+      "longUsd": 68380.62161698856,
+      "shortUsd": 8962.749750756564,
+      "netUsd": 59417.871866231995,
+      "totalUsd": 77343.37136774513,
+      "longPct": 88.41174157234326
+    },
+    {
+      "symbol": "AERO",
+      "longUsd": 43304.018670000005,
+      "shortUsd": 31668.001050000006,
+      "netUsd": 11636.017619999999,
+      "totalUsd": 74972.01972000001,
+      "longPct": 57.76024019591398
+    },
+    {
+      "symbol": "ENA",
+      "longUsd": 5071.852500000001,
+      "shortUsd": 68951.56125,
+      "netUsd": -63879.70875,
+      "totalUsd": 74023.41375,
+      "longPct": 6.851686842124327
+    },
+    {
+      "symbol": "ZRO",
+      "longUsd": 32327.345948341084,
+      "shortUsd": 26428.35507261436,
+      "netUsd": 5898.990875726726,
+      "totalUsd": 58755.70102095544,
+      "longPct": 55.019930639260714
+    },
+    {
+      "symbol": "KORU",
+      "longUsd": 27125.44982562333,
+      "shortUsd": 28156.43877737904,
+      "netUsd": -1030.9889517557094,
+      "totalUsd": 55281.88860300237,
+      "longPct": 49.067516525023606
+    },
+    {
+      "symbol": "MON",
+      "longUsd": 38397.9375,
+      "shortUsd": 13.863525000000001,
+      "netUsd": 38384.073975,
+      "totalUsd": 38411.801025,
+      "longPct": 99.96390816199694
+    },
+    {
+      "symbol": "STRK",
+      "longUsd": 24050.973675,
+      "shortUsd": 0,
+      "netUsd": 24050.973675,
+      "totalUsd": 24050.973675,
+      "longPct": 100
+    },
+    {
+      "symbol": "EWZ",
+      "longUsd": 11420.505000844583,
+      "shortUsd": 11459.364817739524,
+      "netUsd": -38.859816894941105,
+      "totalUsd": 22879.869818584106,
+      "longPct": 49.91507858828948
     },
     {
       "symbol": "CHIP",
-      "longUsd": 0,
-      "shortUsd": 1467.555194364319,
-      "netUsd": -1467.555194364319,
-      "totalUsd": 1467.555194364319,
-      "longPct": 0
+      "longUsd": 587.7377220000001,
+      "shortUsd": 0,
+      "netUsd": 587.7377220000001,
+      "totalUsd": 587.7377220000001,
+      "longPct": 100
     }
   ],
   "atRisk": [
     {
-      "account": "0x9a3cac8518daf60e60139c9049a69a699ed5e9ed",
-      "symbol": "META",
+      "account": "0xd78b968acb47c1965616b683a6b1044f4b37bb66",
+      "symbol": "GOOGL",
       "side": "long",
-      "notional": 56.90653413642829,
+      "notional": 8.5202085,
       "lev": 20,
-      "entry": 649.16,
-      "mark": 618.5492840916119,
-      "liqPrice": 618.6494799999999,
-      "distPct": 0.016198532754783605
+      "entry": 295.04,
+      "mark": 281.195,
+      "liqPrice": 281.17312,
+      "distPct": 0.007781077188431555
     },
     {
-      "account": "0x11fd6faaf2f8bda8f9f0df39a4686e1079ad4f02",
-      "symbol": "BTC",
-      "side": "long",
-      "notional": 13.933958653726522,
-      "lev": 25,
-      "entry": 83071.9162227603,
-      "mark": 80080.22214785358,
-      "liqPrice": 80060.55925968524,
-      "distPct": 0.02455398803969201
-    },
-    {
-      "account": "0xbb8459e81327316456247b5f29d2ec6aa1fa15f3",
-      "symbol": "VVV",
-      "side": "long",
-      "notional": 390.526717,
-      "lev": 5,
-      "entry": 29.160885313728986,
-      "mark": 23.3429,
-      "liqPrice": 23.350578914968484,
-      "distPct": 0.032896148158470015
-    },
-    {
-      "account": "0xbafd34a2eaa6e1919adf99ec3a3188f7d4f0bf02",
-      "symbol": "META",
-      "side": "long",
-      "notional": 4434.379817652765,
-      "lev": 20,
-      "entry": 648.7579974361713,
-      "mark": 618.5492840916119,
-      "liqPrice": 618.2663715566712,
-      "distPct": 0.04573807491446239
-    },
-    {
-      "account": "0x4836fee5d6e7f229e5ab99356580909ac4e7a155",
-      "symbol": "NVDA",
-      "side": "long",
-      "notional": 5006.055175965831,
-      "lev": 20,
-      "entry": 224.79653706317634,
-      "mark": 214.12614636921302,
-      "liqPrice": 214.23109982120704,
-      "distPct": 0.049014776464081145
-    },
-    {
-      "account": "0x74b69d9cc92083ef31ffb17f5732723edddde2b4",
+      "account": "0x7526b5bc46ed45eb31ce8c3a4518c5e2a10e3bd0",
       "symbol": "ETH",
       "side": "long",
-      "notional": 4815.40695184019,
+      "notional": 4816.222808341728,
       "lev": 25,
-      "entry": 2403.5193269230767,
-      "mark": 2315.0994960770145,
-      "liqPrice": 2316.3917513221154,
-      "distPct": 0.05581856189294181
+      "entry": 2352.13,
+      "mark": 2266.457792160813,
+      "liqPrice": 2266.8652875000002,
+      "distPct": 0.01797939236268918
     },
     {
-      "account": "0x9a3cac8518daf60e60139c9049a69a699ed5e9ed",
-      "symbol": "HYPE",
-      "side": "long",
-      "notional": 164.5625174375671,
-      "lev": 20,
-      "entry": 82.9621875,
-      "mark": 79.11659492190725,
-      "liqPrice": 79.0629646875,
-      "distPct": 0.0677863278370198
-    },
-    {
-      "account": "0x2beb55ffc7771f992ba4a89cf6ecdd6ab06c1f4b",
+      "account": "0xa52f23bdcdf3094d124e93b75dd8e0c0fe8b945a",
       "symbol": "BTC",
       "side": "long",
-      "notional": 9644.30139393245,
+      "notional": 13.297248748934207,
       "lev": 25,
-      "entry": 83022.28400466296,
-      "mark": 80080.22214785358,
-      "liqPrice": 80012.72620949392,
-      "distPct": 0.08428540349830561
+      "entry": 81669.59999999999,
+      "mark": 78681.94525996572,
+      "liqPrice": 78709.07699999999,
+      "distPct": 0.03448280281406792
     },
     {
-      "account": "0x1adb19398519be815ebd914a76ebb537498afa67",
+      "account": "0xa75f9c8246f7269279be4c969e7bc6eb619cc204",
+      "symbol": "XAG",
+      "side": "long",
+      "notional": 1517.5043,
+      "lev": 5,
+      "entry": 64.89276880796977,
+      "mark": 52.13,
+      "liqPrice": 52.108893352799726,
+      "distPct": 0.04048848494202378
+    },
+    {
+      "account": "0x3dcc289598df2b723787983a879638ae3ad52974",
       "symbol": "QQQ",
       "side": "long",
-      "notional": 24068.110666742577,
+      "notional": 99190.99113212847,
+      "lev": 18,
+      "entry": 744.5407436397965,
+      "mark": 705.6371524110402,
+      "liqPrice": 705.9693967817904,
+      "distPct": 0.0470843080774441
+    },
+    {
+      "account": "0x166e9863d8b93ee0c6c31e3e3f0e0ce06ab21897",
+      "symbol": "QQQ",
+      "side": "long",
+      "notional": 1100.4411391850174,
       "lev": 25,
-      "entry": 747.6519924995289,
-      "mark": 719.7853533488221,
-      "liqPrice": 720.5496077714209,
-      "distPct": 0.10617810143580926
+      "entry": 731.7937991409963,
+      "mark": 705.6371524110402,
+      "liqPrice": 705.2662739221352,
+      "distPct": 0.05255937667650432
     },
     {
-      "account": "0xe7b29075108bdf64baf1ff87a0d89af60358304e",
-      "symbol": "MU",
-      "side": "long",
-      "notional": 286.131591,
-      "lev": 20,
-      "entry": 1000.0744381460487,
-      "mark": 954.09,
-      "liqPrice": 953.0709395531844,
-      "distPct": 0.10680967695035218
-    },
-    {
-      "account": "0x291e4ebb46c04d87c2fb10582b20e9258a1a83f8",
-      "symbol": "SNDK",
-      "side": "short",
-      "notional": 0.27181097024028344,
-      "lev": 20,
-      "entry": 1296.61,
-      "mark": 1359.0548512014173,
-      "liqPrice": 1357.5506699999999,
-      "distPct": 0.11067847630194508
-    },
-    {
-      "account": "0xec40a926bb1175b6c17c5d67f9c314e6fa75d414",
-      "symbol": "ETH",
-      "side": "long",
-      "notional": 40838.35511079853,
-      "lev": 25,
-      "entry": 2399.4770141723357,
-      "mark": 2315.0994960770145,
-      "liqPrice": 2312.4959724085884,
-      "distPct": 0.11245839208370115
-    },
-    {
-      "account": "0x2beb55ffc7771f992ba4a89cf6ecdd6ab06c1f4b",
-      "symbol": "HYPE",
-      "side": "long",
-      "notional": 5709.053489564827,
-      "lev": 20,
-      "entry": 83.11225055432374,
-      "mark": 79.11659492190725,
-      "liqPrice": 79.20597477827052,
-      "distPct": 0.11297232451862839
-    },
-    {
-      "account": "0xf6f7aaf632eaefb334c125d8cb086bdb2f4aa52a",
-      "symbol": "BZ",
-      "side": "short",
-      "notional": 166489.58,
-      "lev": 20,
-      "entry": 105.1893557370861,
-      "mark": 110.258,
-      "liqPrice": 110.13325545672915,
-      "distPct": 0.11313876840759879
-    },
-    {
-      "account": "0x35a290cf118a42e4ad3926b2034be90c435435ee",
-      "symbol": "BTC",
-      "side": "long",
-      "notional": 602.2032705518589,
-      "lev": 25,
-      "entry": 82998.2,
-      "mark": 80080.22214785358,
-      "liqPrice": 79989.51525,
-      "distPct": 0.11327003774553575
-    },
-    {
-      "account": "0x06453f99650515950478a7f396fb266e33d2e453",
-      "symbol": "SOL",
-      "side": "long",
-      "notional": 80159.39676590117,
-      "lev": 20,
-      "entry": 104.87472433234124,
-      "mark": 100.0731537836091,
-      "liqPrice": 99.94561228872121,
-      "distPct": 0.1274482616623432
-    },
-    {
-      "account": "0x92c4ab5f0c475bf9211a22b072702b39bc9f50cf",
-      "symbol": "ETH",
-      "side": "long",
-      "notional": 4810.776752848035,
-      "lev": 25,
-      "entry": 2405.59,
-      "mark": 2315.0994960770145,
-      "liqPrice": 2318.3873625,
-      "distPct": 0.14201836372721793
-    },
-    {
-      "account": "0x9ee19889d7447a54319bb5c74a32585a3d228631",
-      "symbol": "HYPE",
-      "side": "long",
-      "notional": 23177.206482372727,
-      "lev": 7,
-      "entry": 91.84602085680152,
-      "mark": 79.11659492190725,
-      "liqPrice": 79.0006987969717,
-      "distPct": 0.1464877565192764
-    },
-    {
-      "account": "0xbfe0b47d3155d85318aecdef21caa8adf80e88dc",
-      "symbol": "NVDA",
-      "side": "long",
-      "notional": 10717.013625779111,
-      "lev": 20,
-      "entry": 224.3564835164835,
-      "mark": 214.12614636921302,
-      "liqPrice": 213.81172879120876,
-      "distPct": 0.14683754568772267
-    },
-    {
-      "account": "0xe9a86d733db7df39518338bb37a8bdb7489b520d",
-      "symbol": "HYPE",
-      "side": "long",
-      "notional": 12.658655187505161,
-      "lev": 20,
-      "entry": 83.15024576271186,
-      "mark": 79.11659492190725,
-      "liqPrice": 79.2421842118644,
-      "distPct": 0.15873950348989596
-    },
-    {
-      "account": "0x1fa0c50a8843437c81b25fcd19aadf8e5c182c8c",
-      "symbol": "MU",
-      "side": "short",
-      "notional": 8.109765000000001,
-      "lev": 20,
-      "entry": 909.71,
-      "mark": 954.09,
-      "liqPrice": 952.46637,
-      "distPct": 0.17017576958149108
-    },
-    {
-      "account": "0x0851dae86b9504adb9aca6bb7031e178d0236faf",
-      "symbol": "ETH",
-      "side": "long",
-      "notional": 2845.257280678651,
-      "lev": 25,
-      "entry": 2406.385931651749,
-      "mark": 2315.0994960770145,
-      "liqPrice": 2319.154441629373,
-      "distPct": 0.1751521072519744
-    },
-    {
-      "account": "0xb8bab93f73781b6f869cc29d30fe566780dd3b4b",
-      "symbol": "HYPE",
-      "side": "long",
-      "notional": 39835.2055431803,
-      "lev": 10,
-      "entry": 87.77280691161866,
-      "mark": 79.11659492190725,
-      "liqPrice": 79.25884464119166,
-      "distPct": 0.17979757524298984
-    },
-    {
-      "account": "0x2f3873739f0cab90d548d3c3e1ff9080d0186928",
-      "symbol": "ETH",
-      "side": "long",
-      "notional": 3606.9250148879887,
-      "lev": 10,
-      "entry": 2566.42,
-      "mark": 2315.0994960770145,
-      "liqPrice": 2319.4020750000004,
-      "distPct": 0.1858485533894664
-    },
-    {
-      "account": "0xd9d860a621535087e5dc4db775ad723630c34c75",
-      "symbol": "XRP",
-      "side": "long",
-      "notional": 9021.533115086693,
-      "lev": 10,
-      "entry": 1.4410887927044855,
-      "mark": 1.2966257693040362,
-      "liqPrice": 1.2991415466230936,
-      "distPct": 0.1940249360004415
-    },
-    {
-      "account": "0x9a3cac8518daf60e60139c9049a69a699ed5e9ed",
-      "symbol": "ZEC",
-      "side": "long",
-      "notional": 711.3438781282209,
-      "lev": 10,
-      "entry": 1379.1570753064798,
-      "mark": 1245.786126319126,
-      "liqPrice": 1243.3101033887915,
-      "distPct": 0.1987518465669762
-    },
-    {
-      "account": "0xd636aba7453b97f133de949f7952846999d67d35",
+      "account": "0x4d824a1c1fa93d361a6938a8ae2c76ff4a45994f",
       "symbol": "XAU",
       "side": "long",
-      "notional": 74.62092588975882,
-      "lev": 25,
-      "entry": 4193.64975188781,
-      "mark": 4033.563561608585,
-      "liqPrice": 4041.6299483818775,
-      "distPct": 0.19998164526445453
+      "notional": 1409.2678359999998,
+      "lev": 20,
+      "entry": 4216.923224343625,
+      "mark": 4024.179999999999,
+      "liqPrice": 4021.890525217733,
+      "distPct": 0.05689295166384452
     },
     {
-      "account": "0xc1b03e63e86bd16364018159aa08506cfa3673ef",
-      "symbol": "NEAR",
+      "account": "0x6b6f4170af6b49b2a159c25c256c3ee091e5a476",
+      "symbol": "XAU",
       "side": "long",
-      "notional": 3671.7532279999996,
+      "notional": 5420.570459999998,
       "lev": 10,
-      "entry": 4.939787716334468,
-      "mark": 4.46251,
-      "liqPrice": 4.453218626275523,
-      "distPct": 0.20820958887436225
+      "entry": 4449.435694135115,
+      "mark": 4024.179999999999,
+      "liqPrice": 4021.177508574611,
+      "distPct": 0.07461126056459065
+    },
+    {
+      "account": "0x65cdb7d45aaad9d1b6deca4b42fbf53d675c72a0",
+      "symbol": "GOOGL",
+      "side": "long",
+      "notional": 140.5975,
+      "lev": 20,
+      "entry": 294.83,
+      "mark": 281.195,
+      "liqPrice": 280.97299,
+      "distPct": 0.0789523284553465
+    },
+    {
+      "account": "0xea33cc81328dd4437db5fc7aee1419f97f986afb",
+      "symbol": "GOOGL",
+      "side": "long",
+      "notional": 476.93483949999995,
+      "lev": 20,
+      "entry": 294.83,
+      "mark": 281.195,
+      "liqPrice": 280.97299,
+      "distPct": 0.0789523284553465
+    },
+    {
+      "account": "0x40fcef5e26645e288b401e3c7d25201338bd210c",
+      "symbol": "GOOGL",
+      "side": "long",
+      "notional": 2385.9676944999997,
+      "lev": 20,
+      "entry": 294.7177605449553,
+      "mark": 281.195,
+      "liqPrice": 280.86602579934237,
+      "distPct": 0.11699148301272291
+    },
+    {
+      "account": "0x7fadeb1086531643f4e5104e69f0810d2100ee45",
+      "symbol": "SOL",
+      "side": "long",
+      "notional": 50.925208797251805,
+      "lev": 20,
+      "entry": 101.517,
+      "mark": 96.63227475759355,
+      "liqPrice": 96.745701,
+      "distPct": 0.11737925314392347
+    },
+    {
+      "account": "0x2173058fbc0dd4107583a5f3c813d2330a945fba",
+      "symbol": "NVDA",
+      "side": "long",
+      "notional": 7637.264439999999,
+      "lev": 20,
+      "entry": 220.12,
+      "mark": 210.04,
+      "liqPrice": 209.77436,
+      "distPct": 0.12647114835269022
+    },
+    {
+      "account": "0xc6945f6decf927bc91d8127251e345f918ecb8c9",
+      "symbol": "BTC",
+      "side": "long",
+      "notional": 60695.9607110449,
+      "lev": 25,
+      "entry": 81532.5786508843,
+      "mark": 78681.94525996572,
+      "liqPrice": 78577.02267478974,
+      "distPct": 0.13335026838662778
+    },
+    {
+      "account": "0x4a37336edfd54666e981d5401d29125339ef0e91",
+      "symbol": "XAU",
+      "side": "long",
+      "notional": 12752.626419999997,
+      "lev": 20,
+      "entry": 4224.978988008836,
+      "mark": 4024.179999999999,
+      "liqPrice": 4029.573709813427,
+      "distPct": 0.1340325187597947
+    },
+    {
+      "account": "0x15924be766007df2a22f0a13d56d02cf373eca08",
+      "symbol": "ETH",
+      "side": "long",
+      "notional": 74.79310714130683,
+      "lev": 25,
+      "entry": 2354.960895679663,
+      "mark": 2266.457792160813,
+      "liqPrice": 2269.593563211275,
+      "distPct": 0.13835559000075393
+    },
+    {
+      "account": "0x4fff72c9bd3e47719e315c096d91d8bd44745adf",
+      "symbol": "DRAM",
+      "side": "long",
+      "notional": 373.56243452069185,
+      "lev": 20,
+      "entry": 51.819,
+      "mark": 49.45226827120623,
+      "liqPrice": 49.383507,
+      "distPct": 0.13904573765782965
+    },
+    {
+      "account": "0x629bf960b3c3b9edd61ba681d7caf68e5cfe4e1d",
+      "symbol": "BTC",
+      "side": "long",
+      "notional": 998.1591575679251,
+      "lev": 25,
+      "entry": 81507.5,
+      "mark": 78681.94525996572,
+      "liqPrice": 78552.853125,
+      "distPct": 0.16406830631755207
+    },
+    {
+      "account": "0x05e6ffff89d05b7ed820dfedb665e430252c8132",
+      "symbol": "CRWV",
+      "side": "short",
+      "notional": 36731.77888,
+      "lev": 10,
+      "entry": 52.491977110904195,
+      "mark": 57.76,
+      "liqPrice": 57.66243685632826,
+      "distPct": 0.16891125981948585
+    },
+    {
+      "account": "0x123f1c8d9f49bba27083e3b1510bdb0a2cad4919",
+      "symbol": "HYPE",
+      "side": "long",
+      "notional": 218054.0711107127,
+      "lev": 20,
+      "entry": 95.534015345,
+      "mark": 90.85586296279696,
+      "liqPrice": 91.043916623785,
+      "distPct": 0.20698021553659696
+    },
+    {
+      "account": "0xe06d74716f100c0dab6596ecb2e0228f5f24fa93",
+      "symbol": "SPCX",
+      "side": "long",
+      "notional": 190.19475,
+      "lev": 20,
+      "entry": 148.14,
+      "mark": 140.885,
+      "liqPrice": 141.17741999999998,
+      "distPct": 0.20755935692230743
+    },
+    {
+      "account": "0xd2972554f601843138dff2255e543b4f4bf8a51c",
+      "symbol": "ETH",
+      "side": "long",
+      "notional": 1228.4201233511608,
+      "lev": 25,
+      "entry": 2346.650479704797,
+      "mark": 2266.457792160813,
+      "liqPrice": 2261.584399815498,
+      "distPct": 0.2150224178968215
+    },
+    {
+      "account": "0xd6635e6f9c166aaaf14137fbe98d2dade29d8107",
+      "symbol": "XAG",
+      "side": "long",
+      "notional": 3502.6147,
+      "lev": 20,
+      "entry": 54.824436493525816,
+      "mark": 52.13,
+      "liqPrice": 52.2476879783301,
+      "distPct": 0.225758638653551
+    },
+    {
+      "account": "0x8ea6090506365c78ece2f39e0b1e59cbd3c89e3f",
+      "symbol": "XAU",
+      "side": "long",
+      "notional": 19230.751383999996,
+      "lev": 25,
+      "entry": 4185.12,
+      "mark": 4024.179999999999,
+      "liqPrice": 4033.4094,
+      "distPct": 0.2293485877868555
+    },
+    {
+      "account": "0x04c872122ec2553b2d8adcc6c7eac4bec7717ccf",
+      "symbol": "ETH",
+      "side": "long",
+      "notional": 18131.662337286503,
+      "lev": 25,
+      "entry": 2357.3181925,
+      "mark": 2266.457792160813,
+      "liqPrice": 2271.865408021875,
+      "distPct": 0.2385932744816906
     },
     {
       "account": "0x6f00fcc6c2918e1e437fa25876b4761b5d3f280e",
-      "symbol": "BTC",
+      "symbol": "NVDA",
       "side": "long",
-      "notional": 16016.044429570717,
+      "notional": 8401.6,
       "lev": 20,
-      "entry": 83785.27500000001,
-      "mark": 80080.22214785358,
-      "liqPrice": 79910.20603125001,
-      "distPct": 0.21230724896050462
+      "entry": 220.93,
+      "mark": 210.04,
+      "liqPrice": 210.54629,
+      "distPct": 0.24104456294039567
     },
     {
-      "account": "0x657347e15ff38ed3031e190bda4cbfd68ad24c60",
-      "symbol": "BTC",
+      "account": "0x199e711b43fa3f555afda29e35c5cc6bc4bf1108",
+      "symbol": "SOL",
       "side": "long",
-      "notional": 35.315377967203425,
-      "lev": 25,
-      "entry": 83294.85048143053,
-      "mark": 80080.22214785358,
-      "liqPrice": 80275.41215147868,
-      "distPct": 0.24374308460923072
+      "notional": 4389.231184039414,
+      "lev": 20,
+      "entry": 101.1415016379825,
+      "mark": 96.63227475759355,
+      "liqPrice": 96.38785106099732,
+      "distPct": 0.25294209125199313
     },
     {
-      "account": "0x100b03683f7a62f32fb6ab276eae06529505f506",
+      "account": "0xd2b34c35ea6e2f834f2be1f1587572ff4622d558",
       "symbol": "ETH",
       "side": "long",
-      "notional": 3361.524468303825,
+      "notional": 18965.718804801683,
       "lev": 25,
-      "entry": 2408.201873278237,
-      "mark": 2315.0994960770145,
-      "liqPrice": 2320.904555371901,
-      "distPct": 0.250747724005963
+      "entry": 2345.739023661568,
+      "mark": 2266.457792160813,
+      "liqPrice": 2260.705984053836,
+      "distPct": 0.2537796259374996
     },
     {
-      "account": "0x000000000000134c41930c0a6324efd7e8d4a3bb",
-      "symbol": "BTC",
-      "side": "long",
-      "notional": 13613.637765135109,
-      "lev": 20,
-      "entry": 84176.38235294117,
-      "mark": 80080.22214785358,
-      "liqPrice": 80283.22466911764,
-      "distPct": 0.25349894870328155
-    },
-    {
-      "account": "0x497eadd205aa2015c3a98b619821b4b42d6f8ecd",
-      "symbol": "HYPE",
-      "side": "long",
-      "notional": 82.28125871878355,
-      "lev": 20,
-      "entry": 83.23498972316212,
-      "mark": 79.11659492190725,
-      "liqPrice": 79.32294520617349,
-      "distPct": 0.2608179541471872
-    },
-    {
-      "account": "0x46bdf67b40f2dfcc0916a8809694a178ea38fd65",
-      "symbol": "ETH",
-      "side": "long",
-      "notional": 86695.84592909204,
-      "lev": 25,
-      "entry": 2395.8195848217497,
-      "mark": 2315.0994960770145,
-      "liqPrice": 2308.9711248719614,
-      "distPct": 0.2647130810333532
-    },
-    {
-      "account": "0x4cd9d0527329701d6e7ea50e5f22e151e6a2a2cc",
-      "symbol": "BTC",
-      "side": "long",
-      "notional": 158.8791607413415,
-      "lev": 25,
-      "entry": 83315.90000000001,
-      "mark": 80080.22214785358,
-      "liqPrice": 80295.698625,
-      "distPct": 0.26907577347698536
-    },
-    {
-      "account": "0xa672a5a997c00152c00fbcaf333380e07bb893cc",
-      "symbol": "SPCX",
-      "side": "long",
-      "notional": 380.814058724777,
-      "lev": 20,
-      "entry": 151.8902122015915,
-      "mark": 144.30240952056727,
-      "liqPrice": 144.7513722281167,
-      "distPct": 0.3111262722785311
-    },
-    {
-      "account": "0x2d2b861abb1eb66e1858eb907b453ff3d81ea169",
-      "symbol": "PUMP",
-      "side": "long",
-      "notional": 152.7782506111436,
-      "lev": 10,
-      "entry": 0.004738120325475114,
-      "mark": 0.00425732181383112,
-      "liqPrice": 0.004271415473415815,
-      "distPct": 0.3310452016783769
-    },
-    {
-      "account": "0x9055e1b1e2619a9315b2b4a682b0c6c2183430e6",
-      "symbol": "XAU",
-      "side": "long",
-      "notional": 1167.3132947295244,
-      "lev": 20,
-      "entry": 4213.302198136368,
-      "mark": 4033.563561608585,
-      "liqPrice": 4018.4369714725613,
-      "distPct": 0.3750180183101266
-    },
-    {
-      "account": "0x533195cddb5f92afc13b167de4cd7c1c0d1a6da6",
-      "symbol": "BTC",
-      "side": "long",
-      "notional": 892.2538351713846,
-      "lev": 25,
-      "entry": 82759.85810446957,
-      "mark": 80080.22214785358,
-      "liqPrice": 79759.81324818255,
-      "distPct": 0.40010990364069854
-    },
-    {
-      "account": "0x9a3cac8518daf60e60139c9049a69a699ed5e9ed",
-      "symbol": "ETH",
+      "account": "0xaca27c2745a287f62aec45230bd6db6a9b5cd3b6",
+      "symbol": "CL",
       "side": "short",
-      "notional": 722.3110427760286,
+      "notional": 609.5635890247233,
+      "lev": 20,
+      "entry": 98.42,
+      "mark": 102.77585382308605,
+      "liqPrice": 103.04574,
+      "distPct": 0.2625968716139427
+    },
+    {
+      "account": "0x7526b5bc46ed45eb31ce8c3a4518c5e2a10e3bd0",
+      "symbol": "SOL",
+      "side": "long",
+      "notional": 4750.925788457087,
+      "lev": 20,
+      "entry": 101.66890013220787,
+      "mark": 96.63227475759355,
+      "liqPrice": 96.8904618259941,
+      "distPct": 0.26718512944895395
+    },
+    {
+      "account": "0x3fef9bfa4e5a86a1b7db3a5508bc6351f140d4a2",
+      "symbol": "BTC",
+      "side": "long",
+      "notional": 144.617415387817,
       "lev": 25,
-      "entry": 2243.688622718929,
-      "mark": 2315.0994960770145,
-      "liqPrice": 2325.02233529249,
-      "distPct": 0.42861394217786186
+      "entry": 81418.25954061942,
+      "mark": 78681.94525996572,
+      "liqPrice": 78466.84763227197,
+      "distPct": 0.27337609280384967
+    },
+    {
+      "account": "0xca95c4070fe14ce0dc9a5f312d7997f0ed438139",
+      "symbol": "NVDA",
+      "side": "long",
+      "notional": 12.18232,
+      "lev": 20,
+      "entry": 221.01,
+      "mark": 210.04,
+      "liqPrice": 210.62252999999998,
+      "distPct": 0.2773424109693351
+    },
+    {
+      "account": "0x50f05fb0371ae0b470fb1a469c655b16e579bce1",
+      "symbol": "SOL",
+      "side": "long",
+      "notional": 112.86649691686925,
+      "lev": 11,
+      "entry": 105.64219467213114,
+      "mark": 96.63227475759355,
+      "liqPrice": 96.35528537686288,
+      "distPct": 0.286642719966501
+    },
+    {
+      "account": "0xb0140ed01ea8ffbf679e5073e9076f9f893089f5",
+      "symbol": "SNDK",
+      "side": "long",
+      "notional": 5748.84,
+      "lev": 20,
+      "entry": 1336.38,
+      "mark": 1277.52,
+      "liqPrice": 1273.57014,
+      "distPct": 0.3091818523389023
+    },
+    {
+      "account": "0xc451a0fa277eaf3cbacab4af913efea45eaec55d",
+      "symbol": "BTC",
+      "side": "long",
+      "notional": 1409.0362757154662,
+      "lev": 25,
+      "entry": 81371.50343980343,
+      "mark": 78681.94525996572,
+      "liqPrice": 78421.78644011056,
+      "distPct": 0.33064614632441414
+    },
+    {
+      "account": "0xa17d9b58da383abccfa6c6e7423dd873915c992c",
+      "symbol": "INTC",
+      "side": "long",
+      "notional": 535.015691311701,
+      "lev": 10,
+      "entry": 79.4014,
+      "mark": 71.33542550822679,
+      "liqPrice": 71.58036209999999,
+      "distPct": 0.34335898332161663
+    },
+    {
+      "account": "0x668b3cb300b0890102fee88183adfe6ad3de5d8f",
+      "symbol": "ETH",
+      "side": "long",
+      "notional": 257397.0785401192,
+      "lev": 25,
+      "entry": 2343.4731751901945,
+      "mark": 2266.457792160813,
+      "liqPrice": 2258.52227258955,
+      "distPct": 0.3501287162156769
+    },
+    {
+      "account": "0xd73a26f31fed99afbf4197ebc793cdce08a651dd",
+      "symbol": "HYPE",
+      "side": "short",
+      "notional": 272.5675888883909,
+      "lev": 5,
+      "entry": 75.633,
+      "mark": 90.85586296279696,
+      "liqPrice": 90.532701,
+      "distPct": 0.3556864161086505
+    },
+    {
+      "account": "0xbb8e6365b0599c444ef002f9960829be60b9a255",
+      "symbol": "BZ",
+      "side": "short",
+      "notional": 1042.7266915,
+      "lev": 20,
+      "entry": 106.92811466467002,
+      "mark": 111.5335,
+      "liqPrice": 111.95373605390951,
+      "distPct": 0.3767801188965695
+    },
+    {
+      "account": "0xbe065ebba26a54809c2a692b9056b6be1cf19081",
+      "symbol": "LIT",
+      "side": "long",
+      "notional": 5142.609577637423,
+      "lev": 5,
+      "entry": 3.4583429054054053,
+      "mark": 2.7797889608850936,
+      "liqPrice": 2.769268081503378,
+      "distPct": 0.37847763012792346
     }
   ],
   "liqMap": [
     {
       "symbol": "BTC",
-      "mark": 80080.22214785358,
-      "count": 396,
-      "total": 11459197.906975888,
+      "mark": 78681.94525996572,
+      "count": 434,
+      "total": 12755101.427183026,
       "bins": [
         {
-          "price": 43171.83789423077,
-          "longUsd": 8727.222689895232,
+          "price": 40924.193623409956,
+          "longUsd": 1201.7880319007165,
           "shortUsd": 0
         },
         {
-          "price": 47890.58393269231,
-          "longUsd": 0,
+          "price": 44006.230870229876,
+          "longUsd": 4112.547914847889,
           "shortUsd": 0
         },
         {
-          "price": 52609.32997115384,
-          "longUsd": 9080.9370311223,
-          "shortUsd": 0
-        },
-        {
-          "price": 57328.07600961538,
-          "longUsd": 212.61298980255125,
-          "shortUsd": 0
-        },
-        {
-          "price": 62046.82204807692,
-          "longUsd": 11649.189835626112,
-          "shortUsd": 0
-        },
-        {
-          "price": 66765.56808653846,
-          "longUsd": 43287.28400180012,
-          "shortUsd": 130130.36099026205
-        },
-        {
-          "price": 71484.314125,
-          "longUsd": 1698395.1652209624,
-          "shortUsd": 0
-        },
-        {
-          "price": 76203.06016346155,
-          "longUsd": 1912072.9016571906,
-          "shortUsd": 2594.2788767018646
-        },
-        {
-          "price": 80921.80620192309,
-          "longUsd": 2483799.1611837987,
-          "shortUsd": 806354.9840822681
-        },
-        {
-          "price": 85640.55224038463,
-          "longUsd": 6051.021745936112,
-          "shortUsd": 2151167.0595602607
-        },
-        {
-          "price": 90359.29827884615,
-          "longUsd": 0,
-          "shortUsd": 166181.27579789353
-        },
-        {
-          "price": 95078.0443173077,
-          "longUsd": 0,
-          "shortUsd": 1385183.798751834
-        },
-        {
-          "price": 99796.79035576923,
-          "longUsd": 0,
-          "shortUsd": 3769.2959762773203
-        },
-        {
-          "price": 104515.53639423077,
-          "longUsd": 0,
-          "shortUsd": 24877.48157178575
-        },
-        {
-          "price": 109234.2824326923,
+          "price": 47088.268117049796,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 113953.02847115384,
-          "longUsd": 0,
-          "shortUsd": 612755.4414242816
-        },
-        {
-          "price": 118671.77450961538,
-          "longUsd": 0,
-          "shortUsd": 2693.898673053794
-        },
-        {
-          "price": 123390.52054807692,
-          "longUsd": 0,
-          "shortUsd": 199.88023448104252
-        },
-        {
-          "price": 128109.26658653846,
+          "price": 50170.30536386972,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 132828.012625,
+          "price": 53252.34261068964,
+          "longUsd": 1317.214445597086,
+          "shortUsd": 0
+        },
+        {
+          "price": 56334.37985750956,
+          "longUsd": 149.57437793919485,
+          "shortUsd": 0
+        },
+        {
+          "price": 59416.41710432948,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 137546.75866346154,
+          "price": 62498.4543511494,
+          "longUsd": 56058.52553936777,
+          "shortUsd": 0
+        },
+        {
+          "price": 65580.49159796932,
+          "longUsd": 68264.84911727256,
+          "shortUsd": 46422.347703379775
+        },
+        {
+          "price": 68662.52884478924,
+          "longUsd": 1503940.6284032958,
+          "shortUsd": 0
+        },
+        {
+          "price": 71744.56609160916,
+          "longUsd": 243017.84294938273,
+          "shortUsd": 0
+        },
+        {
+          "price": 74826.60333842908,
+          "longUsd": 942459.500380888,
+          "shortUsd": 0
+        },
+        {
+          "price": 77908.640585249,
+          "longUsd": 2184287.987404948,
+          "shortUsd": 0
+        },
+        {
+          "price": 80990.67783206892,
+          "longUsd": 467890.055682912,
+          "shortUsd": 527994.4855294926
+        },
+        {
+          "price": 84072.71507888884,
+          "longUsd": 1579521.954246402,
+          "shortUsd": 2847722.9770007534
+        },
+        {
+          "price": 87154.75232570876,
+          "longUsd": 0,
+          "shortUsd": 273093.15102360677
+        },
+        {
+          "price": 90236.78957252868,
+          "longUsd": 0,
+          "shortUsd": 23231.70983940274
+        },
+        {
+          "price": 93318.8268193486,
+          "longUsd": 0,
+          "shortUsd": 10932.148156364898
+        },
+        {
+          "price": 96400.86406616852,
+          "longUsd": 0,
+          "shortUsd": 1357033.332362578
+        },
+        {
+          "price": 99482.90131298844,
+          "longUsd": 0,
+          "shortUsd": 4728.78491012394
+        },
+        {
+          "price": 102564.93855980836,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 142265.50470192308,
+          "price": 105646.97580662827,
+          "longUsd": 0,
+          "shortUsd": 7297.907786752341
+        },
+        {
+          "price": 108729.0130534482,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 146984.25074038462,
+          "price": 111811.0503002681,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 151702.99677884617,
+          "price": 114893.08754708804,
           "longUsd": 0,
-          "shortUsd": 0
+          "shortUsd": 602056.1482818479
         },
         {
-          "price": 156421.7428173077,
+          "price": 117975.12479390795,
           "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 161140.48885576925,
-          "longUsd": 0,
-          "shortUsd": 14.654680653057206
+          "shortUsd": 2365.9660939671694
         }
       ]
     },
     {
       "symbol": "ETH",
-      "mark": 2315.0994960770145,
-      "count": 188,
-      "total": 6621795.745047228,
+      "mark": 2266.457792160813,
+      "count": 196,
+      "total": 8075606.693417024,
       "bins": [
         {
-          "price": 1208.353091105769,
-          "longUsd": 2266.4824066593974,
+          "price": 76.82121375994703,
+          "longUsd": 43.06269805105544,
           "shortUsd": 0
         },
         {
-          "price": 1283.8811483173074,
-          "longUsd": 1856.7097958537656,
-          "shortUsd": 0
-        },
-        {
-          "price": 1359.4092055288459,
-          "longUsd": 16.205696472539103,
-          "shortUsd": 0
-        },
-        {
-          "price": 1434.9372627403845,
+          "price": 211.6331921419099,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 1510.465319951923,
+          "price": 346.4451705238727,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 1585.9933771634614,
-          "longUsd": 34.726492441155216,
-          "shortUsd": 0
-        },
-        {
-          "price": 1661.521434375,
+          "price": 481.2571489058356,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 1737.0494915865384,
-          "longUsd": 6482.27858901564,
-          "shortUsd": 0
-        },
-        {
-          "price": 1812.5775487980768,
-          "longUsd": 117607.05440071234,
-          "shortUsd": 0
-        },
-        {
-          "price": 1888.1056060096153,
-          "longUsd": 10480.455418740645,
-          "shortUsd": 6947.613587727121
-        },
-        {
-          "price": 1963.6336632211537,
-          "longUsd": 0,
-          "shortUsd": 9290.49427775706
-        },
-        {
-          "price": 2039.1617204326922,
-          "longUsd": 33897.68682155964,
-          "shortUsd": 0
-        },
-        {
-          "price": 2114.6897776442306,
-          "longUsd": 1192350.323663537,
-          "shortUsd": 0
-        },
-        {
-          "price": 2190.217834855769,
-          "longUsd": 53096.80694252633,
-          "shortUsd": 0
-        },
-        {
-          "price": 2265.745892067308,
-          "longUsd": 1122598.6909462325,
-          "shortUsd": 0
-        },
-        {
-          "price": 2341.273949278846,
-          "longUsd": 424878.6350175341,
-          "shortUsd": 722.3110427760286
-        },
-        {
-          "price": 2416.802006490385,
-          "longUsd": 113463.02630273449,
-          "shortUsd": 398854.6015821322
-        },
-        {
-          "price": 2492.330063701923,
-          "longUsd": 42107.029634648745,
-          "shortUsd": 32733.19177503291
-        },
-        {
-          "price": 2567.858120913462,
-          "longUsd": 278615.27905438043,
-          "shortUsd": 36701.27231130891
-        },
-        {
-          "price": 2643.386178125,
-          "longUsd": 0,
-          "shortUsd": 750.0922367289527
-        },
-        {
-          "price": 2718.9142353365387,
-          "longUsd": 8672.362712304495,
-          "shortUsd": 48598.56862164869
-        },
-        {
-          "price": 2794.442292548077,
-          "longUsd": 0,
-          "shortUsd": 1410161.8295529506
-        },
-        {
-          "price": 2869.9703497596156,
+          "price": 616.0691272877986,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 2945.498406971154,
-          "longUsd": 0,
-          "shortUsd": 1268570.3443728806
-        },
-        {
-          "price": 3021.0264641826925,
+          "price": 750.8811056697614,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 3096.554521394231,
+          "price": 885.6930840517242,
           "longUsd": 0,
-          "shortUsd": 41.671790929386255
+          "shortUsd": 0
+        },
+        {
+          "price": 1020.505062433687,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 1155.31704081565,
+          "longUsd": 1133.2288960804065,
+          "shortUsd": 0
+        },
+        {
+          "price": 1290.1290191976127,
+          "longUsd": 1636.382525940107,
+          "shortUsd": 0
+        },
+        {
+          "price": 1424.9409975795757,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 1559.7529759615386,
+          "longUsd": 47.59561363537708,
+          "shortUsd": 0
+        },
+        {
+          "price": 1694.5649543435013,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 1829.3769327254643,
+          "longUsd": 53606.25970018754,
+          "shortUsd": 432.89343830271525
+        },
+        {
+          "price": 1964.1889111074272,
+          "longUsd": 53633.45719369347,
+          "shortUsd": 61790.43878768025
+        },
+        {
+          "price": 2099.00088948939,
+          "longUsd": 1288490.3206745908,
+          "shortUsd": 4279.072311599614
+        },
+        {
+          "price": 2233.812867871353,
+          "longUsd": 973133.1170155429,
+          "shortUsd": 0
+        },
+        {
+          "price": 2368.624846253316,
+          "longUsd": 736449.1962379813,
+          "shortUsd": 378201.5453200827
+        },
+        {
+          "price": 2503.4368246352788,
+          "longUsd": 68349.56763819364,
+          "shortUsd": 1208833.3951113068
+        },
+        {
+          "price": 2638.2488030172412,
+          "longUsd": 296980.7638802078,
+          "shortUsd": 307238.7518475277
+        },
+        {
+          "price": 2773.060781399204,
+          "longUsd": 0,
+          "shortUsd": 1399168.2540391798
+        },
+        {
+          "price": 2907.872759781167,
+          "longUsd": 0,
+          "shortUsd": 1241916.8795034783
+        },
+        {
+          "price": 3042.68473816313,
+          "longUsd": 0,
+          "shortUsd": 179.05016558070423
+        },
+        {
+          "price": 3177.496716545093,
+          "longUsd": 0,
+          "shortUsd": 40.79624025889463
+        },
+        {
+          "price": 3312.3086949270555,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 3447.1206733090185,
+          "longUsd": 0,
+          "shortUsd": 22.664577921608128
         }
       ]
     },
     {
       "symbol": "SPY",
-      "mark": 772.1737046964396,
-      "count": 148,
-      "total": 6083275.948182559,
+      "mark": 766.4341141519046,
+      "count": 170,
+      "total": 6820264.415797332,
       "bins": [
         {
-          "price": 527.4975480769232,
-          "longUsd": 10.810431865750154,
+          "price": 24.997805048076945,
+          "longUsd": 4173.846898848442,
           "shortUsd": 0
         },
         {
-          "price": 551.9951858974359,
+          "price": 69.20131514423079,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 576.4928237179488,
+          "price": 113.40482524038464,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 600.9904615384617,
+          "price": 157.6083353365385,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 625.4880993589744,
-          "longUsd": 70.80832872066351,
-          "shortUsd": 0
-        },
-        {
-          "price": 649.9857371794872,
-          "longUsd": 6993.731678176592,
-          "shortUsd": 0
-        },
-        {
-          "price": 674.483375,
-          "longUsd": 40892.3889664617,
-          "shortUsd": 0
-        },
-        {
-          "price": 698.9810128205129,
-          "longUsd": 20927.451744682905,
-          "shortUsd": 0
-        },
-        {
-          "price": 723.4786506410256,
-          "longUsd": 467210.34072044125,
-          "shortUsd": 0
-        },
-        {
-          "price": 747.9762884615385,
-          "longUsd": 2451612.7492912197,
-          "shortUsd": 0
-        },
-        {
-          "price": 772.4739262820513,
+          "price": 201.8118454326923,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 796.9715641025641,
-          "longUsd": 0,
-          "shortUsd": 2781317.871460989
-        },
-        {
-          "price": 821.469201923077,
-          "longUsd": 0,
-          "shortUsd": 14188.460171685667
-        },
-        {
-          "price": 845.9668397435897,
-          "longUsd": 0,
-          "shortUsd": 129345.96788262542
-        },
-        {
-          "price": 870.4644775641025,
+          "price": 246.01535552884616,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 894.9621153846153,
+          "price": 290.218865625,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 919.4597532051282,
-          "longUsd": 0,
-          "shortUsd": 135902.57202657335
-        },
-        {
-          "price": 943.9573910256411,
+          "price": 334.4223757211538,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 968.4550288461538,
-          "longUsd": 0,
-          "shortUsd": 19359.630254667252
-        },
-        {
-          "price": 992.9526666666666,
+          "price": 378.6258858173077,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 1017.4503044871794,
-          "longUsd": 0,
-          "shortUsd": 14014.48943601756
-        },
-        {
-          "price": 1041.9479423076923,
+          "price": 422.8293959134615,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 1066.4455801282052,
+          "price": 467.0329060096153,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 1090.943217948718,
+          "price": 511.2364161057692,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 1115.4408557692307,
+          "price": 555.4399262019231,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 1139.9384935897435,
+          "price": 599.643436298077,
+          "longUsd": 32797.631829845384,
+          "shortUsd": 0
+        },
+        {
+          "price": 643.8469463942307,
+          "longUsd": 30412.642153427485,
+          "shortUsd": 0
+        },
+        {
+          "price": 688.0504564903846,
+          "longUsd": 203908.26320188594,
+          "shortUsd": 0
+        },
+        {
+          "price": 732.2539665865385,
+          "longUsd": 3216498.415535749,
+          "shortUsd": 0
+        },
+        {
+          "price": 776.4574766826923,
           "longUsd": 0,
-          "shortUsd": 1428.6757884293525
+          "shortUsd": 1389792.8371065082
+        },
+        {
+          "price": 820.6609867788461,
+          "longUsd": 0,
+          "shortUsd": 1732132.130704169
+        },
+        {
+          "price": 864.864496875,
+          "longUsd": 0,
+          "shortUsd": 58810.71223780668
+        },
+        {
+          "price": 909.0680069711539,
+          "longUsd": 0,
+          "shortUsd": 134907.4261993726
+        },
+        {
+          "price": 953.2715170673076,
+          "longUsd": 0,
+          "shortUsd": 6002.405408392056
+        },
+        {
+          "price": 997.4750271634615,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 1041.6785372596153,
+          "longUsd": 0,
+          "shortUsd": 9410.048123322838
+        },
+        {
+          "price": 1085.8820473557691,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 1130.085557451923,
+          "longUsd": 0,
+          "shortUsd": 1418.056398003854
         }
       ]
     },
     {
       "symbol": "QQQ",
-      "mark": 719.7853533488221,
-      "count": 123,
-      "total": 4079143.153774966,
+      "mark": 705.6371524110402,
+      "count": 120,
+      "total": 4542637.2522102585,
       "bins": [
         {
-          "price": 365.83214807692303,
-          "longUsd": 428.6321779192236,
+          "price": 365.8157478609694,
+          "longUsd": 420.2069242607745,
           "shortUsd": 0
         },
         {
-          "price": 386.8563192307692,
+          "price": 386.80711858290823,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 407.8804903846153,
+          "price": 407.79848930484707,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 428.9046615384615,
+          "price": 428.78986002678596,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 449.92883269230765,
+          "price": 449.78123074872474,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 470.9530038461538,
+          "price": 470.77260147066363,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 491.977175,
-          "longUsd": 89.10942674458417,
-          "shortUsd": 0
-        },
-        {
-          "price": 513.001346153846,
+          "price": 491.76397219260247,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 534.0255173076923,
+          "price": 512.7553429145413,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 555.0496884615384,
+          "price": 533.7467136364802,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 576.0738596153845,
-          "longUsd": 950.1166664204452,
-          "shortUsd": 0
-        },
-        {
-          "price": 597.0980307692307,
-          "longUsd": 61.25373356998476,
-          "shortUsd": 0
-        },
-        {
-          "price": 618.1222019230769,
-          "longUsd": 2159.356060046466,
-          "shortUsd": 0
-        },
-        {
-          "price": 639.146373076923,
-          "longUsd": 87862.97444819001,
-          "shortUsd": 0
-        },
-        {
-          "price": 660.1705442307691,
-          "longUsd": 108476.4033329996,
-          "shortUsd": 0
-        },
-        {
-          "price": 681.1947153846154,
-          "longUsd": 774220.0564167859,
-          "shortUsd": 0
-        },
-        {
-          "price": 702.2188865384614,
-          "longUsd": 638021.7680063747,
-          "shortUsd": 0
-        },
-        {
-          "price": 723.2430576923077,
-          "longUsd": 239300.9182523794,
-          "shortUsd": 108554.85993651461
-        },
-        {
-          "price": 744.2672288461538,
-          "longUsd": 0,
-          "shortUsd": 1416687.57865812
-        },
-        {
-          "price": 765.2914,
-          "longUsd": 0,
-          "shortUsd": 199781.679255045
-        },
-        {
-          "price": 786.3155711538461,
-          "longUsd": 0,
-          "shortUsd": 454760.53020285646
-        },
-        {
-          "price": 807.3397423076923,
-          "longUsd": 0,
-          "shortUsd": 42458.050616522305
-        },
-        {
-          "price": 828.3639134615385,
+          "price": 554.738084358419,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 849.3880846153845,
-          "longUsd": 0,
-          "shortUsd": 3967.3848891233724
-        },
-        {
-          "price": 870.4122557692307,
+          "price": 575.7294550803579,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 891.4364269230769,
+          "price": 596.7208258022968,
+          "longUsd": 192.28612403200847,
+          "shortUsd": 0
+        },
+        {
+          "price": 617.7121965242357,
+          "longUsd": 2116.911457233121,
+          "shortUsd": 0
+        },
+        {
+          "price": 638.7035672461744,
+          "longUsd": 95642.83583866004,
+          "shortUsd": 0
+        },
+        {
+          "price": 659.6949379681132,
+          "longUsd": 91410.7064533596,
+          "shortUsd": 0
+        },
+        {
+          "price": 680.6863086900521,
+          "longUsd": 717301.1934129641,
+          "shortUsd": 0
+        },
+        {
+          "price": 701.677679411991,
+          "longUsd": 1130760.039021517,
+          "shortUsd": 0
+        },
+        {
+          "price": 722.6690501339299,
+          "longUsd": 129653.55869285882,
+          "shortUsd": 11906.286236346721
+        },
+        {
+          "price": 743.6604208558687,
           "longUsd": 0,
-          "shortUsd": 1362.4816953539853
+          "shortUsd": 1415742.0464525712
+        },
+        {
+          "price": 764.6517915778074,
+          "longUsd": 0,
+          "shortUsd": 280370.2452577567
+        },
+        {
+          "price": 785.6431622997463,
+          "longUsd": 0,
+          "shortUsd": 554242.7013612514
+        },
+        {
+          "price": 806.6345330216852,
+          "longUsd": 0,
+          "shortUsd": 70042.88445890942
+        },
+        {
+          "price": 827.6259037436241,
+          "longUsd": 0,
+          "shortUsd": 8543.360695386187
+        },
+        {
+          "price": 848.6172744655629,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 869.6086451875018,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 890.6000159094406,
+          "longUsd": 0,
+          "shortUsd": 34291.9898231498
         }
       ]
     },
     {
       "symbol": "XAU",
-      "mark": 4033.563561608585,
-      "count": 143,
-      "total": 2052112.5707531348,
+      "mark": 4024.179999999999,
+      "count": 169,
+      "total": 2917365.106202001,
       "bins": [
         {
-          "price": 2118.625119230769,
-          "longUsd": 98.82230725941034,
+          "price": 2079.208688461538,
+          "longUsd": 7.645941999999998,
           "shortUsd": 0
         },
         {
-          "price": 2277.3944576923077,
-          "longUsd": 86.31826021842372,
-          "shortUsd": 0
-        },
-        {
-          "price": 2436.163796153846,
+          "price": 2202.104965384615,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 2594.9331346153845,
+          "price": 2325.001242307692,
+          "longUsd": 86.11745199999997,
+          "shortUsd": 0
+        },
+        {
+          "price": 2447.897519230769,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 2753.7024730769226,
+          "price": 2570.793796153846,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 2912.471811538461,
+          "price": 2693.690073076923,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 3071.24115,
+          "price": 2816.5863499999996,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 3230.0104884615384,
-          "longUsd": 639.7231808711216,
-          "shortUsd": 0
-        },
-        {
-          "price": 3388.779826923077,
-          "longUsd": 968.0552547860603,
-          "shortUsd": 0
-        },
-        {
-          "price": 3547.549165384615,
-          "longUsd": 19898.779118483635,
-          "shortUsd": 0
-        },
-        {
-          "price": 3706.3185038461534,
-          "longUsd": 299666.747751655,
-          "shortUsd": 0
-        },
-        {
-          "price": 3865.087842307692,
-          "longUsd": 457718.30570608197,
-          "shortUsd": 0
-        },
-        {
-          "price": 4023.8571807692306,
-          "longUsd": 316022.4446376217,
-          "shortUsd": 0
-        },
-        {
-          "price": 4182.626519230769,
-          "longUsd": 21045.924595405115,
-          "shortUsd": 770913.2222870162
-        },
-        {
-          "price": 4341.395857692307,
-          "longUsd": 8067.12712321717,
-          "shortUsd": 89083.67139626257
-        },
-        {
-          "price": 4500.165196153846,
-          "longUsd": 0,
-          "shortUsd": 58850.499076581575
-        },
-        {
-          "price": 4658.934534615384,
-          "longUsd": 0,
-          "shortUsd": 15.327541534112623
-        },
-        {
-          "price": 4817.703873076924,
-          "longUsd": 0,
-          "shortUsd": 8931.11643811373
-        },
-        {
-          "price": 4976.473211538461,
+          "price": 2939.4826269230766,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 5135.24255,
+          "price": 3062.3789038461537,
+          "longUsd": 11790.847399999995,
+          "shortUsd": 0
+        },
+        {
+          "price": 3185.2751807692302,
+          "longUsd": 216.50088399999996,
+          "shortUsd": 0
+        },
+        {
+          "price": 3308.1714576923077,
+          "longUsd": 1210.8757619999997,
+          "shortUsd": 0
+        },
+        {
+          "price": 3431.0677346153843,
+          "longUsd": 2335.2316539999997,
+          "shortUsd": 0
+        },
+        {
+          "price": 3553.9640115384614,
+          "longUsd": 34570.92554399999,
+          "shortUsd": 0
+        },
+        {
+          "price": 3676.8602884615384,
+          "longUsd": 99725.61908799998,
+          "shortUsd": 0
+        },
+        {
+          "price": 3799.7565653846154,
+          "longUsd": 334578.37355999986,
+          "shortUsd": 0
+        },
+        {
+          "price": 3922.6528423076925,
+          "longUsd": 592224.4859699999,
+          "shortUsd": 0
+        },
+        {
+          "price": 4045.549119230769,
+          "longUsd": 96247.11789599998,
+          "shortUsd": 0
+        },
+        {
+          "price": 4168.445396153846,
+          "longUsd": 31712.952907999992,
+          "shortUsd": 453352.0462599998
+        },
+        {
+          "price": 4291.341673076923,
+          "longUsd": 0,
+          "shortUsd": 806255.7307039999
+        },
+        {
+          "price": 4414.237950000001,
+          "longUsd": 780.2885019999998,
+          "shortUsd": 359123.4570519999
+        },
+        {
+          "price": 4537.134226923077,
+          "longUsd": 0,
+          "shortUsd": 74044.91199999997
+        },
+        {
+          "price": 4660.030503846154,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 5294.011888461539,
+          "price": 4782.92678076923,
+          "longUsd": 0,
+          "shortUsd": 6908.3098059999975
+        },
+        {
+          "price": 4905.823057692308,
+          "longUsd": 0,
+          "shortUsd": 11791.249817999997
+        },
+        {
+          "price": 5028.719334615385,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 5452.781226923076,
+          "price": 5151.615611538462,
           "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 5611.550565384616,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 5770.3199038461535,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 5929.089242307692,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 6087.858580769231,
-          "longUsd": 0,
-          "shortUsd": 106.48607802646666
+          "shortUsd": 402.4179999999999
         }
       ]
     },
     {
-      "symbol": "BZ",
-      "mark": 110.258,
-      "count": 56,
-      "total": 1563193.3797680002,
+      "symbol": "GOOGL",
+      "mark": 281.195,
+      "count": 157,
+      "total": 2788257.6903190003,
       "bins": [
         {
-          "price": 84.67327160726187,
-          "longUsd": 11186.886938,
+          "price": 148.1816200090483,
+          "longUsd": 1156.7799909999999,
           "shortUsd": 0
         },
         {
-          "price": 89.31091882178562,
-          "longUsd": 722.1899000000001,
-          "shortUsd": 0
-        },
-        {
-          "price": 93.94856603630937,
-          "longUsd": 290014.484108,
-          "shortUsd": 3011.587012
-        },
-        {
-          "price": 98.58621325083313,
-          "longUsd": 16038.128679999998,
-          "shortUsd": 0
-        },
-        {
-          "price": 103.22386046535688,
-          "longUsd": 451343.7691919999,
-          "shortUsd": 191297.63
-        },
-        {
-          "price": 107.86150767988063,
-          "longUsd": 130190.22072399998,
-          "shortUsd": 190184.02419999999
-        },
-        {
-          "price": 112.49915489440438,
-          "longUsd": 0,
-          "shortUsd": 223117.75802599997
-        },
-        {
-          "price": 117.13680210892814,
-          "longUsd": 0,
-          "shortUsd": 37078.993594
-        },
-        {
-          "price": 121.77444932345189,
-          "longUsd": 0,
-          "shortUsd": 4362.026996
-        },
-        {
-          "price": 126.41209653797564,
+          "price": 157.7242000271448,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 131.0497437524994,
-          "longUsd": 0,
-          "shortUsd": 5271.876012
-        },
-        {
-          "price": 135.68739096702313,
-          "longUsd": 0,
-          "shortUsd": 2207.034386
-        },
-        {
-          "price": 140.32503818154692,
+          "price": 167.26678004524132,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 144.96268539607064,
+          "price": 176.80936006333783,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 149.60033261059442,
+          "price": 186.35194008143435,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 154.23797982511815,
+          "price": 195.89452009953087,
+          "longUsd": 294.83295749999996,
+          "shortUsd": 0
+        },
+        {
+          "price": 205.43710011762738,
+          "longUsd": 6487.759159499999,
+          "shortUsd": 0
+        },
+        {
+          "price": 214.9796801357239,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 158.87562703964193,
+          "price": 224.5222601538204,
+          "longUsd": 14154.034683499998,
+          "shortUsd": 0
+        },
+        {
+          "price": 234.06484017191693,
+          "longUsd": 9790.675629500001,
+          "shortUsd": 0
+        },
+        {
+          "price": 243.60742019001344,
+          "longUsd": 1114.769458,
+          "shortUsd": 0
+        },
+        {
+          "price": 253.15000020810996,
+          "longUsd": 5464.293718,
+          "shortUsd": 0
+        },
+        {
+          "price": 262.6925802262065,
+          "longUsd": 52469.074874,
+          "shortUsd": 0
+        },
+        {
+          "price": 272.23516024430296,
+          "longUsd": 1332158.894223,
+          "shortUsd": 0
+        },
+        {
+          "price": 281.7777402623995,
+          "longUsd": 49556.7101395,
+          "shortUsd": 0
+        },
+        {
+          "price": 291.32032028049605,
+          "longUsd": 133.961298,
+          "shortUsd": 199350.94568999996
+        },
+        {
+          "price": 300.86290029859254,
+          "longUsd": 13.750435499999998,
+          "shortUsd": 713351.5322345
+        },
+        {
+          "price": 310.4054803166891,
+          "longUsd": 2891.9499775,
+          "shortUsd": 145542.70774799996
+        },
+        {
+          "price": 319.9480603347856,
+          "longUsd": 0,
+          "shortUsd": 71575.881451
+        },
+        {
+          "price": 329.4906403528821,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 163.51327425416565,
+          "price": 339.0332203709786,
+          "longUsd": 0,
+          "shortUsd": 122841.94787599999
+        },
+        {
+          "price": 348.57580038907514,
+          "longUsd": 0,
+          "shortUsd": 2617.7286135
+        },
+        {
+          "price": 358.1183804071717,
+          "longUsd": 0,
+          "shortUsd": 45827.3333325
+        },
+        {
+          "price": 367.6609604252682,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 168.15092146868943,
+          "price": 377.20354044336466,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 172.78856868321316,
+          "price": 386.7461204614612,
           "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 177.42621589773694,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 182.06386311226066,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 186.70151032678444,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 191.33915754130817,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 195.97680475583195,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 200.61445197035567,
-          "longUsd": 0,
-          "shortUsd": 7166.7699999999995
-        }
-      ]
-    },
-    {
-      "symbol": "CL",
-      "mark": 101.41985195081607,
-      "count": 70,
-      "total": 1305844.69121319,
-      "bins": [
-        {
-          "price": 2.8748767315187376,
-          "longUsd": 6592.290376803045,
-          "shortUsd": 0
-        },
-        {
-          "price": 8.084826219171596,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 13.294775706824456,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 18.504725194477317,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 23.714674682130173,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 28.924624169783034,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 34.134573657435894,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 39.34452314508875,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 44.554472632741614,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 49.76442212039447,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 54.97437160804733,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 60.18432109570019,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 65.39427058335305,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 70.60422007100591,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 75.81416955865876,
-          "longUsd": 0,
-          "shortUsd": 0
-        },
-        {
-          "price": 81.02411904631163,
-          "longUsd": 4481.134738594857,
-          "shortUsd": 0
-        },
-        {
-          "price": 86.23406853396449,
-          "longUsd": 140466.49495188025,
-          "shortUsd": 11982.552668285016
-        },
-        {
-          "price": 91.44401802161735,
-          "longUsd": 323371.9241128756,
-          "shortUsd": 338463.50234271283
-        },
-        {
-          "price": 96.6539675092702,
-          "longUsd": 133078.26157696723,
-          "shortUsd": 5598.578667388949
-        },
-        {
-          "price": 101.86391699692307,
-          "longUsd": 0,
-          "shortUsd": 28111.858823283048
-        },
-        {
-          "price": 107.07386648457593,
-          "longUsd": 0,
-          "shortUsd": 287163.414248803
-        },
-        {
-          "price": 112.28381597222878,
-          "longUsd": 0,
-          "shortUsd": 20469.670139085156
-        },
-        {
-          "price": 117.49376545988164,
-          "longUsd": 0,
-          "shortUsd": 2314.9081207773766
-        },
-        {
-          "price": 122.70371494753451,
-          "longUsd": 0,
-          "shortUsd": 2528.0926495779922
-        },
-        {
-          "price": 127.91366443518736,
-          "longUsd": 0,
-          "shortUsd": 29.41175706573666
-        },
-        {
-          "price": 133.12361392284024,
-          "longUsd": 0,
-          "shortUsd": 1192.5960390896462
+          "shortUsd": 11462.126828999999
         }
       ]
     },
     {
       "symbol": "HYPE",
-      "mark": 79.11659492190725,
-      "count": 148,
-      "total": 1283794.13032577,
+      "mark": 90.85586296279696,
+      "count": 135,
+      "total": 2036572.327773539,
       "bins": [
         {
-          "price": 2.509201326923077,
-          "longUsd": 18.196816832038667,
+          "price": 2.902739596153846,
+          "longUsd": 20.896848481443303,
           "shortUsd": 0
         },
         {
-          "price": 7.029603980769231,
+          "price": 8.210218788461537,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 11.550006634615386,
+          "price": 13.51769798076923,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 16.070409288461537,
+          "price": 18.82517717307692,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 20.590811942307692,
+          "price": 24.13265636538461,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 25.111214596153847,
+          "price": 29.4401355576923,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 29.631617249999998,
+          "price": 34.74761475,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 34.15201990384616,
+          "price": 40.055093942307685,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 38.67242255769231,
+          "price": 45.36257313461538,
+          "longUsd": 12113.81220882972,
+          "shortUsd": 0
+        },
+        {
+          "price": 50.67005232692307,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 43.19282521153846,
-          "longUsd": 1789.617377133542,
+          "price": 55.97753151923076,
+          "longUsd": 156.27208429601077,
           "shortUsd": 0
         },
         {
-          "price": 47.71322786538462,
-          "longUsd": 10548.615600937894,
+          "price": 61.285010711538455,
+          "longUsd": 4969.815704064993,
           "shortUsd": 0
         },
         {
-          "price": 52.23363051923077,
-          "longUsd": 7639.498405659363,
+          "price": 66.59248990384614,
+          "longUsd": 7215.772636505335,
           "shortUsd": 0
         },
         {
-          "price": 56.75403317307693,
-          "longUsd": 136.08054326568046,
+          "price": 71.89996909615382,
+          "longUsd": 28717.721165280862,
+          "shortUsd": 11356.98287034962
+        },
+        {
+          "price": 77.20744828846152,
+          "longUsd": 122174.7874847027,
           "shortUsd": 0
         },
         {
-          "price": 61.27443582692308,
-          "longUsd": 7392.654629503015,
-          "shortUsd": 0
+          "price": 82.51492748076922,
+          "longUsd": 132564.15541449853,
+          "shortUsd": 325175.8592197392
         },
         {
-          "price": 65.79483848076923,
-          "longUsd": 23464.39972193925,
-          "shortUsd": 0
+          "price": 87.8224066730769,
+          "longUsd": 678793.2377813522,
+          "shortUsd": 218593.75493671172
         },
         {
-          "price": 70.31524113461538,
-          "longUsd": 15602.58368454933,
-          "shortUsd": 0
+          "price": 93.1298858653846,
+          "longUsd": 219943.8730603389,
+          "shortUsd": 11355.165753090365
         },
         {
-          "price": 74.83564378846154,
-          "longUsd": 391381.88341918297,
-          "shortUsd": 130978.31405916667
-        },
-        {
-          "price": 79.35604644230769,
-          "longUsd": 293636.4950569634,
-          "shortUsd": 2452.614442579125
-        },
-        {
-          "price": 83.87644909615385,
-          "longUsd": 30306.40285078579,
-          "shortUsd": 248391.29675302308
-        },
-        {
-          "price": 88.39685175,
-          "longUsd": 16820.188080397482,
-          "shortUsd": 63407.99500016256
-        },
-        {
-          "price": 92.91725440384614,
-          "longUsd": 1166.969775098132,
-          "shortUsd": 286.40207361730427
-        },
-        {
-          "price": 97.4376570576923,
+          "price": 98.43736505769229,
           "longUsd": 0,
-          "shortUsd": 19293.372837656305
+          "shortUsd": 116299.13882689863
         },
         {
-          "price": 101.95805971153845,
+          "price": 103.74484424999997,
           "longUsd": 0,
-          "shortUsd": 0
+          "shortUsd": 144306.36714381038
         },
         {
-          "price": 106.47846236538462,
+          "price": 109.05232344230767,
+          "longUsd": 0,
+          "shortUsd": 1939.7726742557152
+        },
+        {
+          "price": 114.35980263461536,
+          "longUsd": 0,
+          "shortUsd": 156.27208429601077
+        },
+        {
+          "price": 119.66728182692304,
+          "longUsd": 0,
+          "shortUsd": 299.82434777722995
+        },
+        {
+          "price": 124.97476101923074,
           "longUsd": 0,
           "shortUsd": 0
         },
         {
-          "price": 110.99886501923076,
+          "price": 130.28224021153844,
           "longUsd": 0,
-          "shortUsd": 19060.770048585895
+          "shortUsd": 0
         },
         {
-          "price": 115.51926767307693,
+          "price": 135.58971940384612,
           "longUsd": 0,
-          "shortUsd": 19.779148730476813
+          "shortUsd": 418.845528258494
+        }
+      ]
+    },
+    {
+      "symbol": "BZ",
+      "mark": 111.5335,
+      "count": 54,
+      "total": 1677883.5405604993,
+      "bins": [
+        {
+          "price": 85.07900682692308,
+          "longUsd": 75559.5964435,
+          "shortUsd": 0
+        },
+        {
+          "price": 90.40039248076923,
+          "longUsd": 130862.1440165,
+          "shortUsd": 75619.71299999999
+        },
+        {
+          "price": 95.72177813461538,
+          "longUsd": 185182.416055,
+          "shortUsd": 20076.03
+        },
+        {
+          "price": 101.04316378846153,
+          "longUsd": 236229.51446900002,
+          "shortUsd": 42940.3975
+        },
+        {
+          "price": 106.36454944230769,
+          "longUsd": 397949.18579650007,
+          "shortUsd": 151054.6149905
+        },
+        {
+          "price": 111.68593509615384,
+          "longUsd": 0,
+          "shortUsd": 236129.9150535
+        },
+        {
+          "price": 117.00732074999999,
+          "longUsd": 0,
+          "shortUsd": 99407.13174599998
+        },
+        {
+          "price": 122.32870640384616,
+          "longUsd": 0,
+          "shortUsd": 7481.3325795
+        },
+        {
+          "price": 127.65009205769229,
+          "longUsd": 0,
+          "shortUsd": 12091.4582685
+        },
+        {
+          "price": 132.97147771153845,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 138.29286336538462,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 143.61424901923075,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 148.93563467307692,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 154.25702032692305,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 159.57840598076922,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 164.89979163461538,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 170.22117728846155,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 175.54256294230768,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 180.86394859615382,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 186.18533424999998,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 191.50671990384615,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 196.8281055576923,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 202.14949121153845,
+          "longUsd": 0,
+          "shortUsd": 7249.6775
+        },
+        {
+          "price": 207.47087686538458,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 212.79226251923075,
+          "longUsd": 0,
+          "shortUsd": 0
+        },
+        {
+          "price": 218.1136481730769,
+          "longUsd": 0,
+          "shortUsd": 50.413142
         }
       ]
     }
@@ -3288,53 +3263,53 @@
       "accounts": [
         {
           "key": "w0",
-          "account": "0x29c792a175627a15c60f5288e55d1cf7d95f2157",
-          "total": 4682286.632523403
+          "account": "0x123f1c8d9f49bba27083e3b1510bdb0a2cad4919",
+          "total": 2746140.714616897
         },
         {
           "key": "w1",
-          "account": "0xe0f5ba4abfdeee1a1d904ad20d0879cf5e4a32ad",
-          "total": 3927245.051205
+          "account": "0x7154a908b0db84e7d4f9fec5ef13dbdc29e8200c",
+          "total": 2738261.972912
         },
         {
           "key": "w2",
-          "account": "0x123f1c8d9f49bba27083e3b1510bdb0a2cad4919",
-          "total": 3595942.554236999
+          "account": "0xd3da2b966444e44d3327330fee570e5dbcb27f70",
+          "total": 2648400.3265856
         },
         {
           "key": "w3",
-          "account": "0x874ccd286e0590100a1b16bb846ce05650702218",
-          "total": 3208275.9229418025
+          "account": "0xd96e8a3a1abdf5541b212db6bd697ab48896bb90",
+          "total": 2568855.3513372005
         },
         {
           "key": "w4",
-          "account": "0x189455125ddcc58d388b3f1fee5e20895e1d4595",
-          "total": 2859419.859047298
+          "account": "0xe7f32cfd7c94d833ce0e16737a5ada94ea582dfc",
+          "total": 2434594.8571441993
         },
         {
           "key": "w5",
-          "account": "0x019950a8efd6ee7729664b1845d7ebd8ee1fb042",
-          "total": 2632890.722057398
+          "account": "0xf98f0e7dd8e5189cb05664c0b220b7789c749ef0",
+          "total": 2323305.306592001
         },
         {
           "key": "w6",
           "account": "0x36bd3da5ecf14b381a9edd542ea930445d5f0606",
-          "total": 2479733.120409102
+          "total": 2308218.7180902013
         },
         {
           "key": "w7",
-          "account": "0x71bb3cb0550c5966af52f7dcdb731e8c8e8158e4",
-          "total": 2434975.5097599984
+          "account": "0x69be108a2aaa3e06df75f854df08d215acf0ca7a",
+          "total": 2049600.5761661986
         },
         {
           "key": "w8",
-          "account": "0xe94b6ff07fad285a8cd3cee086b166cfed2fb181",
-          "total": 2410437.9441823005
+          "account": "0x7d7be6740ab53f2e78eec1737bcce07941e29747",
+          "total": 2023380.8291994
         },
         {
           "key": "w9",
-          "account": "0x5027457c50a3b45772bafe70e2e6f05d98514ad4",
-          "total": 2383642.7883627987
+          "account": "0x0b83821bb8b9d19582af26122556be7408313140",
+          "total": 1609507.1090216003
         }
       ],
       "data": []
@@ -3343,53 +3318,53 @@
       "accounts": [
         {
           "key": "w0",
-          "account": "0x0077f2a592dd51ef5fcc3a3678c277248264cccd",
-          "total": 64322.58944428042
+          "account": "0xd96e8a3a1abdf5541b212db6bd697ab48896bb90",
+          "total": 5515.6891894142445
         },
         {
           "key": "w1",
-          "account": "0x9ee19889d7447a54319bb5c74a32585a3d228631",
-          "total": 22062.88703357359
+          "account": "0x69be108a2aaa3e06df75f854df08d215acf0ca7a",
+          "total": 3585.5055315334143
         },
         {
           "key": "w2",
-          "account": "0x019950a8efd6ee7729664b1845d7ebd8ee1fb042",
-          "total": 12537.114385112687
+          "account": "0xf98f0e7dd8e5189cb05664c0b220b7789c749ef0",
+          "total": 2861.51587268229
         },
         {
           "key": "w3",
-          "account": "0x4b65e0343d7103a6a9c9b1003400251c3f42566d",
-          "total": 12092.238175741459
+          "account": "0x7d7be6740ab53f2e78eec1737bcce07941e29747",
+          "total": 1739.7342281511683
         },
         {
           "key": "w4",
-          "account": "0xd5984506a354e9286225e8b13ffd6a8e11fdad0f",
-          "total": 9454.069202636985
+          "account": "0x929ab3d463ce9988fdc527e73cdca1d7f08993de",
+          "total": 1210.0853913251383
         },
         {
           "key": "w5",
-          "account": "0x269f6c970581372523a58a630dc462d6568b61a6",
-          "total": 5589.169618130832
+          "account": "0x4025dcf3c823e41b7bbd141bfee8da6e9fd2cc19",
+          "total": 1152.1329366198866
         },
         {
           "key": "w6",
-          "account": "0x189f6436b7ed98c84e5622eda94c8809042c1bcc",
-          "total": 5356.076654712664
+          "account": "0x3d56db4e3d10e21afb7a69c0ba4c367724525fdc",
+          "total": 1027.7358390295565
         },
         {
           "key": "w7",
-          "account": "0x874ccd286e0590100a1b16bb846ce05650702218",
-          "total": 2912.798351100565
+          "account": "0x111089c79fd4b3082638cd6421b3d927e16b63a9",
+          "total": 1005.0907694199088
         },
         {
           "key": "w8",
-          "account": "0x4829e996dbd411c1cceed55635f11d29a1453100",
-          "total": 1991.5276454845673
+          "account": "0x1549920373edb37ae3a9cffe1be02844df3127d0",
+          "total": 997.3322757212968
         },
         {
           "key": "w9",
-          "account": "0xf477b6a5ddd06ba4ce1785cc4172da34967f20e0",
-          "total": 1674.1994364639236
+          "account": "0xbd5a3a44e11d08b8361f522b2ee142b4cd387aeb",
+          "total": 937.4611107963015
         }
       ],
       "data": []
@@ -3398,53 +3373,53 @@
       "accounts": [
         {
           "key": "w0",
-          "account": "0x0fb13b24482226bb9f4ab3bd6fff68c4b6eb9aeb",
-          "total": 2990664.14060328
+          "account": "0x36dc0d99dcaee443cebaa5fb8c11877d157c26df",
+          "total": 3717096.288831941
         },
         {
           "key": "w1",
-          "account": "0x7079b5814032c0b02425135f06f32a0084cdf2d2",
-          "total": 2819099.191426854
+          "account": "0x0fb13b24482226bb9f4ab3bd6fff68c4b6eb9aeb",
+          "total": 2933513.580495802
         },
         {
           "key": "w2",
           "account": "0x6d7ff3fb44cffd46915859b06518ce147bf160c9",
-          "total": 2756648.7400811594
+          "total": 2704012.0102772214
         },
         {
           "key": "w3",
-          "account": "0x355b5f013a1ede94607f7a4ce45c0132f053507c",
-          "total": 2539464.148986522
+          "account": "0xabbc45d1726e3231e6fbad61eb72aef71b035787",
+          "total": 2616270.3892546436
         },
         {
           "key": "w4",
-          "account": "0x0077f2a592dd51ef5fcc3a3678c277248264cccd",
-          "total": 1597326.3233649682
+          "account": "0x355b5f013a1ede94607f7a4ce45c0132f053507c",
+          "total": 2491002.325426319
         },
         {
           "key": "w5",
-          "account": "0x05e6ffff89d05b7ed820dfedb665e430252c8132",
-          "total": 1382778.630728578
+          "account": "0x0077f2a592dd51ef5fcc3a3678c277248264cccd",
+          "total": 1584950.9675579828
         },
         {
           "key": "w6",
-          "account": "0xb11bce73e65f1a833b8b2b18db07da61d18386e7",
-          "total": 1095827.4867779731
+          "account": "0x7d1eb7c855bf2692b0d4cc1e49193a3845bc9199",
+          "total": 1573355.0165629447
         },
         {
           "key": "w7",
-          "account": "0xb57066e5f90dace64ada2ddb235ab72b946a6bc3",
-          "total": 1000061.7486806284
+          "account": "0x123f1c8d9f49bba27083e3b1510bdb0a2cad4919",
+          "total": 1469346.5545760267
         },
         {
           "key": "w8",
-          "account": "0x123f1c8d9f49bba27083e3b1510bdb0a2cad4919",
-          "total": 926062.3830150146
+          "account": "0x05e6ffff89d05b7ed820dfedb665e430252c8132",
+          "total": 1315306.4933039674
         },
         {
           "key": "w9",
-          "account": "0x9950e5c61fe8255163864cf32872dc1e85e76cdc",
-          "total": 906527.7595194577
+          "account": "0x668b3cb300b0890102fee88183adfe6ad3de5d8f",
+          "total": 1246868.8040721917
         }
       ],
       "data": []
