@@ -202,23 +202,9 @@ export default function Arcade({ candleSets }: { candleSets: CandleSet[] }) {
 
   return (
     <div className="arcade" ref={rootRef}>
-      <div className="arcade-screen">
-        <div className="arcade-hud">
-          <span className="arcade-hud-title">{game.title}</span>
-          <span className="arcade-hud-score tnum">{hud || bestOf(game)}</span>
-        </div>
-        <canvas
-          ref={canvasRef}
-          className="arcade-canvas"
-          width={W}
-          height={H}
-          role="img"
-          aria-label={`${game.title} — ${game.tagline}`}
-        />
-        <p className="arcade-controls">{game.controls}</p>
-      </div>
-      <div className="arcade-list" role="tablist" aria-label="Choose a game">
-        {GAMES.map((entry) => (
+      {/* cartridge rack */}
+      <div className="arcade-rack" role="tablist" aria-label="Choose a game">
+        {GAMES.map((entry, index) => (
           <button
             key={entry.id}
             type="button"
@@ -230,12 +216,35 @@ export default function Arcade({ candleSets }: { candleSets: CandleSet[] }) {
           >
             <span className="arcade-pick-icon"><PixelIcon rows={entry.icon} /></span>
             <span className="arcade-pick-text">
-              <b>{entry.title}</b>
+              <em className="ev-pixel">{`0${index + 1}`}</em>
+              <b className="ev-pixel">{entry.title}</b>
               <span>{entry.tagline}</span>
               <i className="tnum">{bestOf(entry)}</i>
             </span>
           </button>
         ))}
+      </div>
+      {/* cabinet */}
+      <div className="arcade-cabinet">
+        <div className="arcade-marquee">
+          <span className="arcade-lights" aria-hidden="true"><i /><i /><i /></span>
+          <span className="arcade-marquee-title ev-pixel">{game.title}</span>
+          <span className="arcade-marquee-score ev-pixel tnum">{hud || bestOf(game)}</span>
+        </div>
+        <div className="arcade-bezel">
+          <canvas
+            ref={canvasRef}
+            className="arcade-canvas"
+            width={W}
+            height={H}
+            role="img"
+            aria-label={`${game.title} — ${game.tagline}`}
+          />
+        </div>
+        <div className="arcade-deck">
+          <p className="arcade-tagline">{game.tagline}</p>
+          <p className="arcade-controls">{game.controls}</p>
+        </div>
       </div>
     </div>
   );

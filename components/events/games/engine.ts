@@ -180,6 +180,9 @@ export const RIXEL_W = 18;
 export const RIXEL_H = 18;
 
 const RIXEL_LIVE: Palette = { G: C.green, D: C.greenMid, K: C.black, W: C.ink };
+/** Rixel standing still, for use outside the canvas (page art, icons). */
+export const RIXEL_SPRITE = [...RIXEL_BODY, ...RIXEL_LEGS.idle];
+export const RIXEL_PALETTE: Palette = RIXEL_LIVE;
 const RIXEL_REKT: Palette = { G: C.red, D: C.redDim, K: C.black, W: C.ink };
 
 /** Draws Rixel with its feet resting on `footY`. */

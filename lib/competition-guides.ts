@@ -4,11 +4,21 @@
 
 export interface GuideImage { src: string; alt: string; width: number; height: number }
 export interface GuideRule { label: string; text: string }
-export interface CompetitionGuide { title: string; images: GuideImage[]; rules: GuideRule[] }
+export interface CompetitionGuide {
+  title: string;
+  /** Event colour, taken from its official art. Falls back to the site accent. */
+  accent?: string;
+  /** Index into `images` of the card used as the poster's key art. */
+  keyArt?: number;
+  images: GuideImage[];
+  rules: GuideRule[];
+}
 
 export const COMPETITION_GUIDES: Record<string, CompetitionGuide> = {
   perpkin: {
     title: "The recipe",
+    accent: "#ff8a3d",
+    keyArt: 1,
     images: [
       {
         src: "/events/perpkin-recipe.webp",
