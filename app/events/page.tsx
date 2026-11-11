@@ -225,6 +225,17 @@ function scoringNote(detail: CompetitionDetail | null) {
   return parts.length ? parts.join(" · ") : null;
 }
 
+// Every card gets exactly one rule line, so cards in a row carry the same rows.
+function cardRule(detail: CompetitionDetail | null) {
+  if (!detail) return "Scoring not published";
+  const parts: string[] = [];
+  if (detail.weights.length) parts.push(`Score: ${detail.weights.map((entry) => `${entry.label === "Open interest" ? "OI" : entry.label} ${pct(entry.weight)}`).join(" · ")}`);
+  else if (detail.tracks.length) parts.push(`Ranked by ${detail.tracks.map((track) => track.toUpperCase()).join(" and ")}`);
+  const floor = detail.qualifyingVolume || detail.minVolume;
+  if (floor > 0) parts.push(`min ${dollars(floor)} volume`);
+  return parts.length ? parts.join(" · ") : "Scoring not published";
+}
+
 // ── featured competition ──
 function Poster({ entry, guide, now }: { entry: LiveEntry; guide?: CompetitionGuide; now: number }) {
   const { competition, detail, board } = entry;
@@ -365,7 +376,6 @@ function RulesPanel({ detail, guide }: { detail: CompetitionDetail | null; guide
 
 function CompetitionCard({ entry, now }: { entry: LiveEntry; now: number }) {
   const { competition, detail, board } = entry;
-  const note = scoringNote(detail);
   const byScore = board.rows.some((row) => row.score > 0);
   return (
     <article className="ev-card">
@@ -377,25 +387,28 @@ function CompetitionCard({ entry, now }: { entry: LiveEntry; now: number }) {
       <div className="ev-progress-bar" role="img" aria-label={`${pct(elapsedOf(competition, now))} of the competition window has passed`}>
         <i style={{ width: pct(elapsedOf(competition, now)) }} />
       </div>
-      <p className="ev-meta">
-        {windowLabel(competition)}
-        {competition.prizePool > 0 ? ` · ${dollars(competition.prizePool)} prize pool` : ""}
-        {` · ${count(competition.participants)} traders`}
-        {detail && detail.totalVolume > 0 ? ` · ${usd(detail.totalVolume)} volume` : ""}
-      </p>
-      {note && <p className="ev-meta">{note}</p>}
-      {board.rows.length > 0 ? (
-        <ol className="ev-mini">
-          {board.rows.map((row) => (
-            <li key={`${row.rank}-${row.address}`} data-rank={row.rank}>
-              <span className="ev-rank ev-pixel tnum">{row.rank}</span>
-              <span className="ev-board-name"><Trader address={row.address} name={row.name} /></span>
-              <span className="tnum ev-dim">{usd(row.volume)}</span>
-              <b className="tnum">{byScore ? row.score.toFixed(1) : `${row.roiPct >= 0 ? "+" : "−"}${Math.abs(row.roiPct).toFixed(1)}%`}</b>
-            </li>
-          ))}
-        </ol>
-      ) : <p className="ev-meta">Standings are not published yet.</p>}
+      <dl className="ev-card-facts">
+        <div><dt>Window</dt><dd className="tnum">{day.format(competition.start)} – {day.format(competition.end)}</dd></div>
+        <div><dt>Traders</dt><dd className="tnum">{count(competition.participants)}</dd></div>
+        <div><dt>Volume</dt><dd className="tnum">{detail && detail.totalVolume > 0 ? usd(detail.totalVolume) : "—"}</dd></div>
+        <div><dt>Prize</dt><dd className="tnum">{competition.prizePool > 0 ? dollars(competition.prizePool) : "—"}</dd></div>
+      </dl>
+      <p className="ev-card-rule">{cardRule(detail)}</p>
+      <div className="ev-mini">
+        <div className="ev-mini-cols" aria-hidden="true"><span>#</span><span>Trader</span><span>Volume</span><span>{byScore ? "Score" : "ROI"}</span></div>
+        {board.rows.length > 0 ? (
+          <ol>
+            {board.rows.map((row) => (
+              <li key={`${row.rank}-${row.address}`} data-rank={row.rank}>
+                <span className="ev-rank ev-pixel tnum">{row.rank}</span>
+                <span className="ev-board-name"><Trader address={row.address} name={row.name} /></span>
+                <span className="tnum ev-dim">{usd(row.volume)}</span>
+                <b className="tnum">{byScore ? row.score.toFixed(1) : `${row.roiPct >= 0 ? "+" : "−"}${Math.abs(row.roiPct).toFixed(1)}%`}</b>
+              </li>
+            ))}
+          </ol>
+        ) : <p className="ev-meta">Standings are not published yet.</p>}
+      </div>
     </article>
   );
 }
