@@ -2000,8 +2000,11 @@ export function RealizedVolRankingChart({
       item.impliedVolPct ?? 0,
     ]),
   );
+  // The surface reports a few pixels of width while its card is still laying
+  // out; without the clamp every bar gets a negative width for that frame.
+  const plotWidth = Math.max(0, W - pad.left - pad.right);
   const barWidth = (value: number) =>
-    (Math.max(0, value) / maxVol) * (W - pad.left - pad.right);
+    (Math.max(0, value) / maxVol) * plotWidth;
 
   return (
     <ChartSurface
@@ -2108,7 +2111,7 @@ export function RealizedVolRankingChart({
               <rect
                 x={pad.left}
                 y={centerY - Math.min(7, rowHeight * 0.24)}
-                width={W - pad.left - pad.right}
+                width={plotWidth}
                 height={Math.min(14, rowHeight * 0.48)}
                 rx="2"
                 fill="rgba(127,145,160,.07)"

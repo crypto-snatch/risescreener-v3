@@ -158,7 +158,18 @@ export default async function Overview() {
   const buyFlow = feed.filter((t) => t.side === "BUY").reduce((s, t) => s + t.notional, 0);
   const sellFlow = feed.filter((t) => t.side === "SELL").reduce((s, t) => s + t.notional, 0);
 
-  const tvlPoints = (dune?.tvl ?? []).map((x) => ({ t: x.t, tvl: x.tvl }));
+  // TVL is the USDC actually held by the CollateralManager: one stored snapshot
+  // per UTC day, ending on the live balance. The seeded "cumulative net deposits"
+  // series runs 13–16% above that balance, so it stays on the Flows page and is
+  // not mixed into this line or the KPI above it.
+  const DAY_MS = 86_400_000;
+  const tvlByDay = new Map<number, number>();
+  for (const point of timeseries) {
+    if (point.tvl > 0) tvlByDay.set(Math.floor(point.t / DAY_MS) * DAY_MS, point.tvl);
+  }
+  if (p.tvl > 0) tvlByDay.set(Math.floor(Date.now() / DAY_MS) * DAY_MS, p.tvl);
+  const tvlPoints = [...tvlByDay.entries()].map(([t, tvl]) => ({ t, tvl })).sort((left, right) => left.t - right.t);
+  const tvlNow = p.tvl || tvlPoints.at(-1)?.tvl || dune?.totals.tvl || 0;
   const asOf = (t?: number) => t ? `Through ${new Date(t).toISOString().slice(0, 10)} UTC` : "Latest available snapshot";
 
   return (
@@ -168,7 +179,7 @@ export default async function Overview() {
 
       {/* ── animated KPI grid ── */}
       <div className="reveal" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: 10 }}>
-        <Kpi label="TVL" value={dune?.totals.tvl ?? p.tvl} accent hint={asOf(dune?.tvl.at(-1)?.t)} />
+        <Kpi label="TVL" value={tvlNow} accent hint={p.tvl > 0 ? "live collateral balance" : "latest stored snapshot"} />
         <Kpi label="Open interest" value={p.totalOiUsd} hint="live RISEx books" />
         <Kpi label="24h volume" value={p.totalVolume24h} />
         <Kpi label="Cumulative volume" value={patchedVolume.cumVolume} accent hint={patchedVolume.estDays ? `${patchedVolume.estDays} missing Dune day${patchedVolume.estDays === 1 ? "" : "s"} rebuilt from snapshots` : "Dune historical total"} />
@@ -296,7 +307,7 @@ export default async function Overview() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px,1fr))", gap: 16 }}>
         <ChartCard
           title="TVL"
-          subtitle={`Historical collateral snapshots · ${asOf(dune?.tvl.at(-1)?.t)}`}
+          subtitle="USDC held by the CollateralManager · daily snapshots + live balance"
           height={250}
           modalHeight={440}
           filename="risescreener-tvl"
