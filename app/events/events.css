@@ -40,6 +40,17 @@
 .events-trader { color: var(--ink); font-weight: 500; }
 .events-trader:hover { color: var(--accent-ink); }
 
+/* official rule cards + plain-text rules */
+.events-guide { display: flex; flex-direction: column; gap: 10px; }
+.events-guide-images { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.events-guide-images a { display: block; border: 1px solid var(--hair); border-radius: var(--r-sm); overflow: hidden; background: #0b0f0e; }
+.events-guide-images a:hover { border-color: var(--accent-line); }
+.events-guide-images img { display: block; width: 100%; height: auto; }
+.events-guide-rules { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px 22px; }
+.events-guide-rules dt { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted-2); }
+.events-guide-rules dd { margin: 4px 0 0; font-size: 12px; line-height: 1.55; color: var(--muted); }
+@media (max-width: 760px) { .events-guide-images { grid-template-columns: minmax(0, 1fr); } }
+
 /* secondary competitions */
 .events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px; margin-top: 16px; }
 .events-card { padding: 16px 18px; }

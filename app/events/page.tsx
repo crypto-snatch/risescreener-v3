@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import "./events.css";
@@ -10,6 +11,7 @@ import {
   getCompetitionDetail, getCompetitionLeaderboard, getCompetitions,
   type Competition, type CompetitionDetail, type Leaderboard,
 } from "@/lib/competitions";
+import { COMPETITION_GUIDES } from "@/lib/competition-guides";
 import { shortAddr, usd } from "@/lib/format";
 import { getCandles } from "@/lib/market-data";
 
@@ -201,6 +203,7 @@ function FeaturedCompetition({ entry, now }: { entry: LiveEntry; now: number }) 
   const { competition, detail, board } = entry;
   const elapsed = Math.max(0, Math.min(1, (now - competition.start) / (competition.end - competition.start)));
   const note = scoringNote(detail);
+  const guide = COMPETITION_GUIDES[competition.slug];
   return (
     <Panel className="events-hero">
       <div className="events-hero-top">
@@ -238,6 +241,24 @@ function FeaturedCompetition({ entry, now }: { entry: LiveEntry; now: number }) 
         </div>
       )}
       {note && <p className="events-card-meta">{note}</p>}
+
+      {guide && (
+        <div className="events-guide">
+          <div className="events-board-head"><span>{guide.title}</span><span>Official RISEx cards</span></div>
+          <div className="events-guide-images">
+            {guide.images.map((image) => (
+              <a key={image.src} href={image.src} target="_blank" rel="noreferrer" aria-label="Open the full-size card">
+                <Image src={image.src} alt={image.alt} width={image.width} height={image.height} sizes="(max-width: 760px) 100vw, 560px" />
+              </a>
+            ))}
+          </div>
+          <dl className="events-guide-rules">
+            {guide.rules.map((rule) => (
+              <div key={rule.label}><dt>{rule.label}</dt><dd>{rule.text}</dd></div>
+            ))}
+          </dl>
+        </div>
+      )}
 
       <div className="events-board">
         <div className="events-board-head">
