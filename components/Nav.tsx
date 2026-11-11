@@ -27,6 +27,7 @@ type NavItem = {
 
 // one-line descriptions shown when the rail expands on hover
 const RAIL_DESC: Record<string, string> = {
+  "/events": "Competitions & pixel arcade",
   "/overview": "Live market pulse, volume & OI",
   "/markets": "Prices, OI & 24h screener",
   "/rwa": "Commodities, stocks & ETFs",
@@ -38,6 +39,7 @@ const RAIL_DESC: Record<string, string> = {
 };
 
 type IconName =
+  | "events"
   | "pulse"
   | "markets"
   | "rwa"
@@ -52,6 +54,7 @@ type IconName =
   | "command";
 
 const ITEMS: NavItem[] = [
+  { href: "/events", label: "Events & arcade", short: "Events", group: "Pulse", icon: "events", keywords: "competition contest prize leaderboard games arcade pixel" },
   { href: "/overview", label: "Overview", short: "Pulse", group: "Pulse", icon: "pulse", keywords: "home dashboard live" },
   { href: "/markets", label: "Perp markets", short: "Markets", group: "Markets", icon: "markets", keywords: "price volume screener" },
   { href: "/rwa", label: "RWA markets", short: "RWA", group: "Markets", icon: "rwa", keywords: "commodity gold silver oil stocks etf" },
@@ -70,8 +73,8 @@ const ITEMS: NavItem[] = [
   { href: "/ecosystem", label: "RISE ecosystem", short: "Ecosystem", group: "World", icon: "ecosystem", keywords: "apps projects directory" },
 ];
 
-const RAIL = ["/overview", "/markets", "/rwa", "/funding", "/open-interest", "/traders", "/liquidations", "/fees", "/flows", "/network", "/global", "/ecosystem"];
-const MOBILE = ["/overview", "/markets", "/funding", "/liquidations"];
+const RAIL = ["/events", "/overview", "/markets", "/rwa", "/funding", "/open-interest", "/traders", "/liquidations", "/fees", "/flows", "/network", "/global", "/ecosystem"];
+const MOBILE = ["/events", "/overview", "/markets", "/funding", "/liquidations"];
 
 function activeFor(path: string, href: string) {
   return href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`);
@@ -174,7 +177,7 @@ export default function Nav({ ticker = [] }: { ticker?: TickerMarket[] }) {
         </Link>
         <div className="rail-route-list">
           {railItems.map((item, index) => (
-            <div key={item.href} className={index === 5 ? "rail-route-wrap rail-route-break" : "rail-route-wrap"}>
+            <div key={item.href} className={index === 6 ? "rail-route-wrap rail-route-break" : "rail-route-wrap"}>
               <Link
                 href={item.href}
                 className="rail-route"
@@ -339,6 +342,7 @@ function Icon({ name }: { name: IconName }) {
     strokeLinejoin: "round" as const,
     "aria-hidden": true,
   };
+  if (name === "events") return <svg {...common}><path d="M8 4h8v5a4 4 0 0 1-8 0V4Z" /><path d="M8 6H5v1a3 3 0 0 0 3 3M16 6h3v1a3 3 0 0 1-3 3M12 13v4M8.5 20h7M10 17h4" /></svg>;
   if (name === "pulse") return <svg {...common}><path d="M3 12h4l2.2-6 4.2 12 2.1-6H21" /></svg>;
   if (name === "markets") return <svg {...common}><path d="M4 19V9M10 19V5M16 19v-7M22 19V3" /><path d="M2 19h21" /></svg>;
   if (name === "rwa") return <svg {...common}><path d="M4 20V9M10 20V4M16 20v-7M22 20H2" /><path d="m3 8 6-4 6 7 6-5" /></svg>;

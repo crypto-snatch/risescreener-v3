@@ -10,7 +10,7 @@ import { AreaTrend, VolumeChart } from "@/components/charts";
 import { Kpi, Treemap, FundingHeatmap, MarketHeatmap, PressureBar, Spark } from "@/components/viz";
 import CoinLogo from "@/components/CoinLogo";
 import { CorrelationMatrixChart, RealizedVolRankingChart } from "@/components/QuantViz";
-import { getAggOiHistory, getPositionsStat } from "@/lib/risescan";
+import { getPositionsStat } from "@/lib/risescan";
 import { isRwa, RWA_COLORS } from "@/lib/sectors";
 import type { Candle } from "@/lib/market-data";
 import PageHeader from "@/components/PageHeader";
@@ -30,12 +30,11 @@ const colorOf = (sym: string, i: number) =>
   isRwa(sym) ? (RWA_COLORS[sym] ?? "#e6c069") : (OI_COLORS[sym] ?? FALLBACK[i % FALLBACK.length]);
 
 export default async function Overview() {
-  const [p, rows, dune, feed, oiHistory, posStat, timeseries] = await Promise.all([
+  const [p, rows, dune, feed, posStat, timeseries] = await Promise.all([
     getProtocol(),
     getMarketRows(),
     getDune(),
     getGlobalFeed(8).catch(() => []),
-    getAggOiHistory(30),
     getPositionsStat(),
     getTimeseries(),
   ]);
@@ -74,7 +73,9 @@ export default async function Overview() {
 
   // Long-horizon flagship series. Volume uses every complete Dune UTC day
   // available (with repaired snapshot gaps). OI uses every stored snapshot and
-  // appends the freshest RiseScan hourly observations.
+  // ends on the live RISEx book total. Both are open_interest × mark, so the
+  // line never mixes definitions: RiseScan's long + short notional runs about a
+  // third higher and made the tail jump between the two levels.
   const HOUR = 3_600_000;
   const volSeries = patchedVolume.volume
     .map((day) => ({ t: day.t, volume: dayTotal(day) }))
@@ -90,7 +91,7 @@ export default async function Overview() {
   for (const point of timeseries) {
     addOi(point.t, Object.values(point.oi ?? {}).reduce((sum, value) => sum + (Number(value) || 0), 0));
   }
-  for (const point of oiHistory) addOi(point.t, point.totalUsd);
+  addOi(Date.now(), p.totalOiUsd);
   const oiSeries = [...oiByHour.entries()]
     .map(([t, point]) => ({ t, totalUsd: point.totalUsd }))
     .sort((left, right) => left.t - right.t);
@@ -189,7 +190,7 @@ export default async function Overview() {
         </ChartCard>
         <ChartCard
           title="Total open interest history"
-          subtitle={`Stored all-market OI + recent API samples · one point per UTC hour · ${historyRange}`}
+          subtitle={`Stored all-market OI snapshots + live RISEx total · one point per UTC hour · ${historyRange}`}
           height={264}
           modalHeight={460}
           toolbar={latestOiHistory > 0 ? <span className="tnum text-accent" style={{ fontSize: 11.5, fontWeight: 700 }}>{usd(latestOiHistory)}</span> : undefined}
